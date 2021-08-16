@@ -1,0 +1,25 @@
+.body-min-height {
+    min-height: calc(100vh - 267px);
+}
+
+.no-border {
+    border: none !important;
+    border-style: none;
+}
+
+#crypto_chart {
+}
+
+.border-panel {
+    border: solid 1px #252525;
+}
+
+.tab-border-right {
+    border-right: solid 1px;
+    padding-right: 0 !important;
+}
+
+.input-dark-bg {
+    background-color: #2e3133 !important;
+    border: none !important;
+}
