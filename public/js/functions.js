@@ -629,9 +629,9 @@ var INSPIRO = {},
 
             //chkd this - $(window).on('resize',function(){location.reload();});
             // refresh window on resize
-            $(window).on("resize", function() {
+/*            $(window).on("resize", function() {
                 location.reload();
-            });
+            });*/
 
             if ($(window).width() < 992) {
                 $(".dropdown a, .dropdown-menu a").click(function(e) {

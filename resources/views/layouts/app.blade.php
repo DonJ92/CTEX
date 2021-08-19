@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
@@ -38,9 +39,13 @@
                             <li>
                                 <div class="p-dropdown">
                                     <a href="#"><i class="icon-globe"></i><span>EN</span></a>
-                                    <ul class="p-dropdown-content">
-                                        <li><a href="#">日本語</a></li>
+                                    <ul class="p-dropdown-content background-black-dark border-panel">
                                         <li><a href="#">English</a></li>
+                                        <li><a href="#">日本語</a></li>
+                                        <li><a href="#">中文</a></li>
+                                        <li><a href="#">Русский</a></li>
+                                        <li><a href="#">Français</a></li>
+                                        <li><a href="#">한국어</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -57,16 +62,16 @@
                         <div class="container">
                             <nav>
                                 <ul>
-                                    <li><a href="{{ route('/') }}">ホーム</a></li>
-                                    <li><a href="{{ route('exchange') }}">販売所</a></li>
-                                    <li><a href="{{ route('exchange') }}">取引所</a></li>
-                                    <li><a href="index.html">取引概要</a></li>
-                                    <li><a href="index.html">サービス案内</a></li>
-                                    <li><a href="index.html">初めての方</a></li>
-                                    <li><a href="index.html">よくある質問</a></li>
+                                    <li><a href="{{ route('/') }}">Home</a></li>
+                                    <li><a href="{{ route('exchange') }}">Trade</a></li>
+                                    <li><a href="{{ route('exchange') }}">Buy/Sell Crypto</a></li>
+                                    <li><a href="">Overview</a></li>
+                                    <li><a href="">Services</a></li>
+                                    <li><a href="">How to Use</a></li>
+                                    <li><a href="{{ route('faq') }}">FAQ</a></li>
                                     @guest
-                                    <li><a href="{{ route('login') }}">ログイン</a></li>
-                                    <li><a href="{{ route('register') }}">無料会員登録</a></li>
+                                    <li><a href="{{ route('login') }}"><i class="icon-log-in"> </i>Login</a></li>
+                                    <li><a href="{{ route('register') }}"><i class="icon-user-plus"> </i>Register</a></li>
                                     @else
                                     <li><a href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
@@ -94,7 +99,7 @@
                     <div class="row">
                         <div class="col-lg-5">
                             <div class="widget">
-                                <div class="widget-title">CTEX取引所</div>
+                                <div class="widget-title">CTEX Exchange</div>
                                 <p>All rights reserved. Copyright © 2021.</p>
                             </div>
                         </div>
@@ -103,28 +108,32 @@
                                 <div class="col-lg-3">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">取引概要</a></li>
+                                            <li><a href="#">Overview</a></li>
+                                            <li><a href="#">Services</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">サービス案内</a></li>
+                                            <li><a href="#">Privacy Policy</a></li>
+                                            <li><a href="#">Term of Service</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">初めての方</a></li>
+                                            <li><a href="#">How to use</a></li>
+                                            <li><a href="#">FAQ</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">よくある質問</a></li>
+                                            <li><a href="{{ route('login') }}">Login</a></li>
+                                            <li><a href="{{ route('register') }}">Register</a></li>
                                         </ul>
                                     </div>
                                 </div>

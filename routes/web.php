@@ -28,3 +28,5 @@ Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('report');
 
 Route::get('/setting', [App\Http\Controllers\SettingController::class, 'index'])->name('setting');
+
+Route::get('/faq', [App\Http\Controllers\FAQController::class, 'index'])->name('faq');
