@@ -62,13 +62,14 @@
                         <div class="container">
                             <nav>
                                 <ul>
-                                    <li><a href="{{ route('/') }}">Home</a></li>
-                                    <li><a href="{{ route('exchange') }}">Trade</a></li>
-                                    <li><a href="{{ route('exchange') }}">Buy/Sell Crypto</a></li>
-                                    <li><a href="">Overview</a></li>
+                                    <li><a href="{{ route('/') }}"><i class="fa fa-home"></i>Home</a></li>
+                                    <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>Trade</a></li>
+                                    <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
+                                    <!--<li><a href="">Overview</a></li>
                                     <li><a href="">Services</a></li>
-                                    <li><a href="">How to Use</a></li>
-                                    <li><a href="{{ route('faq') }}">FAQ</a></li>
+                                    <li><a href="">How to Use</a></li>-->
+                                    <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>FAQ</a></li>
+                                    <li><a href="{{ route('faq') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
                                     @guest
                                     <li><a href="{{ route('login') }}"><i class="icon-log-in"> </i>Login</a></li>
                                     <li><a href="{{ route('register') }}"><i class="icon-user-plus"> </i>Register</a></li>
@@ -96,7 +97,7 @@
         <footer id="footer" class="inverted">
             <div class="footer-content">
                 <div class="container">
-                    <div class="row">
+                    <div class="row mx-1">
                         <div class="col-lg-5">
                             <div class="widget">
                                 <div class="widget-title">CTEX Exchange</div>
@@ -105,31 +106,23 @@
                         </div>
                         <div class="col-lg-7">
                             <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">Overview</a></li>
-                                            <li><a href="#">Services</a></li>
+                                            <li><a href="{{ route('exchange') }}">Trade</a></li>
+                                            <li><a href="{{ route('exchange') }}">Buy / Sell Crypto</a></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="#">Privacy Policy</a></li>
-                                            <li><a href="#">Term of Service</a></li>
+                                            <li><a href="{{ route('faq') }}">FAQ</a></li>
+                                            <li><a href="#">Contact Us</a></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="widget">
-                                        <ul class="list">
-                                            <li><a href="#">How to use</a></li>
-                                            <li><a href="#">FAQ</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="widget">
                                         <ul class="list">
                                             <li><a href="{{ route('login') }}">Login</a></li>

@@ -17,7 +17,6 @@
         <section id="page-content" class="dark">
             <div class="container">
                 <div class="form-group col-lg-6">
-                    <label for="category">Category</label>
                     <select class="form-select text-light input-dark-bg" id="exampleFormControlSelect1">
                         <option>FAQ1</option>
                         <option>FAQ2</option>

@@ -51,8 +51,8 @@
                 <div class="col-md-6 text-right">
                     <ul class="top-menu float-right">
                         <li><a href="{{ route('/') }}"><b>CTEX</b></a></li>
-                        <li><a href="{{ route('exchange') }}">Trade</a></li>
-                        <li><a href="{{ route('exchange') }}">Buy / Sell Crypto</a></li>
+                        <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>&nbsp;Trade</a></li>
+                        <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>&nbsp;Buy / Sell Crypto</a></li>
                         @guest
                             <li><a href="{{ route('login') }}"><i class="icon-log-in"></i>&nbsp;Login</a></li>
                             <li><a href="{{ route('register') }}"><i class="icon-user-plus"></i>&nbsp;Register</a></li>
@@ -63,6 +63,7 @@
                                 <a href="#"><i class="icon-user"></i></a>
                                 <div class="p-dropdown-content background-black-dark border-panel">
                                     <ul>
+                                        <li><a href="{{ route('home') }}">Dashboard</a></li>
                                         <li><a href="{{ route('payment') }}">Deposit / Withdraw</a></li>
                                         <li><a href="{{ route('report') }}">Report</a></li>
                                         <li><a href="{{ route('setting') }}">Setting</a></li>

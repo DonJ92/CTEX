@@ -483,13 +483,12 @@
         searching: false,
         viewCount: false,
         bLengthChange: false,
-        "language": {
-            "info": "すべてのお取引_TOTAL_の中で_START_から_END_まで",
+        language: {
             "paginate": {
-                "first": "First",
-                "last": "Last",
-                "next": "次へ",
-                "previous": "前へ"
+                "first":      "<<",
+                "last":       ">>",
+                "next":       ">",
+                "previous":   "<"
             },
         }
     });
@@ -499,6 +498,14 @@
         searching: false,
         viewCount: false,
         bLengthChange: false,
+        language: {
+            "paginate": {
+                "first":      "<<",
+                "last":       ">>",
+                "next":       ">",
+                "previous":   "<"
+            },
+        }
     });
 
     $('#withdraw_history_tbl').DataTable({
@@ -506,6 +513,14 @@
         searching: false,
         viewCount: false,
         bLengthChange: false,
+        language: {
+            "paginate": {
+                "first":      "<<",
+                "last":       ">>",
+                "next":       ">",
+                "previous":   "<"
+            },
+        }
     });
 </script>
 @endsection

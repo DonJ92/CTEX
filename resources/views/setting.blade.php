@@ -18,7 +18,7 @@
             <div class="container">
                 <div class="tabs tabs-vertical">
                     <div class="row">
-                        <div class="col-md-3 tab-border-right">
+                        <div class="col-md-3 tab-border-right mb-3">
                             <ul class="nav flex-column nav-tabs border-1" id="setting_tab" role="tablist" aria-orientation="vertical">
                                 <li class="nav-item">
                                     <a class="nav-link no-border active" id="account_into-tab" data-bs-toggle="tab" href="#account_info" role="tab" aria-controls="account_info" aria-selected="true"><b>Account Info</b></a>
@@ -36,10 +36,10 @@
                                     <a class="nav-link no-border" id="download-tab" data-bs-toggle="tab" href="#download" role="tab" aria-controls="download" aria-selected="false"><b>Data Download</b></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><b>LoginHistory / IP</b></a>
+                                    <a class="nav-link no-border" id="login_history-tab" data-bs-toggle="tab" href="#login_history" role="tab" aria-controls="login_history" aria-selected="false"><b>LoginHistory / IP</b></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><b>Language</b></a>
+                                    <a class="nav-link no-border" id="language-tab" data-bs-toggle="tab" href="#language" role="tab" aria-controls="language" aria-selected="false"><b>Language</b></a>
                                 </li>
                             </ul>
                         </div>
@@ -146,7 +146,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group text-center">
-                                                    <button type="submit" class="btn m-t-30 mt-3">Update</button>
+                                                    <button type="submit" class="btn m-t-30 mt-3">Save</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -177,7 +177,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group text-center">
-                                                <button type="submit" class="btn m-t-30 mt-3 mx-auto">Update</button>
+                                                <button type="submit" class="btn m-t-30 mt-3 mx-auto">Save</button>
                                             </div>
                                         </div>
                                     </div>
@@ -231,15 +231,15 @@
                                                     <input data-switch="true" data-on-color="success" data-off-color="secondary" id="step_switch" type="checkbox">
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-8 row mt-5">
+                                            <div class="form-group col-lg-8 mt-5 mx-auto text-center">
                                                 <p>Please read the QR code below from the authentication app and enter the displayed 6-digit authentication code.</p>
                                                 <div class="form-group">
                                                     <img class="mx-auto img-thumbnail mb-5" src="{{ asset('/images/QR.png') }}" width="300px">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-6">
+                                                        <div class="form-group col-lg-8">
                                                             <input type="text" class="form-control text-light input-dark-bg" name="verification_code" placeholder="Verification Code" required="" autofocus>
                                                         </div>
-                                                        <div class="form-group col-lg-6 text-center">
+                                                        <div class="form-group col-lg-4 text-center">
                                                             <button type="submit" class="btn">Save</button>
                                                         </div>
                                                     </div>
@@ -302,6 +302,91 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="login_history" role="tabpanel" aria-labelledby="login_history-tab">
+                                    <div class="card background-dark">
+                                        <div class="card-header background-black-dark">
+                                            <span class="h4 mx-auto text-primary">Login History / IP</span>
+                                        </div>
+                                        <div class="card-body text-light">
+                                            <h5>Please check your login history.</h5>
+                                            <div class="overflow-auto p-15">
+                                                <table id="login_history_tbl" class="table table-dark font-size-sm" style="width:100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="background-black-dark">IP</th>
+                                                        <th class="background-black-dark">Device</th>
+                                                        <th class="background-black-dark">Platform</th>
+                                                        <th class="background-black-dark">Region</th>
+                                                        <th class="background-black-dark">DateTime</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>196.54.28.34</td>
+                                                        <td>PC</td>
+                                                        <td>Chrome</td>
+                                                        <td>Tokyo Japan</td>
+                                                        <td>2021/01/23 16:58:00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>196.54.28.34</td>
+                                                        <td>PC</td>
+                                                        <td>Chrome</td>
+                                                        <td>Tokyo Japan</td>
+                                                        <td>2021/01/23 16:58:00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>196.54.28.34</td>
+                                                        <td>PC</td>
+                                                        <td>Chrome</td>
+                                                        <td>Tokyo Japan</td>
+                                                        <td>2021/01/23 16:58:00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>196.54.28.34</td>
+                                                        <td>PC</td>
+                                                        <td>Chrome</td>
+                                                        <td>Tokyo Japan</td>
+                                                        <td>2021/01/23 16:58:00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>196.54.28.34</td>
+                                                        <td>PC</td>
+                                                        <td>Chrome</td>
+                                                        <td>Tokyo Japan</td>
+                                                        <td>2021/01/23 16:58:00</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="language" role="tabpanel" aria-labelledby="language-tab">
+                                    <div class="card background-dark">
+                                        <div class="card-header background-black-dark">
+                                            <span class="h4 mx-auto text-primary">Language Setting</span>
+                                        </div>
+                                        <div class="card-body text-light">
+                                            <div class="form-group row">
+                                                <label for="password_confirmation" class="col-lg-4 col-6 col-form-label">Language</label>
+                                                <div class="col-lg-8 col-6">
+                                                    <select class="form-select text-light input-dark-bg" name="language" required="">
+                                                        <option>English</option>
+                                                        <option>日本語</option>
+                                                        <option>中文</option>
+                                                        <option>Русский</option>
+                                                        <option>Français</option>
+                                                        <option>한국어</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center">
+                                                <button type="submit" class="btn mt-3 mx-auto">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -314,6 +399,12 @@
 @section('script')
     <script>
         $('#data_list_tbl').DataTable({
+            searching: false,
+            viewCount: false,
+            bLengthChange: false,
+        });
+
+        $('#login_history_tbl').DataTable({
             searching: false,
             viewCount: false,
             bLengthChange: false,

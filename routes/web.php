@@ -23,6 +23,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange');
 
+Route::get('/dealer', [App\Http\Controllers\DealerController::class, 'index'])->name('dealer');
+
 Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment');
 
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('report');

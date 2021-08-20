@@ -7,6 +7,10 @@
     border-style: none;
 }
 
+.no-box-shadow {
+    box-shadow: none !important;
+}
+
 #crypto_chart {
     height: 100%;
     min-height: 300px;
@@ -33,3 +37,13 @@
 .no-float {
     float: none !important;
 }
+
+.buy-b-r { border-radius: 5px 0 0 5px !important; }
+.sell-b-r { border-radius: 0 5px 5px 0 !important; }
+
+.trading-list tbody td {
+    padding: 0.2rem 1rem !important;
+}
+
+.direction-right { direction: rtl; }
+.direction-left { direction: ltr; }

@@ -2,97 +2,120 @@
 
 @section('content')
     <section class="p-0 h-100" style="min-height: 500px;">
-        <div class="row col-12 h-100 p-0 m-0">
-            <div class="col-lg-2 border-panel">
-                <div class="tabs text-light">
-                    <ul class="nav nav-tabs no-border m-0" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active px-4 py-2 font-size-sm" id="home-tab" data-bs-toggle="tab" href="#order" role="tab" aria-controls="order" aria-selected="true">Order</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-4 py-2 font-size-sm" id="profile-tab" data-bs-toggle="tab" href="#step" role="tab" aria-controls="step" aria-selected="false">取引一覧</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content font-size-sm" id="myTabContent">
-                        <div class="tab-pane fade active show" id="order" role="tabpanel" aria-labelledby="order-tab">
-                            <div class="tabs">
-                                <nav class="nav nav-tabs nav-justified">
-                                    <a class="nav-item nav-link active" id="limit-tab" data-bs-toggle="tab" href="#limit" role="tab" aria-controls="order" aria-selected="true">Limit</a>
-                                    <a class="nav-item nav-link" id="market-tab" data-bs-toggle="tab" href="#market" role="tab" aria-controls="step" aria-selected="false">Market</a>
-                                </nav>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade active show" id="limit" role="tabpanel" aria-labelledby="step-tab">
-                                        <div class="form-group">
-                                            <div class="row m-0">
-                                                <div class="col-6 p-r-0"><button type="button" class="btn btn-info btn-block b-r-2">Buy</button></div>
-                                                <div class="col-6 p-l-0"><button type="button" class="btn btn-light btn-light-hover btn-block b-r-2">Sell</button></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-text font-size-xs input-dark-bg">Price</span>
-                                                <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
-                                                <span class="input-group-text font-size-xs input-dark-bg">BTC/JPY</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-text font-size-xs input-dark-bg">Amount</span>
-                                                <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
-                                                <span class="input-group-text font-size-xs input-dark-bg">BTC</span>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-text font-size-xs input-dark-bg">予想</span>
-                                                <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
-                                                <span class="input-group-text font-size-xs input-dark-bg">JPY</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group range-color-info">
-                                            <input type="hidden" id="range_slider_limit"/>
-                                        </div>
-                                        <button type="button" class="btn btn-info btn-block">Order</button>
-                                    </div>
-                                    <div class="tab-pane fade" id="market" role="tabpanel" aria-labelledby="step-tab">
-                                        <div class="form-group">
-                                            <div class="row m-0">
-                                                <div class="col-6 p-r-0"><button type="button" class="btn btn-light btn-light-hover btn-block b-r-2">Buy</button></div>
-                                                <div class="col-6 p-l-0"><button type="button" class="btn btn-danger btn-block b-r-2">Sell</button></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-text font-size-xs input-dark-bg">Amount</span>
-                                                <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
-                                                <span class="input-group-text font-size-xs input-dark-bg">BTC</span>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-text font-size-xs input-dark-bg">予想</span>
-                                                <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
-                                                <span class="input-group-text font-size-xs input-dark-bg">JPY</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group range-color-info">
-                                            <input type="hidden" id="range_slider_market"/>
-                                        </div>
-                                        <button type="button" class="btn btn-danger btn-block">Order</button>
-                                    </div>
+        <div class="row col-12 h-100 p-0 m-0 direction-right">
+            <div class="col-lg-2 border-panel direction-left">
+                <h5 class="mt-2 text-primary text-center"><b>Exchange Crypto</b></h5>
+                <hr class="my-2">
+                <div class="row">
+                    <div class="tabs col-lg-12 col-md-6">
+                    <nav class="nav nav-tabs nav-justified">
+                        <a class="nav-item nav-link active" id="limit-tab" data-bs-toggle="tab" href="#limit" role="tab" aria-controls="order" aria-selected="true">Limit</a>
+                        <a class="nav-item nav-link" id="market-tab" data-bs-toggle="tab" href="#market" role="tab" aria-controls="step" aria-selected="false">Market</a>
+                    </nav>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active text-light show" id="limit" role="tabpanel" aria-labelledby="step-tab">
+                            <div class="form-group">
+                                <div class="row m-0">
+                                    <div class="col-6 p-r-0"><button type="button" class="btn btn-info btn-block buy-b-r">Buy</button></div>
+                                    <div class="col-6 p-l-0"><button type="button" class="btn btn-light btn-light-hover btn-block sell-b-r">Sell</button></div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-text font-size-xs input-dark-bg">Price</span>
+                                    <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text font-size-xs input-dark-bg">BTC/USDT</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-text font-size-xs input-dark-bg">Amount</span>
+                                    <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text font-size-xs input-dark-bg">BTC</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-text font-size-xs input-dark-bg">Total</span>
+                                    <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text font-size-xs input-dark-bg">USDT</span>
+                                </div>
+                            </div>
+                            <div class="form-group range-color-info">
+                                <input type="hidden" id="range_slider_limit"/>
+                            </div>
+                            <button type="button" class="btn btn-info btn-block">Order</button>
                         </div>
-                        <div class="tab-pane fade" id="step" role="tabpanel" aria-labelledby="step-tab">
+                        <div class="tab-pane fade" id="market" role="tabpanel" aria-labelledby="step-tab">
+                            <div class="form-group">
+                                <div class="row m-0">
+                                    <div class="col-6 p-r-0"><button type="button" class="btn btn-light btn-light-hover btn-block buy-b-r">Buy</button></div>
+                                    <div class="col-6 p-l-0"><button type="button" class="btn btn-danger btn-block sell-b-r">Sell</button></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-text font-size-xs input-dark-bg">Amount</span>
+                                    <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text font-size-xs input-dark-bg">BTC</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-text font-size-xs input-dark-bg">Total</span>
+                                    <input type="text" class="form-control form-control-sm text-light input-dark-bg" aria-label="Amount (to the nearest dollar)">
+                                    <span class="input-group-text font-size-xs input-dark-bg">USDT</span>
+                                </div>
+                            </div>
+                            <div class="form-group range-color-info">
+                                <input type="hidden" id="range_slider_market"/>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-block">Order</button>
                         </div>
                     </div>
+                    <hr class="my-4">
+                </div>
+                    <div class="col-lg-12 col-md-6">
+                    <div class="form-group row">
+                        <div class="col-6"><h5 class="text-light">Symbol</h5></div>
+                        <div class="col-6 text-right"><h5 class="text-light">Balance</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/btc.svg') }}" width="24px" class="p-r-10"><b>BTC</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/eth.svg') }}" width="24px" class="p-r-10"><b>ETH</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/xrp.svg') }}" width="24px" class="p-r-10"><b>XRP</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/ltc.svg') }}" width="24px" class="p-r-10"><b>LTC</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/usdt.svg') }}" width="24px" class="p-r-10"><b>USDT</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/ada.svg') }}" width="24px" class="p-r-10"><b>ADA</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-6"><img src="{{ asset('/icons/wiz+.svg') }}" width="24px" class="p-r-10"><b>WIZ+</b></div>
+                        <div class="col-6 text-right"><h5 class="text-light">0.00300024</h5></div>
+                    </div>
+                </div>
                 </div>
             </div>
-            <div class="col-lg-10">
-                <div class="row mh-100">
-                    <div class="col-lg-3 border-panel p-0">
+            <div class="col-lg-10 direction-left">
+                <div class="row mh-100 direction-right">
+                    <div class="col-lg-3 border-panel p-0 direction-left">
                         <table id="ask_order_list" class="table table-dark font-size-sm">
                             <thead class="text-center">
                             <tr>
@@ -252,7 +275,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-9 border-panel p-0">
+                    <div class="col-lg-9 border-panel p-0 direction-left">
                         <!-- TradingView Widget BEGIN -->
                         <div id="crypto_chart" class=""></div>
                         <!-- TradingView Widget END -->
@@ -269,7 +292,7 @@
                     </ul>
                     <div class="tab-content font-size-sm overflow-auto" id="myTabContent">
                         <div class="tab-pane fade active show" id="order" role="tabpanel" aria-labelledby="order-tab">
-                            <table id="order_list" class="table table-dark" style="width:100%">
+                            <table id="order_list" class="table table-dark trading-list" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th class="background-dark">Order ID</th>
@@ -304,7 +327,7 @@
                             </table>
                         </div>
                         <div class="tab-pane fade" id="trade" role="tabpanel" aria-labelledby="trade-tab">
-                            <table id="trade_list" class="table table-dark" style="width:100%">
+                            <table id="trade_list" class="table table-dark trading-list" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th class="background-dark">Order ID</th>
@@ -351,33 +374,29 @@
     <script>
         $( document ).ready(function() {
             $('#trade_list').DataTable({
-                responsive: true,
                 searching: false,
                 viewCount: false,
                 bLengthChange: false,
-                "language": {
-                    "info": "すべてのお取引_TOTAL_の中で_START_から_END_まで",
+                language: {
                     "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "次へ",
-                        "previous": "前へ"
+                        "first":      "<<",
+                        "last":       ">>",
+                        "next":       ">",
+                        "previous":   "<"
                     },
                 }
             });
 
             $('#order_list').DataTable({
-                responsive: true,
                 searching: false,
                 viewCount: false,
                 bLengthChange: false,
-                "language": {
-                    "info": "すべてのお取引_TOTAL_の中で_START_から_END_まで",
+                language: {
                     "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "次へ",
-                        "previous": "前へ"
+                        "first":      "<<",
+                        "last":       ">>",
+                        "next":       ">",
+                        "previous":   "<"
                     },
                 }
             });

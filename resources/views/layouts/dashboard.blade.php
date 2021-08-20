@@ -105,13 +105,15 @@
                     <div class="container">
                         <nav>
                             <ul>
-                                <li><a href="{{ route('exchange') }}"><i class="fa fa-home"></i>Trade</a></li>
-                                <li><a href="{{ route('exchange') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
-                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i></i>Deposit / Withdraw</a></li>
-                                <li><a href="{{ route('report') }}"><i class="fa fa-list-alt"></i>Report</a></li>
+                                <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>Trade</a></li>
+                                <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
+                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>Deposit / Withdraw</a></li>
+                                <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>Report</a></li>
                                 <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>Setting</a></li>
                                 <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>FAQ</a></li>
-                                <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg"></a>
+                                <li><a href="{{ route('faq') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>User</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
                                         <li><a href="{{ route('setting') }}">Setting</a></li>
                                         <li><a href="#">Notifications</a></li>
@@ -159,17 +161,7 @@
                     </div>
                     <div class="col-lg-7">
                         <div class="row">
-                            <div class="col-lg-3 col-6">
-                                <div class="widget">
-                                    <ul class="list">
-                                        <li><a href="#">Overview</a></li>
-                                        <li><a href="#">Services</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#">Term of Service</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6">
+                            <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
                                         <li><a href="#">Trade</a></li>
@@ -177,7 +169,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-6">
+                            <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
                                         <li><a href="#">Deposit/Withdraw</a></li>
@@ -185,10 +177,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-6">
+                            <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="#">How to use</a></li>
                                         <li><a href="#">FAQ</a></li>
                                         <li><a href="#">Contact Us</a></li>
                                     </ul>
