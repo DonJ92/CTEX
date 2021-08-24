@@ -19,7 +19,7 @@
         <div class="tabs tabs-vertical">
             <div class="row">
                 <div class="col-md-3 tab-border-right mb-3">
-                    <ul class="nav flex-column nav-tabs border-1" id="myTab4" role="tablist" aria-orientation="vertical">
+                    <ul class="nav flex-column nav-tabs border-1" id="cryptoTab" role="tablist" aria-orientation="vertical">
                         <li class="nav-item">
                             <a class="nav-link no-border active" id="btc-tab" data-bs-toggle="tab" href="#btc" role="tab" aria-controls="btc" aria-selected="true"><img src="{{ asset('/icons/btc.svg') }}" width="32px" class="p-r-10"><b>BTC</b></a>
                         </li>
@@ -47,15 +47,15 @@
                     <div class="tab-content" id="myTabContent4">
                         <div class="tab-pane fade show active" id="btc" role="tabpanel" aria-labelledby="btc-tab">
                             <div class="tabs tabs-folder">
-                                <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                                <ul class="nav nav-tabs" id="btc_payment_tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" id="btc-deposit-tab" data-bs-toggle="tab" href="#btc-deposit" role="tab" aria-controls="btc-deposit" aria-selected="true"><b>Deposit</b></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="btc-transfer-tab" data-bs-toggle="tab" href="#btc-transfer" role="tab" aria-controls="btc-transfer" aria-selected="false">Withdraw</a>
+                                        <a class="nav-link" id="btc-withdraw-tab" data-bs-toggle="tab" href="#btc-withdraw" role="tab" aria-controls="btc-withdraw" aria-selected="false">Withdraw</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content" id="myTabContent3">
+                                <div class="tab-content" id="btc_payment_content">
                                     <div class="tab-pane fade show active" id="btc-deposit" role="tabpanel" aria-labelledby="btc-deposit-tab">
                                         <h5>
                                             This is your Bitcoin deposit address.<br>
@@ -86,7 +86,7 @@
                                         <h4>※ Caution</h4>
                                         <p class="text-light">Please transfer funds to the correct Bitcoin address on the above. We are not responsible if you transfer funds to another address.</p>
                                     </div>
-                                    <div class="tab-pane fade" id="btc-transfer" role="tabpanel" aria-labelledby="btc-transfer-tab">
+                                    <div class="tab-pane fade" id="btc-withdraw" role="tabpanel" aria-labelledby="btc-withdraw-tab">
                                         <h5>
                                             Please input an external Bitcoin address to withdraw to.
                                         </h5>

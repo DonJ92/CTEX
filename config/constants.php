@@ -10,6 +10,13 @@ return [
         'valid' => 1,
     ],
 
+    'device' => [
+        'Mobile' => 1,
+        'Tablet' => 2,
+        'Desktop' => 3,
+        'Unknown' => 4,
+    ],
+
     'gender_list' => [
         ['id' => 0, 'gender' => 'male'],
         ['id' => 1, 'gender' => 'female'],

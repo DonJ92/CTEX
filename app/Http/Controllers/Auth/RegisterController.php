@@ -77,6 +77,7 @@ class RegisterController extends Controller
                     return $query->where('email', $data['email'])->where('reg_type', config('constants.reg_type.CTEX'));
                 })],
             'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'birthday' => ['nullable', 'date'],
             'mobile' => ['required', 'string', 'max:20'],
             'country' => ['required', 'string', 'max:64'],
             'lang' => ['required', 'string', 'max:4'],
@@ -88,6 +89,7 @@ class RegisterController extends Controller
             'name' => trans('register.name'),
             'email' => trans('register.email'),
             'password' => trans('register.password'),
+            'birthday' => trans('register.birthday'),
             'mobile' => trans('register.mobile'),
             'country' => trans('register.country'),
             'lang' => trans('register.lang'),
@@ -110,12 +112,14 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'reg_type' => config('constants.reg_type.CTEX'),
+            'birthday' => $data['birthday'],
+            'gender' => $data['gender'],
             'mobile' => $data['mobile'],
             'country' => $data['country'],
             'lang' => $data['lang'],
             'address' => $data['address'],
             'postal_code' => $data['postal_code'],
-            'status' => config('constants.user_status.invalid')
+            'status' => config('constants.user_status.valid')
         ]);
     }
 }
