@@ -7,7 +7,9 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -41,6 +43,21 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $gender_list = config('constants.gender_list');
+        $data['gender_list'] = $gender_list;
+
+        $country_response = Http::get('https://restcountries.eu/rest/v2/all');
+        $country_list = $country_response->json();
+        $data['country_list'] = $country_list;
+
+        $language_list = config('constants.language_list');
+        $data['language_list'] = $language_list;
+
+        return view('auth.register', $data);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -50,9 +67,32 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'login_id' => ['required', 'alpha_dash', 'max:128',
+                Rule::unique('lk_users')->where(function ($query) use($data) {
+                    return $query->where('login_id', $data['login_id'])->where('reg_type', config('constants.reg_type.CTEX'));
+                })],
+            'name' => ['required', 'string', 'max:128'],
+            'email' => ['required', 'string', 'email', 'max:128',
+                Rule::unique('lk_users')->where(function ($query) use($data) {
+                    return $query->where('email', $data['email'])->where('reg_type', config('constants.reg_type.CTEX'));
+                })],
+            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'mobile' => ['required', 'string', 'max:20'],
+            'country' => ['required', 'string', 'max:64'],
+            'lang' => ['required', 'string', 'max:4'],
+            'address' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required', 'string', 'max:16'],
+        ], [
+        ], [
+            'login_id' => trans('register.login_id'),
+            'name' => trans('register.name'),
+            'email' => trans('register.email'),
+            'password' => trans('register.password'),
+            'mobile' => trans('register.mobile'),
+            'country' => trans('register.country'),
+            'lang' => trans('register.lang'),
+            'address' => trans('register.address'),
+            'postal_code' => trans('register.postal_code'),
         ]);
     }
 
@@ -65,9 +105,17 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
+            'login_id' => $data['login_id'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'reg_type' => config('constants.reg_type.CTEX'),
+            'mobile' => $data['mobile'],
+            'country' => $data['country'],
+            'lang' => $data['lang'],
+            'address' => $data['address'],
+            'postal_code' => $data['postal_code'],
+            'status' => config('constants.user_status.invalid')
         ]);
     }
 }

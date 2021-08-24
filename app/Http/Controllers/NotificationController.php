@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-class SettingController
+class NotificationController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -12,7 +12,7 @@ class SettingController
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'verified']);
+//        $this->middleware('auth');
     }
 
     /**
@@ -22,6 +22,6 @@ class SettingController
      */
     public function index()
     {
-        return view('setting');
+        return view('notifications');
     }
 }

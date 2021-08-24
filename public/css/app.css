@@ -47,3 +47,15 @@
 
 .direction-right { direction: rtl; }
 .direction-left { direction: ltr; }
+
+.sub-date {
+    color: #C2C2C2;
+}
+
+.news-item a {
+    color: white;
+}
+
+.news-item a:hover {
+    color: #f8b21c;
+}

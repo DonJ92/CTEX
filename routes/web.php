@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('/');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -32,3 +33,9 @@ Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->
 Route::get('/setting', [App\Http\Controllers\SettingController::class, 'index'])->name('setting');
 
 Route::get('/faq', [App\Http\Controllers\FAQController::class, 'index'])->name('faq');
+
+Route::get('/contactus', [App\Http\Controllers\ContactUsController::class, 'index'])->name('contactus');
+
+Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news');
+
+Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');

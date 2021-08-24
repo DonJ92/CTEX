@@ -1,28 +1,41 @@
 @extends('layouts.app')
 
+@section('title', trans('emailverification.title'))
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
-
-                <div class="card-body">
-                    @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
+<section class="pt-5 pb-5 background-dark background-theme body-min-height">
+    <div class="container-fluid d-flex flex-column">
+        <div class="row align-items-center">
+            <div class="col-md-6 col-lg-4 mx-auto">
+                <div class="card background-black-dark border-panel">
+                    <div class="card-body py-5 px-sm-5">
+                        <div class="text-center">
+                            <h3 class="text-primary">{{ trans('emailverification.page_title') }}</h3>
                         </div>
-                    @endif
+                        <hr>
+                        @if (session('resent'))
+                            <div class="alert alert-success alert-dismissible fade show" id="success_div">
+                                {{ trans('emailverification.sent_success_msg') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                    </form>
+                        <p>{{ trans('emailverification.desc1') }}<br>
+                            {{trans('emailverification.desc2') }},</p>
+                        <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                            @csrf
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6 mx-auto">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        {{ trans('emailverification.request_email') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @endsection

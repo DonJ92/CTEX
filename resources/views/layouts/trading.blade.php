@@ -67,7 +67,7 @@
                                         <li><a href="{{ route('payment') }}">Deposit / Withdraw</a></li>
                                         <li><a href="{{ route('report') }}">Report</a></li>
                                         <li><a href="{{ route('setting') }}">Setting</a></li>
-                                        <li><a href="#">Notification</a></li>
+                                        <li><a href="{{ route('notifications') }}">Notification</a></li>
                                         <li><a href="#">Logout</a></li>
                                     </ul>
                                 </div>

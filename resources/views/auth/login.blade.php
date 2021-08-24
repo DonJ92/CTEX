@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', trans('login.title'))
+
 @section('content')
     <section class="pt-5 pb-5 background-dark background-theme body-min-height">
         <div class="container-fluid d-flex flex-column">
@@ -8,37 +10,40 @@
                     <div class="card background-black-dark border-panel">
                         <div class="card-body py-5 px-sm-5">
                             <div class="mb-5 text-center">
-                                <h6 class="h3 mb-1 text-primary">CTEX</h6>
+                                <h6 class="h3 mb-1 text-primary">ADAM Bit</h6>
                                 <p class="text-muted mb-0">Login</p>
                             </div><span class="clearfix"></span>
                             <hr>
-                            <form class="form-validate text-light">
+                            <form method="post" class="form-validate" action="{{ route('login') }}">
+                                @csrf
+
                                 <div class="form-group">
-                                    <label for="email" class="text-light">Email</label>
-                                    <div class="input-group">
-                                        <input type="email" class="form-control text-light input-dark-bg @error('email') is-invalid @enderror" name="email" placeholder="Email" autocomplete="email" autofocus>
+                                    <label for="login" class="text-light">{{ trans('login.login') }}</label>
+                                    <div class="input-group text-light">
+                                        <input type="text" class="form-control input-dark-bg text-light {{ $errors->has('login_id') || $errors->has('email') ? 'is-invalid' : '' }}" name="login" placeholder="{{ trans('login.login') }}" value="{{ old('login_id') ?: old('email') }}" autofocus>
                                         <span class="input-group-text input-dark-bg"><i class="icon-user"></i></span>
                                     </div>
-                                    @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
+                                    @if ($errors->has('login_id') || $errors->has('email'))
+                                        <div class="is-invalid">{{ $errors->first('login_id') ?: $errors->first('email') }}</div>
+                                    @endif
                                 </div>
                                 <div class="form-group ">
-                                    <label for="password" class="text-light">Password</label>
-                                    <div class="input-group show-hide-password">
-                                        <input class="form-control text-light input-dark-bg" name="password" placeholder="Password" type="password" autocomplete="password">
+                                    <label for="password" class="text-light">{{ trans('login.password') }}</label>
+                                    <div class="input-group show-hide-password text-light">
+                                        <input class="form-control input-dark-bg text-light @error('password') is-invalid @enderror" name="password" placeholder="{{ trans('login.password') }}" type="password">
                                         <span class="input-group-text input-dark-bg"><i class="icon-eye-off" aria-hidden="true" style="cursor: pointer;"></i></span>
                                     </div>
+                                    @error('password')
+                                        <div class="is-invalid">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="mt-4"><!--<button type="submit" class="btn btn-primary btn-block btn-primary">Login</button>-->
-                                    <a class="btn btn-primary btn-block btn-primary text-center" href="{{route('home')}}">Login</a>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary btn-block">{{ trans('buttons.login') }}</button>
                                 </div>
                             </form>
                             <div class="mt-4 text-center">
-                                <div><a href="page-user-register.html" class="small fw-bold">Forgot password?</a></div>
-                                <div><a href="{{ route('register') }}" class="small fw-bold">Register Now</a></div>
+                                <div><a href="{{ route('password.request') }}" class="small fw-bold">{{ trans('buttons.forgot') }}</a></div>
+                                <div><a href="{{ route('register') }}" class="small fw-bold">{{ trans('buttons.register_now') }}</a></div>
                             </div>
                         </div>
                     </div>

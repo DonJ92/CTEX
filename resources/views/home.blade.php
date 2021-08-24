@@ -66,7 +66,7 @@
                         <!--End: Box 1-->
                         <!--Box 2-->
                         <div class="col-lg-4 background-black-dark border-panel">
-                            <a href="{{ route('exchange') }}">
+                            <a href="{{ route('dealer') }}">
                                 <div class="text-box">
                                     <i class="fa fa-money-bill-wave"></i>
                                     <h3>Buy / Sell Crypto</h3>

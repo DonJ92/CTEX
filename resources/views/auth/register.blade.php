@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', trans('register.title'))
+
 @section('content')
     <section class="pt-5 pb-5 background-dark body-min-height">
         <div class="container-fluid d-flex flex-column">
@@ -7,95 +9,130 @@
                 <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                     <div class="card shadow-lg background-black-dark border-panel">
                         <div class="card-body py-5 px-sm-5">
-                            <h3 class="text-primary">Register</h3>
-                            <p>Enter the following information to create an account.</p>
+                            <h3 class="text-primary">{{ trans('register.page_title') }}</h3>
+                            <p>{{ trans('register.page_title_desc') }}</p>
                             <hr>
-                            <form id="form1" class="form-validate text-light mt-5">
-                                <div class="h5 mb-4 text-light">Account Info</div>
+                            <form method="post" id="register_form" class="form-validate mt-5" action="{{ route('register') }}">
+                                @csrf
+
+                                <div class="h5 mb-4 text-light">{{ trans('register.sub_title') }}</div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="username" class="text-light">Full Name</label>
-                                        <input type="text" class="form-control text-light input-dark-bg" name="username" placeholder="Full Name" required="" autofocus>
+                                        <label for="login_id" class="text-light">{{ trans('register.login_id') }}</label>
+                                        <input type="text" class="form-control text-light input-dark-bg @error('login_id') is-invalid @enderror" name="login_id" placeholder="{{ trans('register.login_id') }}" value="{{ old('login_id') }}" autofocus>
+                                        @error('login_id')
+                                        <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="email"   class="text-light">Email</label>
-                                        <input type="email" class="form-control text-light input-dark-bg" name="email" placeholder="Email" required="">
+                                        <label for="name" class="text-light">{{ trans('register.name') }}</label>
+                                        <input type="text" class="form-control text-light input-dark-bg @error('name') is-invalid @enderror" name="name" placeholder="{{ trans('register.name') }}" value="{{ old('name') }}">
+                                        @error('name')
+                                        <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="password" class="text-light">Password</label>
+                                        <label for="email" class="text-light">{{ trans('register.email') }}</label>
+                                        <input type="email" class="form-control text-light input-dark-bg @error('email') is-invalid @enderror" name="email" placeholder="{{ trans('register.email') }}" value="{{ old('email') }}">
+                                        @error('email')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="password" class="text-light">{{ trans('register.password') }}</label>
                                         <div class="input-group show-hide-password">
-                                            <input class="form-control text-light input-dark-bg" name="password" placeholder="Password" type="text" required="">
-                                            <span class="input-group-text input-dark-bg"><i class="icon-eye" aria-hidden="true" style="cursor: pointer;"></i></span>
+                                            <input class="form-control text-light input-dark-bg @error('password') is-invalid @enderror" name="password" placeholder="{{ trans('register.password') }}" value="{{ old('password') }}" type="password" >
+                                            <span class="input-group-text input-dark-bg text-light"><i class="icon-eye-off" aria-hidden="true" style="cursor: pointer;"></i></span>
+                                        </div>
+                                        @error('password')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="password_confirmation" class="text-light">{{ trans('register.password_confirmation') }}</label>
+                                        <div class="input-group show-hide-password">
+                                            <input class="form-control text-light input-dark-bg" name="password_confirmation" placeholder="{{ trans('register.password_confirmation') }}" type="password" >
+                                            <span class="input-group-text input-dark-bg text-light"><i class="icon-eye-off" aria-hidden="true" style="cursor: pointer;"></i></span>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="password2" class="text-light">Password Confirmation</label>
-                                        <div class="input-group show-hide-password">
-                                            <input class="form-control text-light input-dark-bg" name="password2" placeholder="Password Confirmation" type="password" required="">
-                                            <span class="input-group-text input-dark-bg"><i class="icon-eye-off" aria-hidden="true" style="cursor: pointer;"></i></span>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="gender" class="text-light">Gender</label>
-                                        <select class="form-select text-light input-dark-bg" name="gender" required="">
-                                            <option value="">Select your gender</option>
-                                            <option>Female</option>
-                                            <option>Male</option>
-                                            <option>Rather not say</option>
+                                        <label for="gender" class="text-light">{{ trans('register.gender') }}</label>
+                                        <select class="form-select text-light input-dark-bg" name="gender" >
+                                            <option>Select your gender</option>
+                                            @foreach($gender_list as $gender_info)
+                                                <option value="{{ $gender_info['id'] }}" @if( old('gender') == $gender_info['id']) selected @endif>{{ trans('common.gender.'.$gender_info['gender']) }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="birthday" class="text-light">Birthday</label>
-                                        <input class="form-control text-light input-dark-bg" type="date" name="dateofbirth" required="">
+                                        <label for="birthday" class="text-light">{{ trans('register.birthday') }}</label>
+                                        <input class="form-control text-light input-dark-bg" type="date" value="{{ old('birthday') }}" name="birthday" >
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="telephone" class="text-light">Phone</label>
-                                        <input class="form-control text-light input-dark-bg" type="tel" name="telephone" placeholder="Phone" required="">
+                                        <label for="mobile" class="text-light">{{ trans('register.mobile') }}</label>
+                                        <input class="form-control text-light input-dark-bg @error('mobile') is-invalid @enderror" type="tel" name="mobile" placeholder="{{ trans('register.mobile') }}" value="{{ old('mobile') }}">
+                                        @error('mobile')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="country" class="text-light">Country</label>
-                                        <select name="country" class="form-select text-light input-dark-bg" required="">
-                                            <option value="">United States</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
-                                            <option>Option 3</option>
+                                        <label for="country" class="text-light">{{ trans('register.country') }}</label>
+                                        <select name="country" class="form-select text-light input-dark-bg @error('country') is-invalid @enderror" >
+                                            <option value="">{{ trans('register.country_placeholder') }}</option>
+                                            @foreach($country_list as $country_info)
+                                                <option value="{{ $country_info['name'] }}" @if( old('country') == $country_info['name']) selected @endif>{{ $country_info['name'] }}</option>
+                                            @endforeach
                                         </select>
+                                        @error('country')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="state" class="text-light">Language</label>
-                                        <select name="lang" class="form-select text-light input-dark-bg" required="">
-                                            <option value="">English</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
-                                            <option>Option 3</option>
+                                        <label for="lang" class="text-light">{{ trans('register.lang') }}</label>
+                                        <select name="lang" class="form-select text-light input-dark-bg @error('lang') is-invalid @enderror" >
+                                            <option value="">{{ trans('register.lang_placeholder') }}</option>
+                                            @foreach($language_list as $language_info)
+                                                <option value="{{ $language_info['code'] }}" @if( old('lang') == $language_info['code']) selected @endif>{{ $language_info['name'] }}</option>
+                                            @endforeach
                                         </select>
+                                        @error('lang')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label for="address" class="text-light">Address</label>
-                                        <input type="text" class="form-control text-light input-dark-bg" name="address" placeholder="Address" required="">
+                                        <label for="address" class="text-light">{{ trans('register.address') }}</label>
+                                        <input type="text" class="form-control text-light input-dark-bg @error('address') is-invalid @enderror" name="address" placeholder="{{ trans('register.address') }}" value="{{ old('address') }}">
+                                        @error('address')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Postal Code</label>
-                                        <input type="text" class="form-control text-light input-dark-bg" name="zip" placeholder="Postal Code" required="">
+                                        <label for="postal_code" class="text-light">{{ trans('register.postal_code') }}</label>
+                                        <input type="text" class="form-control text-light input-dark-bg @error('postal_code') is-invalid @enderror" name="postal_code" placeholder="{{ trans('register.postal_code') }}" value="{{ old('postal_code') }}">
+                                        @error('postal_code')
+                                            <div class="is-invalid">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-check mb-1 mt-5">
-                                    <input type="checkbox" name="reminders" id="reminders" class="form-check-input" value="1" required="">
-                                    <label class="form-check-label text-light" for="reminders">I have read and agree to Ctex's Terms of Service.</label>
+                                    <input type="checkbox" name="agree" id="agree" class="form-check-input" value="{{ old('agree') }}" required>
+                                    <label class="form-check-label text-light" for="agree">{{ trans('register.agree_desc') }}</label>
                                 </div>
-                                <button type="submit" class="btn m-t-30 mt-3">Register</button>
+                                <button type="submit" class="btn m-t-30 mt-3">{{ trans('buttons.register') }}</button>
                             </form>
-                            <div class="mt-4"><small>Already Registered?</small> <a href="{{route('login')}}" class="small fw-bold">Login</a>
+                            <div class="mt-4"><small>Already Registered?</small> <a href="{{route('login')}}" class="small fw-bold">{{ trans('buttons.login') }}</a>
                             </div>
                         </div>
                     </div>

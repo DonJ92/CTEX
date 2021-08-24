@@ -32,8 +32,8 @@
                 <!--Logo-->
                 <div id="logo">
                     <a href="{{ route('/') }}">
-                        <span class="logo-default">CTEX</span>
-                        <span class="logo-dark text-primary">CTEX</span>
+                        <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
+                        <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 50px"></span>
                     </a>
                 </div>
                 <!--End: Logo-->
@@ -72,7 +72,7 @@
                                             </div>
                                         </div>
                                         <hr class="space">
-                                        <a href="#" class="text-theme">See all notifications</a>
+                                        <a href="{{ route('notifications') }}" class="text-theme">See all notifications</a>
                                     </div>
                                 </div>
                             </div>
@@ -106,17 +106,18 @@
                         <nav>
                             <ul>
                                 <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+                                <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>News</a></li>
                                 <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>Trade</a></li>
                                 <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
                                 <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>Deposit / Withdraw</a></li>
                                 <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>Report</a></li>
                                 <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>Setting</a></li>
                                 <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>FAQ</a></li>
-                                <li><a href="{{ route('faq') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
-                                <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>User</span></a>
+                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
                                         <li><a href="{{ route('setting') }}">Setting</a></li>
-                                        <li><a href="#">Notifications</a></li>
+                                        <li><a href="{{ route('notifications') }}">Notifications</a></li>
                                         <li><a href="{{ route('logout') }}"
                                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -127,17 +128,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                                @guest
-                                @else
-                                    <li><a href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout</a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                    </li>
-                                @endguest
                             </ul>
                         </nav>
                     </div>
@@ -164,24 +154,25 @@
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="#">Trade</a></li>
-                                        <li><a href="#">Buy/Sell Crypto</a></li>
+                                        <li><a href="{{ route('exchange') }}">Trade</a></li>
+                                        <li><a href="{{ route('dealer') }}">Buy/Sell Crypto</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="#">Deposit/Withdraw</a></li>
-                                        <li><a href="#">Trading Report</a></li>
+                                        <li><a href="{{ route('payment') }}">Deposit/Withdraw</a></li>
+                                        <li><a href="{{ route('report') }}">Trading Report</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="#">FAQ</a></li>
-                                        <li><a href="#">Contact Us</a></li>
+                                        <li><a href="{{ route('news') }}">News</a></li>
+                                        <li><a href="{{ route('faq') }}">FAQ</a></li>
+                                        <li><a href="{{ route('contactus') }}">Contact Us</a></li>
                                     </ul>
                                 </div>
                             </div>

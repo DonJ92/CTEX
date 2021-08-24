@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends(Auth::user() ? 'layouts.dashboard' : 'layouts.app')
 
 @section('content')
     <div class="container body-min-height">

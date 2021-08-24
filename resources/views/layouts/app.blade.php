@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'CTEX') }}</title>
+    <title>@yield('title') - {{ config('app.name', 'ADAM Bit') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,7 +20,7 @@
 </head>
 <body>
     <!-- Body Inner -->
-    <div class="body-inner">
+    <div class="body-inner background-dark min-vh-100">
         <!-- Header -->
         <header id="header" class="dark" data-fullwidth="true">
             <div class="header-inner">
@@ -28,8 +28,8 @@
                     <!--Logo-->
                     <div id="logo">
                         <a href="{{ route('/') }}">
-                            <span class="logo-default">CTEX</span>
-                            <span class="logo-dark text-primary">CTEX</span>
+                            <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
+                            <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 50px"></span>
                         </a>
                     </div>
                     <!--End: Logo-->
@@ -63,13 +63,14 @@
                             <nav>
                                 <ul>
                                     <li><a href="{{ route('/') }}"><i class="fa fa-home"></i>Home</a></li>
+                                    <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>News</a></li>
                                     <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>Trade</a></li>
                                     <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
                                     <!--<li><a href="">Overview</a></li>
                                     <li><a href="">Services</a></li>
                                     <li><a href="">How to Use</a></li>-->
                                     <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>FAQ</a></li>
-                                    <li><a href="{{ route('faq') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                    <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
                                     @guest
                                     <li><a href="{{ route('login') }}"><i class="icon-log-in"> </i>Login</a></li>
                                     <li><a href="{{ route('register') }}"><i class="icon-user-plus"> </i>Register</a></li>
@@ -100,7 +101,7 @@
                     <div class="row mx-1">
                         <div class="col-lg-5">
                             <div class="widget">
-                                <div class="widget-title">CTEX Exchange</div>
+                                <div class="widget-title">ADAM Bit Exchange</div>
                                 <p>All rights reserved. Copyright © 2021.</p>
                             </div>
                         </div>
@@ -110,15 +111,16 @@
                                     <div class="widget">
                                         <ul class="list">
                                             <li><a href="{{ route('exchange') }}">Trade</a></li>
-                                            <li><a href="{{ route('exchange') }}">Buy / Sell Crypto</a></li>
+                                            <li><a href="{{ route('dealer') }}">Buy / Sell Crypto</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="widget">
                                         <ul class="list">
+                                            <li><a href="{{ route('news') }}">News</a></li>
                                             <li><a href="{{ route('faq') }}">FAQ</a></li>
-                                            <li><a href="#">Contact Us</a></li>
+                                            <li><a href="{{ route('contactus') }}">Contact Us</a></li>
                                         </ul>
                                     </div>
                                 </div>
