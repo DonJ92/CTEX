@@ -65,6 +65,13 @@ return [
         'valid' => 1,
     ],
 
+    'deposit_status' => [
+        'confirmed' => 0,
+        'completed' => 1,
+        'processing' => 2,
+        'failed' => 3,
+    ],
+
     'withdraw_type' => [
         'crypto' => 1,
         'transfer' => 2,
@@ -76,5 +83,20 @@ return [
         'processing' => 2,
         'failed' => 3,
         'canceled' => 4,
-    ]
+    ],
+
+    'trade_type' => [
+        'trade' => 1,
+        'Buy/Sell Crypto' => 2,
+    ],
+
+    'order_type' => [
+        'sell' => 1,
+        'buy' => 2,
+    ],
+
+    'trade_status' => [
+        'settled' => 1,
+        'canceled' => 2,
+    ],
 ];

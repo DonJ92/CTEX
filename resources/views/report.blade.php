@@ -1,13 +1,15 @@
 @extends('layouts.dashboard')
 
+@section('title', trans('report.title'))
+
 @section('content')
 <div class="container-fluid body-min-height">
     <!-- Page title -->
     <section id="page-title" class="page-title-left text-light background-dark">
         <div class="container-fluid">
             <div class="page-title">
-                <h1>Report</h1>
-                <span>You could confirm trade, deposit, withdraw history and search, export data.</span>
+                <h1>{{ trans('report.page_title') }}</h1>
+                <span>{{ trans('report.page_title_desc') }}</span>
             </div>
         </div>
     </section>
@@ -16,6 +18,8 @@
     <!-- Content -->
     <section id="page-content" class="dark">
         <div class="container-fluid">
+            @csrf
+
             <div class="tabs tabs-vertical">
                 <div class="row">
                     <div class="col-md-2 tab-border-right mb-3">
@@ -35,432 +39,82 @@
                         <div class="tab-content" id="myTabContent4">
                             <div class="tab-pane fade show active" id="trade" role="tabpanel" aria-labelledby="trade-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="to_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="trade_from_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="trade_to_date"></div>
                                     <div class="col-lg-3 form-group">
-                                        <select id="inputState" class="form-select text-light input-dark-bg">
-                                            <option selected>Choose...</option>
-                                            <option>...</option>
+                                        <select id="trade_type" class="form-select text-light input-dark-bg">
+                                            <option value="" selected>{{ trans('report.type_placeholder') }}</option>
+                                            <option value="{{ config('constants.trade_type.trade') }}">{{ trans('common.trade_type.trade') }}</option>
+                                            <option value="{{ config('constants.trade_type.Buy/Sell Crypto') }}">{{ trans('common.trade_type.Buy/Sell Crypto') }}</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-3">
-                                        <button type="submit" class="btn btn-primary">View</button>
+                                        <button type="button" class="btn btn-primary" onclick="getTradeHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
-                                <table id="datatable" class="table table-dark font-size-sm overflow-auto" style="width:100%">
+                                <table id="trade_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th class="background-black-dark">Trade ID</th>
-                                        <th class="background-black-dark">Type</th>
-                                        <th class="background-black-dark">Order DateTime</th>
-                                        <th class="background-black-dark">Order Price</th>
-                                        <th class="background-black-dark">Symbol</th>
-                                        <th class="background-black-dark">Order Type</th>
-                                        <th class="background-black-dark">Settle DateTime</th>
-                                        <th class="background-black-dark">Settle Price</th>
-                                        <th class="background-black-dark">Settle Amount</th>
-                                        <th class="background-black-dark">Fee</th>
-                                        <th class="background-black-dark">Status</th>
-                                        <th class="background-black-dark">Remark</th>
+                                        <th class="background-black-dark">{{ trans('report.trade_id') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.type') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.order_type') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.settle_datetime') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.settle_price') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.settle_amount') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.fee') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.remark') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tx-28477348</td>
-                                        <td>Trade</td>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>43562.54</td>
-                                        <td>BTCUSDT</td>
-                                        <td>BUY</td>
-                                        <td>2021/01/24 16:58:00</td>
-                                        <td>43852.54</td>
-                                        <td>3</td>
-                                        <td>21.5</td>
-                                        <td>Settle</td>
-                                        <td></td>
-                                    </tr>
-
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="to_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="deposit_from_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="deposit_to_date"></div>
                                     <div class="col-lg-3">
-                                        <button type="submit" class="btn btn-primary">View</button>
+                                        <button type="button" class="btn btn-primary" onclick="getDepositHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
                                 <table id="deposit_history_tbl" class="table table-dark font-size-sm" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th class="background-black-dark">DateTime</th>
-                                        <th class="background-black-dark">Symbol</th>
-                                        <th class="background-black-dark">Amount</th>
-                                        <th class="background-black-dark">Deposit Address</th>
-                                        <th class="background-black-dark">Tx_ID</th>
-                                        <th class="background-black-dark">Status</th>
+                                        <th class="background-black-dark">{{ trans('report.date_time') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.amount') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.deposit_address') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="to_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="withdraw_from_date"></div>
+                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="withdraw_to_date"></div>
                                     <div class="col-lg-3">
-                                        <button type="submit" class="btn btn-primary">View</button>
+                                        <button type="button" class="btn btn-primary" onclick="getWithdrawHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
                                 <table id="withdraw_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th class="background-black-dark">DateTime</th>
-                                        <th class="background-black-dark">Symbol</th>
-                                        <th class="background-black-dark">Amount</th>
-                                        <th class="background-black-dark">Withdraw Address</th>
-                                        <th class="background-black-dark">Tx_ID</th>
-                                        <th class="background-black-dark">Status</th>
-                                        <th class="background-black-dark">Remark</th>
+                                        <th class="background-black-dark">{{ trans('report.date_time') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.amount') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.withdraw_address') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.remark') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2021/01/23 16:58:00</td>
-                                        <td>BTC</td>
-                                        <td>1.0</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe</td>
-                                        <td>0x4832hjd028eje202e8fehj20e28fe8hj2fe82fe349jdsjdsdsdsfds</td>
-                                        <td>Pending</td>
-                                        <td></td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -477,50 +131,171 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/moment.js') }}"></script>
 <script>
-    $('#datatable').DataTable({
-        responsive: true,
-        searching: false,
-        viewCount: false,
-        bLengthChange: false,
-        language: {
-            "paginate": {
-                "first":      "<<",
-                "last":       ">>",
-                "next":       ">",
-                "previous":   "<"
-            },
-        }
+    $( document ).ready(function() {
+        getTradeHistory();
+        getDepositHistory();
+        getWithdrawHistory();
     });
 
-    $('#deposit_history_tbl').DataTable({
-        responsive: true,
-        searching: false,
-        viewCount: false,
-        bLengthChange: false,
-        language: {
-            "paginate": {
-                "first":      "<<",
-                "last":       ">>",
-                "next":       ">",
-                "previous":   "<"
-            },
-        }
-    });
+    function getTradeHistory() {
+        var token = $("input[name=_token]").val();
+        var from_date = $('#trade_from_date').val();
+        var to_date = $('#trade_to_date').val();
+        var type = $('#trade_type').val();
 
-    $('#withdraw_history_tbl').DataTable({
-        responsive: true,
-        searching: false,
-        viewCount: false,
-        bLengthChange: false,
-        language: {
-            "paginate": {
-                "first":      "<<",
-                "last":       ">>",
-                "next":       ">",
-                "previous":   "<"
-            },
-        }
-    });
+        $.ajax({
+            url: '{{ route('report.trade.history') }}',
+            type: 'POST',
+            data: {_token: token, from_date: from_date, to_date: to_date, type: type},
+            dataType: 'JSON',
+            success: function (response) {
+                if ( $.fn.DataTable.isDataTable( '#trade_history_tbl' ) ) {
+                    var trade_history_tbl = $('#trade_history_tbl').DataTable();
+                    trade_history_tbl.destroy();
+                }
+
+                datas = new Array();
+                if (response == undefined || response.length == 0) {
+                } else {
+                    for (var i = 0; i < response.length; i++) {
+
+                        datas.push([
+                            response[i].trade_id,
+                            response[i].type,
+                            response[i].currency,
+                            response[i].signal,
+                            moment(response[i].settled_at).utc().format('YYYY-MM-DD HH:mm:ss'),
+                            response[i].settle_price,
+                            response[i].settle_amount,
+                            response[i].fee,
+                            response[i].status,
+                            response[i].remark,
+                        ]);
+                    }
+                }
+
+                $('#trade_history_tbl').dataTable({
+                    data: datas,
+                    responsive: true,
+                    searching: false,
+                    viewCount: false,
+                    bLengthChange: false,
+                    language: {
+                        "paginate": {
+                            "first":      "<<",
+                            "last":       ">>",
+                            "next":       ">",
+                            "previous":   "<"
+                        },
+                    }
+                });
+            }
+        });
+    }
+
+    function getDepositHistory() {
+        var token = $("input[name=_token]").val();
+        var from_date = $('#deposit_from_date').val();
+        var to_date = $('#deposit_to_date').val();
+
+        $.ajax({
+            url: '{{ route('report.deposit.history') }}',
+            type: 'POST',
+            data: {_token: token, from_date: from_date, to_date:to_date},
+            dataType: 'JSON',
+            success: function (response) {
+                if ( $.fn.DataTable.isDataTable( '#deposit_history_tbl' ) ) {
+                    var deposit_history_tbl = $('#deposit_history_tbl').DataTable();
+                    deposit_history_tbl.destroy();
+                }
+
+                datas = new Array();
+                if (response == undefined || response.length == 0) {
+                } else {
+                    for (var i = 0; i < response.length; i++) {
+
+                        datas.push([
+                            moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss'),
+                            response[i].currency,
+                            response[i].amount,
+                            response[i].wallet_addr,
+                            response[i].tx_id,
+                            response[i].status,
+                        ]);
+                    }
+                }
+
+                $('#deposit_history_tbl').dataTable({
+                    data: datas,
+                    responsive: true,
+                    searching: false,
+                    viewCount: false,
+                    bLengthChange: false,
+                    language: {
+                        "paginate": {
+                            "first":      "<<",
+                            "last":       ">>",
+                            "next":       ">",
+                            "previous":   "<"
+                        },
+                    }
+                });
+            }
+        });
+    }
+
+    function getWithdrawHistory() {
+        var token = $("input[name=_token]").val();
+        var from_date = $('#withdraw_from_date').val();
+        var to_date = $('#withdraw_to_date').val();
+
+        $.ajax({
+            url: '{{ route('report.withdraw.history') }}',
+            type: 'POST',
+            data: {_token: token, from_date: from_date, to_date:to_date},
+            dataType: 'JSON',
+            success: function (response) {
+                if ( $.fn.DataTable.isDataTable( '#withdraw_history_tbl' ) ) {
+                    var withdraw_history_tbl = $('#withdraw_history_tbl').DataTable();
+                    withdraw_history_tbl.destroy();
+                }
+
+                datas = new Array();
+                if (response == undefined || response.length == 0) {
+                } else {
+                    for (var i = 0; i < response.length; i++) {
+
+                        datas.push([
+                            moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss'),
+                            response[i].currency,
+                            response[i].amount,
+                            response[i].destination,
+                            response[i].tx_id,
+                            response[i].status,
+                            response[i].remark,
+                        ]);
+                    }
+                }
+
+                $('#withdraw_history_tbl').dataTable({
+                    data: datas,
+                    responsive: true,
+                    searching: false,
+                    viewCount: false,
+                    bLengthChange: false,
+                    language: {
+                        "paginate": {
+                            "first":      "<<",
+                            "last":       ">>",
+                            "next":       ">",
+                            "previous":   "<"
+                        },
+                    }
+                });
+            }
+        });
+    }
 </script>
 @endsection

@@ -5,9 +5,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Withdraw extends Model
+class TradeHistory extends Model
 {
-    protected $table = 'lk_users_withdraw';
+    protected $connection = 'mysql2';
+
+    protected $table = 'ct_trade_history';
 
     /**
      * The attributes that are mass assignable.
@@ -16,20 +18,21 @@ class Withdraw extends Model
      */
     protected $fillable = [
         'user_id',
-        'currency',
-        'destination',
+        'order_id',
+        'trade_id',
+        'settled_at',
         'type',
-        'amount',
-        'withdraw_fee',
-        'transfer_fee',
-        'gas_price',
-        'gas_used',
-        'tx_id',
+        'currency',
+        'signal',
+        'settle_price',
+        'settle_amount',
+        'fee',
         'status',
         'remark',
     ];
 
     protected $hidden = [
         'created_at',
+        'updated_at',
     ];
 }

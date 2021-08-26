@@ -30,6 +30,9 @@ Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])
 Route::post('/withdraw', [App\Http\Controllers\PaymentController::class, 'withdraw'])->name('payment.withdraw');
 
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('report');
+Route::post('/report/trade/history', [App\Http\Controllers\ReportController::class, 'getTradeHistory'])->name('report.trade.history');
+Route::post('/report/deposit/history', [App\Http\Controllers\ReportController::class, 'getDepositHistory'])->name('report.deposit.history');
+Route::post('/report/withdraw/history', [App\Http\Controllers\ReportController::class, 'getWithdrawHistory'])->name('report.withdraw.history');
 
 Route::get('/setting', [App\Http\Controllers\SettingController::class, 'index'])->name('setting');
 

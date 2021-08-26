@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-class SettingController
+class SettingController extends Controller
 {
     /**
      * Create a new controller instance.

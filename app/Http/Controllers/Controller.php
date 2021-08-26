@@ -221,4 +221,87 @@ class Controller extends BaseController
 
         return $balance;
     }
+
+    protected function getDepositStatue($status)
+    {
+        $deposit_status = config('constants.deposit_status');
+        if ($status == $deposit_status['confirmed'])
+            return trans('common.deposit_status.confirmed');
+        elseif ($status == $deposit_status['completed'])
+            return trans('common.deposit_status.completed');
+        elseif ($status == $deposit_status['processing'])
+            return trans('common.deposit_status.processing');
+        elseif ($status == $deposit_status['failed'])
+            return trans('common.deposit_status.failed');
+
+        return '';
+    }
+
+    /**
+     * get withdraw status label
+     *
+     * @param $status
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
+    protected function getWithdrawStatue($status)
+    {
+        $withdraw_status = config('constants.withdraw_status');
+        if ($status == $withdraw_status['requested'])
+            return trans('common.withdraw_status.requested');
+        elseif ($status == $withdraw_status['completed'])
+            return trans('common.withdraw_status.completed');
+        elseif ($status == $withdraw_status['processing'])
+            return trans('common.withdraw_status.processing');
+        elseif ($status == $withdraw_status['failed'])
+            return trans('common.withdraw_status.failed');
+        elseif ($status == $withdraw_status['canceled'])
+            return trans('common.withdraw_status.canceled');
+
+        return '';
+    }
+
+    /**
+     * get trade type label
+     *
+     * @param $type
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
+    protected function getTradeType($type)
+    {
+        $trade_type = config('constants.trade_type');
+        if ($type == $trade_type['trade'])
+            return trans('common.trade_type.trade');
+        elseif ($type == $trade_type['Buy/Sell Crypto'])
+            return trans('common.trade_type.Buy/Sell Crypto');
+
+        return '';
+    }
+
+    /**
+     * get order type label
+     *
+     * @param $type
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
+    protected function getOrderType($type)
+    {
+        $order_type = config('constants.order_type');
+        if ($type == $order_type['sell'])
+            return trans('common.order_type.sell');
+        elseif ($type == $order_type['buy'])
+            return trans('common.order_type.buy');
+
+        return '';
+    }
+
+    protected function getTradeStatue($status)
+    {
+        $trade_status = config('constants.trade_status');
+        if ($status == $trade_status['settled'])
+            return trans('common.trade_status.settled');
+        elseif ($status == $trade_status['canceled'])
+            return trans('common.trade_status.canceled');
+
+        return '';
+    }
 }
