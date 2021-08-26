@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserBalance;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -119,7 +123,30 @@ class RegisterController extends Controller
             'lang' => $data['lang'],
             'address' => $data['address'],
             'postal_code' => $data['postal_code'],
-            'status' => config('constants.user_status.valid')
+            'status' => config('constants.user_status.invalid')
         ]);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $user = Auth::user();
+
+        $cryptocurrency_list = $this->getCryptocurrencyList();
+
+        $insert_data = array();
+        foreach ($cryptocurrency_list as $cryptocurrency_info)
+            $insert_data[] = [
+                'user_id' => $user->id,
+                'currency' => $cryptocurrency_info['currency'],
+                'balance' => 0,
+                'status' => config('constants.balance_status.valid'),
+            ];
+
+        try {
+            $res = UserBalance::insert($insert_data);
+        } catch (QueryException $e) {
+            print_r($e->getMessage());
+            die();
+        }
     }
 }

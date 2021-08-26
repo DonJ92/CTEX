@@ -9,4 +9,6 @@ return [
 
     'reset_pwd_send' => 'Send Password Reset Link',
     'reset_pwd' => 'Reset Password',
+
+    'withdraw' => 'Withdraw'
 ];

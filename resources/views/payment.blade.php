@@ -1,18 +1,32 @@
 @extends('layouts.dashboard')
 
+@section('title', trans('payment.title'))
+
 @section('content')
 <div class="container body-min-height">
 <!-- Page title -->
 <section id="page-title" class="page-title-left text-light background-dark">
     <div class="container">
         <div class="page-title">
-            <h1>Deposit / Withdraw</h1>
-            <span>Deposit / Withdraw Description</span>
+            <h1>{{ trans('payment.page_title') }}</h1>
+            <span>{{ trans('payment.page_title_desc') }}</span>
         </div>
     </div>
 </section>
 <!-- end: Page title -->
 <hr>
+    @if ($errors->has('failed'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ $errors->first('failed') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+@endif
 <!-- Content -->
 <section id="page-content" class="dark">
     <div class="container">
@@ -20,255 +34,107 @@
             <div class="row">
                 <div class="col-md-3 tab-border-right mb-3">
                     <ul class="nav flex-column nav-tabs border-1" id="cryptoTab" role="tablist" aria-orientation="vertical">
-                        <li class="nav-item">
-                            <a class="nav-link no-border active" id="btc-tab" data-bs-toggle="tab" href="#btc" role="tab" aria-controls="btc" aria-selected="true"><img src="{{ asset('/icons/btc.svg') }}" width="32px" class="p-r-10"><b>BTC</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><img src="{{ asset('/icons/eth.svg') }}" width="32px" class="p-r-10"><b>ETH</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="xrp-tab" data-bs-toggle="tab" href="#xrp" role="tab" aria-controls="xrp" aria-selected="false"><img src="{{ asset('/icons/xrp.svg') }}" width="32px" class="p-r-10"><b>XRP</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><img src="{{ asset('/icons/ltc.svg') }}" width="32px" class="p-r-10"><b>LTC</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><img src="{{ asset('/icons/usdt.svg') }}" width="32px" class="p-r-10"><b>USDT</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><img src="{{ asset('/icons/ada.svg') }}" width="32px" class="p-r-10"><b>ADA</b></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link no-border" id="eth-tab" data-bs-toggle="tab" href="#eth" role="tab" aria-controls="eth" aria-selected="false"><img src="{{ asset('/icons/wiz+.svg') }}" width="32px" class="p-r-10"><b>WIZ+</b></a>
-                        </li>
+                        @foreach($cryptocurrency_list as $cryptocurrency_info)
+                            <li class="nav-item">
+                                <a class="nav-link no-border" id="{{ $cryptocurrency_info['currency_url'] }}-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}" aria-selected="false"><img src="{{ $cryptocurrency_info['ico'] }}" width="32px" class="p-r-10"><b>{{ $cryptocurrency_info['currency'] }}</b></a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-md-9">
-                    <div class="tab-content" id="myTabContent4">
-                        <div class="tab-pane fade show active" id="btc" role="tabpanel" aria-labelledby="btc-tab">
+                    <div class="tab-content" id="paymentTabContent">
+                        @foreach($cryptocurrency_list as $cryptocurrency_info)
+                        <div class="tab-pane fade" id="{{ $cryptocurrency_info['currency_url'] }}" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-tab">
                             <div class="tabs tabs-folder">
-                                <ul class="nav nav-tabs" id="btc_payment_tab" role="tablist">
+                                <ul class="nav nav-tabs" id="{{ $cryptocurrency_info['currency_url'] }}_payment_tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="btc-deposit-tab" data-bs-toggle="tab" href="#btc-deposit" role="tab" aria-controls="btc-deposit" aria-selected="true"><b>Deposit</b></a>
+                                        <a class="nav-link active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-deposit" aria-selected="true"><b>{{ trans('payment.deposit') }}</b></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="btc-withdraw-tab" data-bs-toggle="tab" href="#btc-withdraw" role="tab" aria-controls="btc-withdraw" aria-selected="false">Withdraw</a>
+                                        <a class="nav-link" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-withdraw" aria-selected="false">{{ trans('payment.withdraw') }}</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content" id="btc_payment_content">
-                                    <div class="tab-pane fade show active" id="btc-deposit" role="tabpanel" aria-labelledby="btc-deposit-tab">
+                                <div class="tab-content" id="{{ $cryptocurrency_info['currency_url'] }}_payment_content">
+                                    <div class="tab-pane fade show active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab">
                                         <h5>
-                                            This is your Bitcoin deposit address.<br>
-                                            Please copy or scan the QR code to use it.
+                                            {{ trans('payment.deposit_desc1', ['currency' => $cryptocurrency_info['name']]) }}<br>
+                                            {{ trans('payment.deposit_desc2') }}
                                         </h5>
                                         <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Minimal Deposit Amount: <span>0.001BTC</span> <p>You have to transfer funds larger than the minimal deposit amount</p></h5>
+                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . $cryptocurrency_info['currency'] }}</span></h4>
+                                        <h5>{{ trans('payment.min_deposit_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_deposit'] . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_deposit_desc') }}</p></h5>
                                         <hr>
                                         <div class="card background-dark">
                                             <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Deposit Address</span>
+                                                <span class="h4 mx-auto text-primary">{{ trans('payment.deposit_addr_title', ['currency' => $cryptocurrency_info['name']]) }} </span>
                                             </div>
                                             <div class="card-body">
                                                 <div class="col-lg-8 mx-auto mt-5">
                                                     <div class="form-group mb-5 text-center">
-                                                        <img class="mx-auto img-thumbnail" src="{{ asset('/images/QR.png') }}" width="300px">
+                                                        <img class="mx-auto img-thumbnail" src="{{ QR_GENERATE_URL.$cryptocurrency_info['deposit_addr'] }}" width="300px">
                                                     </div>
                                                     <div class="form-inline">
                                                         <div class="input-group">
-                                                            <input id="addr" type="text" disabled class="form-control widget-search-form text-light input-dark-bg" value="">
+                                                            <input id="addr" type="text" readonly class="form-control widget-search-form text-light input-dark-bg" value="{{ $cryptocurrency_info['deposit_addr'] }}">
                                                             <span class="input-group-text input-dark-bg"><button class="no-border input-dark-bg text-light" data-clipboard="true" data-clipboard-target="#addr"><i class="icon-copy"></i></button></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please transfer funds to the correct Bitcoin address on the above. We are not responsible if you transfer funds to another address.</p>
+                                        <h4>{{ trans('payment.deposit_warning_title') }}</h4>
+                                        <p class="text-light">{{ trans('payment.deposit_warning_desc', ['currency' => $cryptocurrency_info['name']]) }}</p>
                                     </div>
-                                    <div class="tab-pane fade" id="btc-withdraw" role="tabpanel" aria-labelledby="btc-withdraw-tab">
+                                    <div class="tab-pane fade" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab">
                                         <h5>
-                                            Please input an external Bitcoin address to withdraw to.
+                                            {{ trans('payment.withdraw_desc', ['currency' => $cryptocurrency_info['name']]) }}
                                         </h5>
                                         <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Maximum Withdrawal Amount: <span>0.03BTC</span> <p>Your withdrawal funds can not be larger than the maximum withdrawal amount.</p></h5>
+                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . $cryptocurrency_info['currency'] }}</span></h4>
+                                        <h5>{{ trans('payment.min_withdraw_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_withdraw'] . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_withdraw_desc') }}</p></h5>
                                         <hr>
                                         <div class="card background-dark">
                                             <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Withdrawal Address</span>
+                                                <span class="h4 mx-auto text-primary">{{ trans('payment.withdraw_addr_title', ['currency' => $cryptocurrency_info['name']]) }}</span>
                                             </div>
-                                            <div class="card-body text-light text-center">
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-lg-3 col-form-label">Bitcoin Address</label>
-                                                    <div class="col-lg-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="btc_addr">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-lg-3 col-form-label">Withdrawal Amount</label>
-                                                    <div class="col-lg-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="amount">
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn m-t-30 mt-3">Withdraw</button>
-                                            </div>
-                                        </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please input the correct Bitcoin withdrawal address. We are not responsible if your withdrawal address is invalid.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="eth" role="tabpanel" aria-labelledby="eth-tab">
-                            <div class="tabs tabs-folder">
-                                <ul class="nav nav-tabs" id="myTab3" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="btc-deposit-tab" data-bs-toggle="tab" href="#btc-deposit" role="tab" aria-controls="btc-deposit" aria-selected="true"><b>Deposit</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="btc-transfer-tab" data-bs-toggle="tab" href="#btc-transfer" role="tab" aria-controls="btc-transfer" aria-selected="false">Withdraw</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent3">
-                                    <div class="tab-pane fade show active" id="btc-deposit" role="tabpanel" aria-labelledby="btc-deposit-tab">
-                                        <h5>
-                                            This is your Bitcoin deposit address.<br>
-                                            Please copy or scan the QR code to use it.
-                                        </h5>
-                                        <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Minimal Deposit Amount: <span>0.001BTC</span> <p>You have to transfer funds larger than the minimal deposit amount</p></h5>
-                                        <hr>
-                                        <div class="card background-dark">
-                                            <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Deposit Address</span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="col-lg-8 mx-auto mt-5">
-                                                    <div class="form-group mb-5 text-center">
-                                                        <img class="mx-auto img-thumbnail" src="{{ asset('/images/QR.png') }}" width="300px">
-                                                    </div>
-                                                    <div class="form-inline">
-                                                        <div class="input-group">
-                                                            <input id="addr" type="text" disabled class="form-control widget-search-form text-light input-dark-bg" value="">
-                                                            <span class="input-group-text input-dark-bg"><button class="no-border input-dark-bg text-light" data-clipboard="true" data-clipboard-target="#addr"><i class="icon-copy"></i></button></span>
+                                            <form method="POST" action="{{ route('payment.withdraw') }}">
+                                                @csrf
+
+                                                <input type="hidden" name="currency" value="{{ $cryptocurrency_info['currency'] }}">
+                                                <input type="hidden" name="currency_url" value="{{ $cryptocurrency_info['currency_url'] }}">
+
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-lg-3 col-form-label text-light">{{ trans('payment.withdraw_address') }}</label>
+                                                        <div class="col-lg-9">
+                                                            <input class="form-control text-light input-dark-bg @error($cryptocurrency_info['currency_url'] . '_destination') is-invalid @enderror" type="text" value="{{ old($cryptocurrency_info['currency_url'].'_destination') }}" id="{{ $cryptocurrency_info['currency_url'] }}_destination" name="{{ $cryptocurrency_info['currency_url'] }}_destination">
+                                                            @error($cryptocurrency_info['currency_url'] . '_destination')
+                                                                <div class="is-invalid">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please transfer funds to the correct Bitcoin address on the above. We are not responsible if you transfer funds to another address.</p>
-                                    </div>
-                                    <div class="tab-pane fade" id="btc-transfer" role="tabpanel" aria-labelledby="btc-transfer-tab">
-                                        <h5>
-                                            Please input an external Bitcoin address to withdraw to.
-                                        </h5>
-                                        <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Maximum Withdrawal Amount: <span>0.03BTC</span> <p>Your withdrawal funds can not be larger than the maximum withdrawal amount.</p></h5>
-                                        <hr>
-                                        <div class="card background-dark">
-                                            <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Withdrawal Address</span>
-                                            </div>
-                                            <div class="card-body text-light">
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-3 col-form-label">Bitcoin Address</label>
-                                                    <div class="col-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="btc_addr">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-3 col-form-label">Withdrawal Amount</label>
-                                                    <div class="col-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="amount">
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary btn-block btn-primary">Withdraw</button>
-                                            </div>
-                                        </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please input the correct Bitcoin withdrawal address. We are not responsible if your withdrawal address is invalid.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="xrp" role="tabpanel" aria-labelledby="xrp-tab">
-                            <div class="tabs tabs-folder">
-                                <ul class="nav nav-tabs" id="myTab3" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="btc-deposit-tab" data-bs-toggle="tab" href="#btc-deposit" role="tab" aria-controls="btc-deposit" aria-selected="true"><b>Deposit</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="btc-transfer-tab" data-bs-toggle="tab" href="#btc-transfer" role="tab" aria-controls="btc-transfer" aria-selected="false">Withdraw</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent3">
-                                    <div class="tab-pane fade show active" id="btc-deposit" role="tabpanel" aria-labelledby="btc-deposit-tab">
-                                        <h5>
-                                            This is your Bitcoin deposit address.<br>
-                                            Please copy or scan the QR code to use it.
-                                        </h5>
-                                        <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Minimal Deposit Amount: <span>0.001BTC</span> <p>You have to transfer funds larger than the minimal deposit amount</p></h5>
-                                        <hr>
-                                        <div class="card background-dark">
-                                            <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Deposit Address</span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="col-lg-8 mx-auto mt-5">
-                                                    <div class="form-group mb-5 text-center">
-                                                        <img class="mx-auto img-thumbnail" src="{{ asset('/images/QR.png') }}" width="300px">
-                                                    </div>
-                                                    <div class="form-inline">
-                                                        <div class="input-group">
-                                                            <input id="addr" type="text" disabled class="form-control widget-search-form text-light input-dark-bg" value="">
-                                                            <span class="input-group-text input-dark-bg"><button class="no-border input-dark-bg text-light" data-clipboard="true" data-clipboard-target="#addr"><i class="icon-copy"></i></button></span>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-lg-3 col-form-label text-light">{{ trans('payment.withdraw_amount') }}</label>
+                                                        <div class="col-lg-9">
+                                                            <input class="form-control text-light input-dark-bg @error($cryptocurrency_info['currency_url'] . '_amount') is-invalid @enderror" type="text" value="{{ old($cryptocurrency_info['currency_url'].'_amount') }}" id="{{ $cryptocurrency_info['currency'] }}_amount" name="{{ $cryptocurrency_info['currency_url'] }}_amount">
+                                                            @error($cryptocurrency_info['currency_url'] . '_amount')
+                                                                <div class="is-invalid">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please transfer funds to the correct Bitcoin address on the above. We are not responsible if you transfer funds to another address.</p>
-                                    </div>
-                                    <div class="tab-pane fade" id="btc-transfer" role="tabpanel" aria-labelledby="btc-transfer-tab">
-                                        <h5>
-                                            Please input an external Bitcoin address to withdraw to.
-                                        </h5>
-                                        <br>
-                                        <h4>Balance: <span class="text-primary">0.03BTC</span></h4>
-                                        <h5>Maximum Withdrawal Amount: <span>0.03BTC</span> <p>Your withdrawal funds can not be larger than the maximum withdrawal amount.</p></h5>
-                                        <hr>
-                                        <div class="card background-dark">
-                                            <div class="card-header background-black-dark">
-                                                <span class="h4 mx-auto text-primary">Bitcoin Withdrawal Address</span>
-                                            </div>
-                                            <div class="card-body text-light">
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-3 col-form-label">Bitcoin Address</label>
-                                                    <div class="col-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="btc_addr">
+                                                    <div class="text-center">
+                                                        <button type="submit" class="btn m-t-30 mt-3">{{ trans('buttons.withdraw') }}</button>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-3 col-form-label">Withdrawal Amount</label>
-                                                    <div class="col-9">
-                                                        <input class="form-control text-light input-dark-bg" type="text" value="" id="amount">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </form>
                                         </div>
-                                        <h4>※ Caution</h4>
-                                        <p class="text-light">Please input the correct Bitcoin withdrawal address. We are not responsible if your withdrawal address is invalid.</p>
+                                        <h4>{{ trans('payment.withdraw_warning_title') }}</h4>
+                                        <p class="text-light">{{ trans('payment.withdraw_warning_desc', ['currency' => $cryptocurrency_info['name']]) }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -276,4 +142,28 @@
     </div>
 </section>
 </div>
+@endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            @if ($errors->any())
+                $('#{{ old('currency_url') }}-tab').addClass('active');
+                $('#{{ old('currency_url') }}').addClass('show active');
+                $('#{{ old('currency_url') }}-deposit-tab').removeClass('active');
+                $('#{{ old('currency_url') }}-deposit').removeClass('show active')
+                $('#{{ old('currency_url') }}-withdraw-tab').addClass('active');
+                $('#{{ old('currency_url') }}-withdraw').addClass('show active');
+            @else
+                $('#{{ $cryptocurrency_list[0]['currency_url'] }}-tab').addClass('active');
+                $('#{{ $cryptocurrency_list[0]['currency_url'] }}').addClass('show active');
+                $('#{{ $cryptocurrency_list[0]['currency_url'] }}-deposit-tab').addClass('active');
+                $('#{{ $cryptocurrency_list[0]['currency_url'] }}-deposit').addClass('show active');
+            @endif
+
+            @if (session('success'))
+                toastr.success('{{ session('success') }}', '', {"closeButton": true});
+            @endif
+        });
+    </script>
 @endsection

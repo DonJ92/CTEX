@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
@@ -38,5 +42,16 @@ class VerificationController extends Controller
         $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+
+    protected function verified(Request $request)
+    {
+        $user = Auth::user();
+
+        try {
+            $res = User::where('id', $user->id)->update(['status' => config('constants.user_status.valid')]);
+        } catch (QueryException $e) {
+            print_r($e->getMessage());
+        }
     }
 }

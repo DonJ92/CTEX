@@ -2,12 +2,223 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CryptoSettings;
+use App\Models\UserBalance;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * Get Crypto Currency Setting List
+     *
+     * @return array
+     */
+    protected function getCryptocurrencyList()
+    {
+        $cryptocurrency_list = array();
+
+        try {
+            $cryptocurrency_list = CryptoSettings::where('status', config('constants.crypto_setting_status.valid'))->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $cryptocurrency_list;
+        }
+
+        for ($i = 0; $i < count($cryptocurrency_list); $i++) {
+
+            $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['min_deposit'] = _number_format($cryptocurrency_list[$i]['min_deposit'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['min_withdraw'] = _number_format($cryptocurrency_list[$i]['min_withdraw'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['transfer_fee'] = _number_format($cryptocurrency_list[$i]['transfer_fee'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas_price'] = _number_format($cryptocurrency_list[$i]['gas_price'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas_limit'] = _number_format($cryptocurrency_list[$i]['gas_limit'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas'] = _number_format($cryptocurrency_list[$i]['gas'], $cryptocurrency_list[$i]['gas']);
+
+            if ($cryptocurrency_list[$i]['currency'] == 'BTC')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/btc.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'ETH')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/eth.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'XRP')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/xrp.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'LTC')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/ltc.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'USDT')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/usdt.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'ADA')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/ada.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'WIZ+')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/wiz+.svg');
+            else
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/btc.svg');
+        }
+
+        return $cryptocurrency_list;
+    }
+
+    /**
+     * Get Crypto Setting Info from currency
+     *
+     * @param $currency
+     * @return array
+     */
+    protected function getCryptocurrencySetting($currency)
+    {
+        $crypto_setting = array();
+
+        try {
+            $crypto_info = CryptoSettings::where('currency', $currency)->first();
+            if (is_null($crypto_info))
+                return $crypto_setting;
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $crypto_setting;
+        }
+
+        $crypto_setting = $crypto_info->toArray();
+        return $crypto_setting;
+    }
+
+    /**
+     * Get crypto currency list with balance
+     *
+     * @return array
+     */
+    protected function getCryptocurrencyListWithBalance()
+    {
+        $user = Auth::user();
+        $cryptocurrency_list = array();
+
+        try {
+            $cryptocurrency_list = CryptoSettings::leftjoin('lk_ctex_db.ct_users_balance', 'lk_crypto_settings.currency', '=', 'ct_users_balance.currency')
+                ->where('lk_crypto_settings.status', config('constants.crypto_setting_status.valid'))
+                ->where('ct_users_balance.user_id', $user->id)
+                ->select('lk_crypto_settings.*', 'ct_users_balance.balance')
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $cryptocurrency_list;
+        }
+
+        for ($i = 0; $i < count($cryptocurrency_list); $i++) {
+            $cryptocurrency_list[$i]['balance'] = _number_format($cryptocurrency_list[$i]['balance'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['min_deposit'] = _number_format($cryptocurrency_list[$i]['min_deposit'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['min_withdraw'] = _number_format($cryptocurrency_list[$i]['min_withdraw'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['transfer_fee'] = _number_format($cryptocurrency_list[$i]['transfer_fee'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas_price'] = _number_format($cryptocurrency_list[$i]['gas_price'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas_limit'] = _number_format($cryptocurrency_list[$i]['gas_limit'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['gas'] = _number_format($cryptocurrency_list[$i]['gas'], $cryptocurrency_list[$i]['rate_decimals']);
+
+            if ($cryptocurrency_list[$i]['currency'] == 'BTC')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/btc.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'ETH')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/eth.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'XRP')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/xrp.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'LTC')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/ltc.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'USDT')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/usdt.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'ADA')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/ada.svg');
+            else if ($cryptocurrency_list[$i]['currency'] == 'WIZ+')
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/wiz+.svg');
+            else
+                $cryptocurrency_list[$i]['ico'] = asset('/icons/btc.svg');
+        }
+
+        return $cryptocurrency_list;
+    }
+
+    /**
+     * Get User's Balance List
+     *
+     * @return array
+     */
+    protected function getBalance()
+    {
+        $user = Auth::user();
+
+        $balance_list = array();
+
+        try {
+            $balance_list = UserBalance::leftjoin('lk_main_db.lk_crypto_settings', 'lk_crypto_settings.currency', '=', 'ct_users_balance.currency')
+                ->where('ct_users_balance.user_id', $user->id)
+                ->where('ct_users_balance.status', config('constants.balance_status.valid'))
+                ->select('ct_users_balance.user_id', 'ct_users_balance.currency', 'ct_users_balance.balance', 'lk_crypto_settings.rate_decimals')
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $balance_list;
+        }
+
+        for ($i = 0; $i < count($balance_list); $i++) {
+            $balance_list[$i]['balance'] = _number_format($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
+
+            if ($balance_list[$i]['currency'] == 'BTC')
+                $balance_list[$i]['ico'] = asset('/icons/btc.svg');
+            else if ($balance_list[$i]['currency'] == 'ETH')
+                $balance_list[$i]['ico'] = asset('/icons/eth.svg');
+            else if ($balance_list[$i]['currency'] == 'XRP')
+                $balance_list[$i]['ico'] = asset('/icons/xrp.svg');
+            else if ($balance_list[$i]['currency'] == 'LTC')
+                $balance_list[$i]['ico'] = asset('/icons/ltc.svg');
+            else if ($balance_list[$i]['currency'] == 'USDT')
+                $balance_list[$i]['ico'] = asset('/icons/usdt.svg');
+            else if ($balance_list[$i]['currency'] == 'ADA')
+                $balance_list[$i]['ico'] = asset('/icons/ada.svg');
+            else if ($balance_list[$i]['currency'] == 'WIZ+')
+                $balance_list[$i]['ico'] = asset('/icons/wiz+.svg');
+            else
+                $balance_list[$i]['ico'] = asset('/icons/btc.svg');
+        }
+
+        return $balance_list;
+    }
+
+    /**
+     * Get User's balance from currency
+     *
+     * @param $currency
+     * @return array
+     */
+    protected function getBalanceFromCurrency($currency)
+    {
+        $user = Auth::user();
+
+        $balance = [
+            'balance' => 0,
+            'decimals' => 0,
+        ];
+
+        try {
+            $balance_info = UserBalance::leftjoin('lk_main_db.lk_crypto_settings', 'lk_crypto_settings.currency', '=', 'ct_users_balance.currency')
+                ->where('ct_users_balance.user_id', $user->id)
+                ->where('ct_users_balance.currency', $currency)
+                ->where('ct_users_balance.status', config('constants.balance_status.valid'))
+                ->select('ct_users_balance.user_id', 'ct_users_balance.currency', 'ct_users_balance.balance', 'lk_crypto_settings.rate_decimals')
+                ->first();
+
+            if (is_null($balance_info))
+                return $balance;
+            else {
+                $balance['balance'] = $balance_info->balance;
+                $balance['decimals'] = $balance_info->rate_decimals;
+            }
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $balance;
+        }
+
+        return $balance;
+    }
 }

@@ -5,9 +5,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LoginHistory extends Model
+class Disposable extends Model
 {
-    protected $table = 'lk_users_login_history';
+    protected $table = 'lk_users_disposable';
 
     /**
      * The attributes that are mass assignable.
@@ -16,11 +16,10 @@ class LoginHistory extends Model
      */
     protected $fillable = [
         'user_id',
-        'ip_addr',
-        'device',
-        'platform',
-        'region',
-        'accessed_at',
+        'currency',
+        'wallet_address',
+        'wallet_privkey',
+        'status',
     ];
 
     protected $hidden = [

@@ -27,6 +27,7 @@ Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'
 Route::get('/dealer', [App\Http\Controllers\DealerController::class, 'index'])->name('dealer');
 
 Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment');
+Route::post('/withdraw', [App\Http\Controllers\PaymentController::class, 'withdraw'])->name('payment.withdraw');
 
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('report');
 

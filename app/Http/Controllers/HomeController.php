@@ -23,6 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $balance_list = $this->getBalance();
+
+        $data['balance_list'] = $balance_list;
+
+        return view('home', $data);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/commonfunc.php';
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
