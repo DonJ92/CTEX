@@ -24,8 +24,12 @@ class HomeController extends Controller
     public function index()
     {
         $balance_list = $this->getBalance();
+        $last_news_list = $this->getLastNews();
+        $last_notification_list = $this->getLastNotifications();
 
         $data['balance_list'] = $balance_list;
+        $data['last_news_list'] = $last_news_list;
+        $data['last_notifications_list'] = $last_notification_list;
 
         return view('home', $data);
     }

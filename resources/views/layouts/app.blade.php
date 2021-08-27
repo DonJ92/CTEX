@@ -144,5 +144,7 @@
     <script src="{{ asset('js/plugins.js') }}"></script>
     <!--Template functions-->
     <script src="{{ asset('js/functions.js') }}"></script>
+
+    @yield('script')
 </body>
 </html>

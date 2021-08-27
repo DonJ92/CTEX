@@ -46,33 +46,16 @@
                                 <div class="p-dropdown-content background-black-dark border-panel">
                                     <div class="widget-notification">
                                         <h4 class="mb-0">Notifications</h4>
-                                        <p class="text-muted">You have 2 new notifications</p>
-                                        <div class="notification-item notification-new">
-                                            <div class="notification-meta">
-                                                <a href="#">New order just placed</a>
-                                                <span>18:20</span>
+                                        <!--<p class="text-muted">You have 2 new notifications</p>-->
+                                        @foreach(\App\Http\Controllers\Controller::getLastNotifications() as $notification_info)
+                                            <div class="notification-item @if($notification_info['status'] == config('constants.notifications_status.unread')) notification-new @endif">
+                                                <div class="notification-meta">
+                                                    <a href="#">{{ $notification_info['title'] }}</a>
+                                                    <span>{{ $notification_info['updated_at'] }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="notification-item notification-new">
-                                            <div class="notification-meta">
-                                                <a href="#">New account is created</a>
-                                                <span>22:03</span>
-                                            </div>
-                                        </div>
-                                        <div class="notification-item">
-                                            <div class="notification-meta">
-                                                <a href="#">Server Backup is finished successfully</a>
-                                                <span>14:12</span>
-                                            </div>
-                                        </div>
-                                        <div class="notification-item">
-                                            <div class="notification-meta">
-                                                <a href="#">Failed to import document file</a>
-                                                <span>11:03</span>
-                                            </div>
-                                        </div>
-                                        <hr class="space">
-                                        <a href="{{ route('notifications') }}" class="text-theme">See all notifications</a>
+                                        @endforeach
+                                        <div class="m-t-20"><a href="{{ route('notifications') }}" class="text-theme">{{ trans('buttons.all_notifications') }}</a></div>
                                     </div>
                                 </div>
                             </div>

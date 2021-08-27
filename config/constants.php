@@ -99,4 +99,18 @@ return [
         'settled' => 1,
         'canceled' => 2,
     ],
+
+    'news_status' => [
+        'invalid' => 0,
+        'valid' => 1,
+    ],
+
+    'notifications_status' => [
+        'unread' => 0,
+        'read' => 1,
+    ],
+
+    'page_num' => 10,
+    'last_news_count' => 4,
+    'last_notification_count' => 4,
 ];

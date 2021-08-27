@@ -41,5 +41,9 @@ Route::get('/faq', [App\Http\Controllers\FAQController::class, 'index'])->name('
 Route::get('/contactus', [App\Http\Controllers\ContactUsController::class, 'index'])->name('contactus');
 
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news');
+Route::post('/news/list', [App\Http\Controllers\NewsController::class, 'getNewsList'])->name('news.list');
+Route::get('/news/detail/{id}', [App\Http\Controllers\NewsController::class, 'newsDetail'])->name('news.detail');
 
 Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
+Route::post('/notifications/list', [App\Http\Controllers\NotificationController::class, 'getNotificationsList'])->name('notifications.list');
+Route::get('/notifications/detail/{id}', [App\Http\Controllers\NotificationController::class, 'notificationDetail'])->name('notifications.detail');

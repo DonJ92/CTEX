@@ -13,13 +13,13 @@
                             <img class="avatar avatar-lg" src="images/user-avatar.png">
                         </div>
                         <span>{{ auth()->user()->name }}</span>
-                        <p class="text-muted">ID Verification: <i class="icon-check-circle text-success"></i> Not Verified</p>
+                        <p class="text-muted">{{ trans('dashboard.id_verification') }}<i class="icon-check-circle text-success"></i> Not Verified</p>
                     </div>
                     <hr>
                     <div class="m-t-30">
                         <div class="form-group row">
-                            <div class="col-6"><h5 class="text-light">Symbol</h5></div>
-                            <div class="col-6"><h5 class="text-light text-right">Balance</h5></div>
+                            <div class="col-6"><h5 class="text-light">{{ trans('dashboard.symbol') }}</h5></div>
+                            <div class="col-6"><h5 class="text-light text-right">{{ trans('dashboard.balance') }}</h5></div>
                         </div>
                         @foreach($balance_list as $balance_info)
                         <div class="form-group row">
@@ -39,8 +39,8 @@
                                 <a href="{{ route('exchange') }}">
                                     <div class="text-box">
                                         <i class="fa fa-chart-bar"></i>
-                                        <h3>Trade </h3>
-                                        <p>Exchange the Cryptocurrency</p>
+                                        <h3>{{ trans('dashboard.trade_title') }}</h3>
+                                        <p>{{ trans('dashboard.trade_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -50,8 +50,8 @@
                                 <a href="{{ route('dealer') }}">
                                     <div class="text-box">
                                         <i class="fa fa-money-bill-wave"></i>
-                                        <h3>Buy / Sell Crypto</h3>
-                                        <p>Buy and Sell Cryptocurrency</p>
+                                        <h3>{{ trans('dashboard.dealer_title') }}</h3>
+                                        <p>{{ trans('dashboard.dealer_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -61,8 +61,8 @@
                                 <a href="{{ route('payment') }}">
                                     <div class="text-box">
                                         <i class="fa fa-wallet"></i>
-                                        <h3>Deposit / Withdraw</h3>
-                                        <p>Deposit and Withdraw the Funds</p>
+                                        <h3>{{ trans('dashboard.payment_title') }}</h3>
+                                        <p>{{ trans('dashboard.payment_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -76,8 +76,8 @@
                                 <a href="{{ route('report') }}">
                                     <div class="text-box">
                                         <i class="fa fa-file-alt"></i>
-                                        <h3>Report </h3>
-                                        <p>Trading, Deposit, Withdraw History Report</p>
+                                        <h3>{{ trans('dashboard.report_title') }}</h3>
+                                        <p>{{ trans('dashboard.report_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -87,8 +87,8 @@
                                 <a href="{{ route('setting') }}">
                                     <div class="text-box">
                                         <i class="fa fa-cog"></i>
-                                        <h3>Setting</h3>
-                                        <p>Platform Settings</p>
+                                        <h3>{{ trans('dashboard.setting_title') }}</h3>
+                                        <p>{{ trans('dashboard.setting_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -98,8 +98,8 @@
                                 <a href="{{ route('faq') }}">
                                     <div class="text-box">
                                         <i class="fa fa-question-circle"></i></i>
-                                        <h3>FAQ</h3>
-                                        <p>Frequently Asked Questions</p>
+                                        <h3>{{ trans('dashboard.faq_title') }}</h3>
+                                        <p>{{ trans('dashboard.faq_desc') }}</p>
                                     </div>
                                 </a>
                             </div>
@@ -110,65 +110,33 @@
             </div>
             <div class="col-lg-3">
                 <div class="widget widget-notification p-cb background-black-dark border-panel">
-                    <h4 class="widget-title text-primary">News</h4>
+                    <h4 class="widget-title text-primary">{{ trans('dashboard.news_title') }}</h4>
                     <hr>
-                    <div class="notification-item notification-new">
-                        <div class="notification-meta">
-                            <a href="#">New order just placed</a>
-                            <span>18:20</span>
-                        </div>
-                    </div>
-                    <div class="notification-item notification-new">
-                        <div class="notification-meta">
-                            <a href="#">New account is created</a>
-                            <span>22:03</span>
-                        </div>
-                    </div>
+                    @foreach( $last_news_list as $news_info)
                     <div class="notification-item">
                         <div class="notification-meta">
-                            <a href="#">Server Backup is finished successfully</a>
-                            <span>14:12</span>
+                            <a href="{{url('news/detail').'/'.$news_info['id']}}">{{ $news_info['title'] }}</a>
+                            <span>{{ $news_info['updated_at'] }}</span>
                         </div>
                     </div>
-                    <div class="notification-item">
-                        <div class="notification-meta">
-                            <a href="#">Failed to import document file</a>
-                            <span>11:03</span>
-                        </div>
-                    </div>
+                    @endforeach
                     <div class="text-center">
-                        <a href="#" class="text-theme font-size-sm mx-auto">See all news</a>
+                        <a href="{{ route('news') }}" class="text-theme font-size-sm mx-auto">{{ trans('buttons.all_news') }}</a>
                     </div>
                 </div>
                 <div class="widget widget-notification p-cb background-black-dark border-panel">
-                    <h4 class="widget-title text-primary">Notifications</h4>
+                    <h4 class="widget-title text-primary">{{ trans('dashboard.notification_title') }}</h4>
                     <hr>
-                    <div class="notification-item notification-new">
+                    @foreach( $last_notifications_list as $notification_info)
+                    <div class="notification-item @if($notification_info['status'] == config('constants.notifications_status.unread')) notification-new @endif">
                         <div class="notification-meta">
-                            <a href="#">New order just placed</a>
-                            <span>18:20</span>
+                            <a href="{{url('notifications/detail').'/'.$notification_info['id']}}">{{ $notification_info['title'] }}</a>
+                            <span>{{ $notification_info['updated_at'] }}</span>
                         </div>
                     </div>
-                    <div class="notification-item notification-new">
-                        <div class="notification-meta">
-                            <a href="#">New account is created</a>
-                            <span>22:03</span>
-                        </div>
-                    </div>
-                    <div class="notification-item">
-                        <div class="notification-meta">
-                            <a href="#">Server Backup is finished successfully</a>
-                            <span>14:12</span>
-                        </div>
-                    </div>
-                    <div class="notification-item">
-                        <div class="notification-meta">
-                            <a href="#">Failed to import document file</a>
-                            <span>11:03</span>
-                        </div>
-                    </div>
+                    @endforeach
                     <div class="text-center">
-                        <a href="#" class="text-theme font-size-sm mx-auto">See all notifications</a>
+                        <a href="{{ route('notifications') }}" class="text-theme font-size-sm mx-auto">{{ trans('buttons.all_notifications') }}</a>
                     </div>
                 </div>
             </div>

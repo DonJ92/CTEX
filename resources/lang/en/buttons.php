@@ -12,5 +12,9 @@ return [
 
     'withdraw' => 'Withdraw',
 
-    'search' => 'Search'
+    'search' => 'Search',
+    'back' => 'Back',
+
+    'all_news' => 'See all news',
+    'all_notifications' => 'See all notifications',
 ];

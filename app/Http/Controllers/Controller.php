@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\CryptoSettings;
+use App\Models\News;
+use App\Models\Notifications;
 use App\Models\UserBalance;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -222,6 +224,67 @@ class Controller extends BaseController
         return $balance;
     }
 
+    /**
+     * get last news
+     *
+     * @return array
+     */
+    protected function getLastNews()
+    {
+        $news_list = array();
+
+        $locale = app()->getLocale();
+        try {
+            $news_list = News::where('lang', $locale)
+                ->where('status', config('constants.news_status.valid'))
+                ->orderby('updated_at', 'desc')
+                ->take(config('constants.last_news_count'))
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $news_list;
+        }
+
+        for ($i = 0; $i < count($news_list); $i++)
+            $news_list[$i]['updated_at'] = date('Y-m-d h:i:s', strtotime($news_list[$i]['updated_at']));
+
+        return $news_list;
+    }
+
+    /**
+     * get last notifications
+     *
+     * @return array
+     */
+    public static function getLastNotifications()
+    {
+        $user = Auth::user();
+
+        $notification_list = array();
+        try {
+            $notification_list = Notifications::leftjoin('ct_users_notifications_detail', 'ct_users_notifications.id', '=', 'ct_users_notifications_detail.notify_id')
+                ->where('ct_users_notifications_detail.user_id', $user->id)
+                ->orderby('ct_users_notifications.updated_at', 'desc')
+                ->select('ct_users_notifications.*', 'ct_users_notifications_detail.status', 'ct_users_notifications_detail.user_id')
+                ->take(config('constants.last_notification_count'))
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $notification_list;
+        }
+
+        for ($i = 0; $i < count($notification_list); $i++)
+            $notification_list[$i]['updated_at'] = date('Y-m-d h:i:s', strtotime($notification_list[$i]['updated_at']));
+
+        return $notification_list;
+    }
+
+    /**
+     * get deposit status
+     *
+     * @param $status
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
     protected function getDepositStatue($status)
     {
         $deposit_status = config('constants.deposit_status');
@@ -294,6 +357,12 @@ class Controller extends BaseController
         return '';
     }
 
+    /**
+     * get trade status label
+     *
+     * @param $status
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
     protected function getTradeStatue($status)
     {
         $trade_status = config('constants.trade_status');
