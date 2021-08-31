@@ -17,4 +17,8 @@ return [
 
     'all_news' => 'See all news',
     'all_notifications' => 'See all notifications',
+
+    'send' => 'Send Message',
+    'save' => 'Save',
+    'upload' => 'Upload'
 ];

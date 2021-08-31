@@ -3,6 +3,16 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Currency;
+use App\Models\OrderHistory;
+use App\Models\TradeHistory;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
 class ExchangeController extends Controller
 {
     /**
@@ -22,6 +32,204 @@ class ExchangeController extends Controller
      */
     public function index()
     {
-        return view('exchange');
+        $data = array();
+
+        try {
+            $symbol_list = Currency::where('status', config('constants.currency_status.valid'))
+                ->get()->toArray();
+
+            $data = $symbol_list[0];
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+        }
+
+        return view('exchange', $data);
+    }
+
+    /**
+     * get balance list
+     *
+     * @param Request $request
+     */
+    public function getCurrentBalance(Request $request)
+    {
+        $this->middleware('auth');
+
+        $balance_list = $this->getBalance();
+
+        echo json_encode($balance_list);
+    }
+
+    /**
+     * get order history
+     *
+     * @param Request $request
+     */
+    public function getOrderHistory(Request $request)
+    {
+        $this->middleware('auth');
+
+        $symbol = $request->input('symbol');
+
+        $order_history = array();
+
+        $user = Auth::user();
+        try {
+            $order_history = OrderHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_order_history.currency')
+                ->where('ct_order_history.user_id', $user->id)
+                ->where('ct_order_history.currency', $symbol)
+                ->select('ct_order_history.*', 'ct_currencies.currency as symbol', 'ct_currencies.amount_decimals', 'ct_currencies.price_decimals')
+                ->orderby('ct_order_history.ordered_at', 'desc')
+                ->get()->toArray();
+
+            for ($i = 0; $i < count($order_history); $i++) {
+                $order_history[$i]['order_amount'] = _number_format($order_history[$i]['order_amount'], $order_history[$i]['amount_decimals']);
+                $order_history[$i]['order_price'] = _number_format($order_history[$i]['order_price'], $order_history[$i]['price_decimals']);
+
+                $order_history[$i]['type2'] = $this->getTradeType($order_history[$i]['type2']);
+                $order_history[$i]['signal'] = $this->getOrderType($order_history[$i]['signal']);
+                $order_history[$i]['status_str'] = $this->getOrderStatus($order_history[$i]['status']);
+            }
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            echo json_encode($order_history);
+            exit;
+        }
+
+        echo json_encode($order_history);
+    }
+
+    /**
+     * get trade history
+     *
+     * @param Request $request
+     */
+    public function getTradeHistory(Request $request)
+    {
+        $this->middleware('auth');
+
+        $symbol = $request->input('symbol');
+
+        $trade_history = array();
+
+        $user = Auth::user();
+        try {
+            $trade_history = TradeHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_trade_history.currency')
+                ->where('ct_trade_history.user_id', $user->id)
+                ->where('ct_trade_history.currency', $symbol)
+                ->select('ct_trade_history.*', 'ct_currencies.currency as symbol', 'ct_currencies.amount_decimals', 'ct_currencies.price_decimals')
+                ->orderby('ct_trade_history.settled_at', 'desc')
+                ->get()->toArray();
+
+            for ($i = 0; $i < count($trade_history); $i++) {
+                $trade_history[$i]['settle_amount'] = _number_format($trade_history[$i]['settle_amount'], $trade_history[$i]['amount_decimals']);
+                $trade_history[$i]['settle_price'] = _number_format($trade_history[$i]['settle_price'], $trade_history[$i]['price_decimals']);
+                $trade_history[$i]['fee'] = _number_format($trade_history[$i]['fee'], $trade_history[$i]['amount_decimals']);
+
+                $trade_history[$i]['type'] = $this->getTradeType($trade_history[$i]['type']);
+                $trade_history[$i]['signal'] = $this->getOrderType($trade_history[$i]['signal']);
+                $trade_history[$i]['status'] = $this->getTradeStatue($trade_history[$i]['status']);
+            }
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            echo json_encode($trade_history);
+            exit;
+        }
+
+        echo json_encode($trade_history);
+    }
+
+    /**
+     * order
+     *
+     * @param Request $request
+     */
+    public function order(Request $request)
+    {
+        $this->middleware('auth');
+
+        $user = Auth::user();
+        $data = $request->all();
+
+        $res = [
+            'status' => 0,
+        ];
+
+        $currency_info = $this->getCurrencyInfo($data['currency']);
+        if (empty($currency_info)) {
+            echo json_encode($res);
+            exit;
+        }
+
+        $validator = Validator::make($data, [
+            'currency' => 'required|exists:mysql2.ct_currencies,id',
+            'order_price' => 'required',
+            'order_amount' => 'required|numeric|min:' . $currency_info['min_order_amount'] . '|max:' . $currency_info['max_order_amount'],
+            'signal' => 'required',
+            'type1' => 'required',
+            'type2' => 'required',
+        ], [
+        ], [
+            'order_price' => trans('exchange.price'),
+            'order_amount' => trans('exchange.amount'),
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $res['errors'] = $errors;
+            echo json_encode($res);
+            exit;
+        }
+
+        $order_at = time();
+        $result = '';
+        $order_id = '';
+
+        DB::connection('mysql2')->statement("call NewOrder(?, ?, ?, ?, ?, ?, ?, ?, @result, @id);",
+            [$user->id, $data['currency'], $data['order_price'], $data['order_amount'], $data['signal'], $order_at, $data['type1'], $data['type2']]);
+        $orderResult = DB::connection('mysql2')->select('select @result as result, @id as order_id');
+
+        if (empty($orderResult) || $orderResult[0]->result != 1) {
+            $res['status'] = 0;
+        } else {
+            $res['status'] = $orderResult[0]->result;
+            $res['order_id'] = $orderResult[0]->order_id;
+        }
+
+        echo json_encode($res);
+    }
+
+    /**
+     * order cancel
+     *
+     * @param Request $request
+     */
+    public function orderCancel(Request $request)
+    {
+        $order_id = $request->input('order_id');
+        $amount = $request->input('amount');
+
+        $res = [
+            'status' => 0,
+        ];
+
+        if (is_null($order_id) || is_null($amount)) {
+            echo json_encode($res);
+            exit;
+        }
+
+        DB::connection('mysql2')->statement("call CancelOrder(?, ?, @result);",
+            [$order_id, $amount]);
+        $cancelResult = DB::connection('mysql2')->select('select @result as result');
+
+        if (empty($cancelResult) || $cancelResult[0]->result != 1) {
+            $res['status'] = 0;
+        } else {
+            $res['status'] = $cancelResult[0]->result;
+        }
+
+        echo json_encode($res);
     }
 }

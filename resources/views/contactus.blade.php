@@ -1,48 +1,65 @@
 @extends(Auth::user() ? 'layouts.dashboard' : 'layouts.app')
 
+@section('title', trans('contactus.title'))
+
 @section('content')
     <div class="container body-min-height">
         <!-- Page title -->
         <section id="page-title" class="page-title-left text-light background-dark">
             <div class="container">
                 <div class="page-title">
-                    <h1>Contact Us</h1>
-                    <span>If you have any inquiries, please send them by entering the information below</span>
+                    <h1>{{ trans('contactus.page_title') }}</h1>
+                    <span>{{ trans('contactus.page_title_desc') }}</span>
                 </div>
             </div>
         </section>
         <!-- end: Page title -->
         <hr>
         <!-- Content -->
+        @if ($errors->has('failed'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ $errors->first('failed') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <section id="page-content" class="dark">
             <div class="container">
-                <div class="col-lg-8 text-light">
-                    <form class="widget-contact-form" data-success-message-delay="40000" novalidate action="include/contact-form.php" role="form" method="post">
+                <div class="col-lg-8">
+                    <form action="{{ route('contactus.send') }}" role="form" method="post">
+                        @csrf
+
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="name">Name</label>
-                                <input type="text" aria-required="true" name="widget-contact-form-name" required class="form-control input-dark-bg text-light required name" placeholder="Enter your Name">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="email">Email</label>
-                                <input type="email" aria-required="true" name="widget-contact-form-email" required class="form-control input-dark-bg text-light required email" placeholder="Enter your Email">
+                            <div class="form-group col-md-12">
+                                <label for="email" class="text-light">{{ trans('contactus.email_title') }}</label>
+                                <input type="email" aria-required="true" name="email" class="form-control input-dark-bg text-light required email @error('email') is-invalid @enderror" placeholder="{{ trans('contactus.email_placeholder') }}">
+                                @error('email')
+                                    <div class="is-invalid">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label for="subject">Your Subject</label>
-                                <input type="text" name="widget-contact-form-subject" required class="form-control input-dark-bg text-light required" placeholder="Subject...">
+                                <label for="subject" class="text-light">{{ trans('contactus.subject_title') }}</label>
+                                <input type="text" name="title" class="form-control input-dark-bg text-light required @error('title') is-invalid @enderror" placeholder="{{ trans('contactus.email_placeholder') }}">
+                                @error('title')
+                                    <div class="is-invalid">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea type="text" name="widget-contact-form-message" required rows="5" class="form-control input-dark-bg text-light required" placeholder="Enter your Message"></textarea>
+                            <label for="message" class="text-light">{{ trans('contactus.message_title') }}</label>
+                            <textarea type="text" name="content" rows="5" class="form-control input-dark-bg text-light required @error('message') is-invalid @enderror" placeholder="{{ trans('contactus.message_placeholder') }}"></textarea>
+                            @error('content')
+                                <div class="is-invalid">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group">
-                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-                            <div class="g-recaptcha" data-sitekey="6LddCxAUAAAAAKOg0-U6IprqOZ7vTfiMNSyQT2-M"></div>
-                        </div>
-                        <button class="btn btn-primary" type="submit" id="form-submit"><i class="fa fa-paper-plane"></i>&nbsp;Send message</button>
+                        <button class="btn btn-primary" type="submit" id="form-submit"><i class="fa fa-paper-plane"></i>&nbsp;{{ trans('buttons.send') }}</button>
                     </form>
                 </div>
             </div>

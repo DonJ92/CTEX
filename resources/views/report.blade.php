@@ -44,8 +44,8 @@
                                     <div class="col-lg-3 form-group">
                                         <select id="trade_type" class="form-select text-light input-dark-bg">
                                             <option value="" selected>{{ trans('report.type_placeholder') }}</option>
-                                            <option value="{{ config('constants.trade_type.trade') }}">{{ trans('common.trade_type.trade') }}</option>
-                                            <option value="{{ config('constants.trade_type.Buy/Sell Crypto') }}">{{ trans('common.trade_type.Buy/Sell Crypto') }}</option>
+                                            <option value="{{ config('constants.trade_type.exchange') }}">{{ trans('common.trade_type.exchange') }}</option>
+                                            <option value="{{ config('constants.trade_type.dealer') }}">{{ trans('common.trade_type.dealer') }}</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-3">

@@ -39,6 +39,11 @@ return [
         'valid' => 1,
     ],
 
+    'currency_status' => [
+        'invalid' => 0,
+        'valid' => 1,
+    ],
+
     'device' => [
         'Mobile' => 1,
         'Tablet' => 2,
@@ -86,13 +91,26 @@ return [
     ],
 
     'trade_type' => [
-        'trade' => 1,
-        'Buy/Sell Crypto' => 2,
+        'exchange' => 1,
+        'dealer' => 2,
     ],
 
     'order_type' => [
         'sell' => 1,
         'buy' => 2,
+    ],
+
+    'order_type2' => [
+        'market' => 1,
+        'limit' => 2,
+    ],
+
+    'order_status' => [
+        'pending' => 0,
+        'settled' => 1,
+        'settlement' => 2,
+        'canceled' => 3,
+        'canceling' => 4,
     ],
 
     'trade_status' => [
@@ -109,6 +127,36 @@ return [
         'unread' => 0,
         'read' => 1,
     ],
+
+    'faq_status' => [
+        'invalid' => 0,
+        'valid' => 1,
+    ],
+
+    'contact_status' => [
+        'requested' => 0,
+        'replied' => 1,
+        'pending' => 2,
+    ],
+
+    'kyc_status' => [
+        'not_verified' => 0,
+        'verified' => 1,
+        'review' => 2,
+        'failed' => 3
+    ],
+
+    'step_auth_status' => [
+        'no_use' => 0,
+        'use' => 1,
+    ],
+
+    'data_status' => [
+        'invalid' => 0,
+        'valid' => 1,
+    ],
+
+    'order_book_count' => 14,
 
     'page_num' => 10,
     'last_news_count' => 4,

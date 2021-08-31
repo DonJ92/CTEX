@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(Auth::user() ? 'layouts.dashboard' : 'layouts.app')
 
 @section('title', 'Home')
 

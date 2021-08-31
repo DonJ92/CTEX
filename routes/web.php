@@ -23,6 +23,11 @@ Auth::routes(['verify' => true]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange');
+Route::post('/exchange/balance', [App\Http\Controllers\ExchangeController::class, 'getCurrentBalance'])->name('exchange.balance');
+Route::post('/exchange/order/history', [App\Http\Controllers\ExchangeController::class, 'getOrderHistory'])->name('exchange.order.history');
+Route::post('/exchange/trade/history', [App\Http\Controllers\ExchangeController::class, 'getTradeHistory'])->name('exchange.trade.history');
+Route::post('/exchange/order', [App\Http\Controllers\ExchangeController::class, 'order'])->name('exchange.order');
+Route::post('/exchange/order/cancel', [App\Http\Controllers\ExchangeController::class, 'orderCancel'])->name('exchange.order.cancel');
 
 Route::get('/dealer', [App\Http\Controllers\DealerController::class, 'index'])->name('dealer');
 
@@ -35,10 +40,18 @@ Route::post('/report/deposit/history', [App\Http\Controllers\ReportController::c
 Route::post('/report/withdraw/history', [App\Http\Controllers\ReportController::class, 'getWithdrawHistory'])->name('report.withdraw.history');
 
 Route::get('/setting', [App\Http\Controllers\SettingController::class, 'index'])->name('setting');
+Route::post('/setting/updateprofile', [App\Http\Controllers\SettingController::class, 'updateProfile'])->name('setting.updateprofile');
+Route::post('/setting/updatepassword', [App\Http\Controllers\SettingController::class, 'updatePassword'])->name('setting.updatepassword');
+Route::post('/setting/idverify', [App\Http\Controllers\SettingController::class, 'idVerify'])->name('setting.idverify');
+Route::post('/setting/datalist', [App\Http\Controllers\SettingController::class, 'getDataList'])->name('setting.datalist');
+Route::post('/setting/loginhistory', [App\Http\Controllers\SettingController::class, 'getLoginHistory'])->name('setting.loginhistory');
+Route::post('/setting/language', [App\Http\Controllers\SettingController::class, 'language'])->name('setting.language');
 
 Route::get('/faq', [App\Http\Controllers\FAQController::class, 'index'])->name('faq');
+Route::get('/faq/{id}', [App\Http\Controllers\FAQController::class, 'getFaqList'])->name('faq.list');
 
 Route::get('/contactus', [App\Http\Controllers\ContactUsController::class, 'index'])->name('contactus');
+Route::post('/contactus/send', [App\Http\Controllers\ContactUsController::class, 'send'])->name('contactus.send');
 
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news');
 Route::post('/news/list', [App\Http\Controllers\NewsController::class, 'getNewsList'])->name('news.list');

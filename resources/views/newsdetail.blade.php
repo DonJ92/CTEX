@@ -27,7 +27,7 @@
             @csrf
 
             <div class="container" id="news_container">
-                <p>{{ $content }}</p>
+                <p>{!! $content !!}</p>
             </div>
         </section>
         <div class="container">

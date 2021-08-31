@@ -68,8 +68,6 @@ class PaymentController extends Controller
             }
 
         } catch (QueryException $e) {
-            print_r($e->getMessage());
-            die();
             Log::error($e->getMessage());
         }
 

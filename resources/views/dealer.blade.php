@@ -82,7 +82,7 @@
             </div>
             <div class="col-lg-10">
                 <div class="row mh-100">
-                    <div class="col-lg-3 border-panel p-0">
+                    <div class="col-lg-4 border-panel p-0">
                         <table id="ask_order_list" class="table table-dark font-size-sm">
                             <thead class="text-center">
                             <tr>
@@ -264,7 +264,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-9 border-panel p-0">
+                    <div class="col-lg-8 border-panel p-0">
                         <!-- TradingView Widget BEGIN -->
                         <div id="crypto_chart" class=""></div>
                         <!-- TradingView Widget END -->

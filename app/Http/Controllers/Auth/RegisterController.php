@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\CTUser;
 use App\Models\UserBalance;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -143,8 +144,22 @@ class RegisterController extends Controller
             ];
 
         try {
-            $res = UserBalance::insert($insert_data);
+            UserBalance::insert($insert_data);
+            CTUser::insert([
+                'id' => $user->id,
+                'login_id' => $user->login_id,
+                'email' => $user->email,
+                'name' => $user->name,
+                'birthday' => $user->birthday,
+                'gender' => $user->gender,
+                'country' => $user->country,
+                'mobile' => $user->mobile,
+                'postal_code' => $user->postal_code,
+                'address' => $user->address,
+                'avatar' => $user->avatar,
+            ]);
         } catch (QueryException $e) {
+            Log::error($e->getMessage());
             print_r($e->getMessage());
             die();
         }

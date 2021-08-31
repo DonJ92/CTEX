@@ -62,15 +62,12 @@
                         </li>
                         <li>
                             <div class="p-dropdown">
-                                <a href="#"><i class="icon-globe"></i><span>EN</span></a>
+                                <a href="#"><i class="icon-globe"></i><span>{{ app()->getLocale() }}</span></a>
                                 <div class="p-dropdown-content background-black-dark border-panel">
                                     <ul>
-                                        <li><a href="#">English</a></li>
-                                        <li><a href="#">日本語</a></li>
-                                        <li><a href="#">中文</a></li>
-                                        <li><a href="#">Русский</a></li>
-                                        <li><a href="#">Français</a></li>
-                                        <li><a href="#">한국어</a></li>
+                                        @foreach(config('constants.language_list') as $language_info)
+                                            <li><a href="#">{{ $language_info['name'] }}</a></li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
@@ -88,23 +85,23 @@
                     <div class="container">
                         <nav>
                             <ul>
-                                <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
-                                <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>News</a></li>
-                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>Trade</a></li>
-                                <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>Buy / Sell Crypto</a></li>
-                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>Deposit / Withdraw</a></li>
-                                <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>Report</a></li>
-                                <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>Setting</a></li>
-                                <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>FAQ</a></li>
-                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>{{ trans('common.top_menu.dashboard') }}</a></li>
+                                <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
+                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
+                                <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
+                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>{{ trans('common.top_menu.payment') }}</a></li>
+                                <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>{{ trans('common.top_menu.report') }}</a></li>
+                                <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
+                                <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
+                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
                                 <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
-                                        <li><a href="{{ route('setting') }}">Setting</a></li>
-                                        <li><a href="{{ route('notifications') }}">Notifications</a></li>
+                                        <li><a href="{{ route('setting') }}">{{ trans('common.top_menu.setting') }}</a></li>
+                                        <li><a href="{{ route('notifications') }}">{{ trans('common.top_menu.notification') }}</a></li>
                                         <li><a href="{{ route('logout') }}"
                                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                                Logout</a>
+                                                {{ trans('common.top_menu.logout') }}</a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                                 @csrf
                                             </form>
@@ -128,8 +125,8 @@
                 <div class="row mx-1">
                     <div class="col-lg-5">
                         <div class="widget">
-                            <div class="widget-title">CTEX Exchange</div>
-                            <p>All rights reserved. Copyright © 2021.</p>
+                            <div class="widget-title">{{ config('app.name') }}</div>
+                            <p>{{ trans('common.footer_menu.desc') }}</p>
                         </div>
                     </div>
                     <div class="col-lg-7">
@@ -137,25 +134,25 @@
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="{{ route('exchange') }}">Trade</a></li>
-                                        <li><a href="{{ route('dealer') }}">Buy/Sell Crypto</a></li>
+                                        <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>
+                                        <li><a href="{{ route('dealer') }}">{{ trans('common.footer_menu.dealer') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="{{ route('payment') }}">Deposit/Withdraw</a></li>
-                                        <li><a href="{{ route('report') }}">Trading Report</a></li>
+                                        <li><a href="{{ route('payment') }}">{{ trans('common.footer_menu.payment') }}</a></li>
+                                        <li><a href="{{ route('report') }}">{{ trans('common.footer_menu.report') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="{{ route('news') }}">News</a></li>
-                                        <li><a href="{{ route('faq') }}">FAQ</a></li>
-                                        <li><a href="{{ route('contactus') }}">Contact Us</a></li>
+                                        <li><a href="{{ route('news') }}">{{ trans('common.footer_menu.news') }}</a></li>
+                                        <li><a href="{{ route('faq') }}">{{ trans('common.footer_menu.faq') }}</a></li>
+                                        <li><a href="{{ route('contactus') }}">{{ trans('common.footer_menu.contactus') }}</a></li>
                                     </ul>
                                 </div>
                             </div>

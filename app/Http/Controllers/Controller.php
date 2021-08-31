@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CryptoSettings;
+use App\Models\Currency;
 use App\Models\News;
 use App\Models\Notifications;
 use App\Models\UserBalance;
@@ -164,6 +165,7 @@ class Controller extends BaseController
         }
 
         for ($i = 0; $i < count($balance_list); $i++) {
+            $balance_list[$i]['balance_amount'] = _number_format2($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
             $balance_list[$i]['balance'] = _number_format($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
 
             if ($balance_list[$i]['currency'] == 'BTC')
@@ -222,6 +224,69 @@ class Controller extends BaseController
         }
 
         return $balance;
+    }
+
+    /**
+     * get currency list
+     *
+     * @return array
+     */
+    public static function getCurrencyList()
+    {
+        $currency_list = array();
+        try {
+            $currency_list = Currency::where('status', config('constants.currency_status.valid'))
+                ->get()->toArray();
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $currency_list;
+        }
+
+        for ($i = 0; $i < count($currency_list); $i++) {
+            $currencies = explode('/', $currency_list[$i]['currency']);
+
+            if ($currencies[0] == 'BTC')
+                $currency_list[$i]['ico'] = asset('/icons/btc.svg');
+            else if ($currencies[0] == 'ETH')
+                $currency_list[$i]['ico'] = asset('/icons/eth.svg');
+            else if ($currencies[0] == 'XRP')
+                $currency_list[$i]['ico'] = asset('/icons/xrp.svg');
+            else if ($currencies[0] == 'LTC')
+                $currency_list[$i]['ico'] = asset('/icons/ltc.svg');
+            else if ($currencies[0] == 'USDT')
+                $currency_list[$i]['ico'] = asset('/icons/usdt.svg');
+            else if ($currencies[0] == 'ADA')
+                $currency_list[$i]['ico'] = asset('/icons/ada.svg');
+            else if ($currencies[0] == 'WIZ+')
+                $currency_list[$i]['ico'] = asset('/icons/wiz+.svg');
+            else
+                $currency_list[$i]['ico'] = asset('/icons/btc.svg');
+        }
+
+        return $currency_list;
+    }
+
+    /**
+     * get currency info from id
+     *
+     * @param $id
+     * @return array
+     */
+    protected function getCurrencyInfo($id)
+    {
+        $currency_info = array();
+        try {
+            $currency_info = Currency::where('id', $id)->first()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $currency_info;
+        }
+
+        $currency_info['min_order_amount'] = _number_format2($currency_info['min_order_amount'], $currency_info['amount_decimals']);
+        $currency_info['max_order_amount'] = _number_format2($currency_info['max_order_amount'], $currency_info['amount_decimals']);
+
+        return $currency_info;
     }
 
     /**
@@ -332,10 +397,10 @@ class Controller extends BaseController
     protected function getTradeType($type)
     {
         $trade_type = config('constants.trade_type');
-        if ($type == $trade_type['trade'])
-            return trans('common.trade_type.trade');
-        elseif ($type == $trade_type['Buy/Sell Crypto'])
-            return trans('common.trade_type.Buy/Sell Crypto');
+        if ($type == $trade_type['exchange'])
+            return trans('common.trade_type.exchange');
+        elseif ($type == $trade_type['dealer'])
+            return trans('common.trade_type.dealer');
 
         return '';
     }
@@ -353,6 +418,29 @@ class Controller extends BaseController
             return trans('common.order_type.sell');
         elseif ($type == $order_type['buy'])
             return trans('common.order_type.buy');
+
+        return '';
+    }
+
+    /**
+     * get order status label
+     *
+     * @param $status
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
+    public function getOrderStatus($status)
+    {
+        $order_status = config('constants.order_status');
+        if ($status == $order_status['pending'])
+            return trans('common.order_status.pending');
+        elseif ($status == $order_status['settled'])
+            return trans('common.order_status.settled');
+        elseif ($status == $order_status['settlement'])
+            return trans('common.order_status.settlement');
+        elseif ($status == $order_status['canceled'])
+            return trans('common.order_status.canceled');
+        elseif ($status == $order_status['canceling'])
+            return trans('common.order_status.canceling');
 
         return '';
     }

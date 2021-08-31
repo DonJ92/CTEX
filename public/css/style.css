@@ -3973,7 +3973,7 @@ th .form-check .form-check-input, td .form-check .form-check-input { float: none
 /* ----------------------------------------------------------------
 	Alert
 -----------------------------------------------------------------*/
-.alert { color: #fff; padding: 0.85rem 1.5rem; z-index: 9999; }
+.alert { color: #fff; padding: 0.85rem 1.5rem; /*z-index: 9999;*/ }
 
 .alert span[data-notify~="title"] { display: block; font-weight: bold; }
 
