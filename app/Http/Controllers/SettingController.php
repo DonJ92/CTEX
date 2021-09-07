@@ -8,6 +8,7 @@ use App\Models\Identity;
 use App\Models\LoginHistory;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -43,20 +44,41 @@ class SettingController extends Controller
         $language_list = config('constants.language_list');
         $data['language_list'] = $language_list;
 
+        $user = Auth::user();
+
+        $google2fa = app('pragmarx.google2fa');
+        $google2fa_secret = $google2fa->generateSecretKey();
+        $QR_Image = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $user->email,
+            $google2fa_secret
+        );
+
+        $kyc_list = $this->getKYCInfo();
+
+        $data['google2fa_secret'] = $google2fa_secret;
+        $data['google2fa_qr_img'] = $QR_Image;
+        $data['kyc_list'] = $kyc_list;
+
         return view('setting', $data);
     }
 
+    /**
+     * update user profile
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateProfile(Request $request)
     {
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'avatar' => ['nullable', 'mimes:jpg,jpeg,png'],
+            'avatar' => ['nullable', 'mimes:jpg,bmp,jpeg,png'],
             'name' => ['required', 'string', 'max:128'],
             'birthday' => ['nullable', 'date'],
             'mobile' => ['required', 'string', 'max:20'],
             'country' => ['required', 'string', 'max:64'],
-            'lang' => ['required', 'string', 'max:4'],
             'address' => ['required', 'string', 'max:255'],
             'postal_code' => ['required', 'string', 'max:16'],
         ], [
@@ -66,7 +88,6 @@ class SettingController extends Controller
             'birthday' => trans('setting.birthday'),
             'mobile' => trans('setting.mobile'),
             'country' => trans('setting.country'),
-            'lang' => trans('setting.lang'),
             'address' => trans('setting.address'),
             'postal_code' => trans('setting.postal_code'),
         ]);
@@ -77,12 +98,18 @@ class SettingController extends Controller
         }
 
         $user = Auth::user();
+
+        $fileName = $user->login_id.'.'.$request->avatar->extension();
+
+        $request->avatar->move(public_path('uploads/avatar'), $fileName);
+        $avatar = url('uploads/avatar') . '/' . $fileName;
+
         try {
+            $user->avatar = $avatar;
             $user->name = $data['name'];
             $user->birthday= $data['birthday'];
             $user->mobile= $data['mobile'];
             $user->country= $data['country'];
-            $user->lang= $data['lang'];
             $user->address= $data['address'];
             $user->postal_code= $data['postal_code'];
             $user->save();
@@ -105,28 +132,43 @@ class SettingController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'id_doc' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+            'id_doc.*' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
         ], [
         ], [
-            'id_doc' => trans('setting.id_doc'),
+            'id_doc.*' => trans('setting.id_doc'),
         ]);
 
-        $fileName = $user->login_id.'.'.$request->id_doc->extension();
+        $data = $request->all();
+        if (!isset($data['id_doc']))
+            return redirect()->back()->withInput()->withErrors(['failed' => trans('setting.id_failed_msg'), 'id_failed' => trans('setting.id_failed_msg')]);
 
-        $request->id_doc->move(public_path('uploads/kyc'), $fileName);
-        $photo_url = url('uploads/kyc') . '/' . $fileName;
+        if (isset($data['id_doc_id']))
+            $id_list = $data['id_doc_id'];
+        else
+            $id_list = array();
+
+        $id_files = $data['id_doc'];
+        $insert_data = array();
 
         try {
-            $id_info = Identity::where('user_id', $user->id)->first();
-            if (is_null($id_info))
-                $res = Identity::insert([
-                    'user_id' => $user->id,
-                    'photo_url' => $photo_url,
-                ]);
-            else {
-                $id_info->photo_url = $photo_url;
-                $id_info->save();
+            foreach($id_files as $id_file) {
+                $key = array_search($id_file, $id_files);
+                $fileName = $user->login_id . $key . '.' . $id_file->extension();
+
+                $id_file->move(public_path('uploads/kyc'), $fileName);
+                $photo_url = url('uploads/kyc') . '/' . $fileName;
+
+                if (isset($id_list[$key]))
+                    Identity::where('id', $id_list[$key])
+                        ->update(['photo_url' => $photo_url]);
+                else
+                    $insert_data[] = [
+                        'user_id' => $user->id,
+                        'photo_url' => $photo_url,
+                    ];
             }
+
+            Identity::insert($insert_data);
 
             $user->kyc_status = config('constants.kyc_status.review');
             $user->save();
@@ -136,6 +178,34 @@ class SettingController extends Controller
         }
 
         return redirect()->route('setting')->with('success', trans('setting.id_success_msg'))->with('id_success', trans('setting.id_success_msg'));
+    }
+
+    /**
+     * delete id verify doc
+     *
+     * @param Request $request
+     */
+    public function idVerifyDelete(Request $request)
+    {
+        $id = $request->input('id');
+
+        $status = 0;
+
+        if(is_null($id)) {
+            echo json_encode($status);
+            exit;
+        }
+
+        try {
+            Identity::where('id', $id)->delete();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            echo json_encode($status);
+            exit;
+        }
+        $status = 1;
+
+        echo json_encode($status);
     }
 
     /**
@@ -182,6 +252,58 @@ class SettingController extends Controller
         }
 
         return redirect()->route('setting')->with('success', trans('setting.pwd_success_msg'))->with('pwd_success', trans('setting.pwd_success_msg'));
+    }
+
+    /**
+     * enable 2FA google auth
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function enable2FA(Request $request)
+    {
+        $user = Auth::user();
+
+        $google2fa_secret = $request->input('google2fa_secret');
+        $verification_code = $request->input('verification_code');
+
+        $google2fa = app('pragmarx.google2fa');
+        $valid = $google2fa->verifyKey($google2fa_secret, $verification_code);
+
+        if ($valid){
+            try {
+                $user->use_google_auth = config('constants.step_auth_status.use');
+                $user->google2fa_secret = $google2fa_secret;
+                $user->save();
+            } catch (QueryException $e) {
+                return redirect()->back()->withInput()->withErrors(['failed' => trans('setting.2fa_failed_msg'), '2fa_failed' => trans('setting.2fa_failed_msg')]);
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors(['failed' => trans('setting.2fa_failed_msg'), '2fa_failed' => trans('setting.2fa_failed_msg')]);
+        }
+
+        return redirect()->route('setting')->with('success', trans('setting.2fa_success_msg'))->with('2fa_success', trans('setting.2fa_success_msg'));
+    }
+
+    /**
+     * disable 2FA google auth
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disable2FA(Request $request)
+    {
+        $user = Auth::user();
+
+        try {
+            $user->use_google_auth = config('constants.step_auth_status.no_use');
+            $user->google2fa_secret = '';
+            $user->save();
+        } catch (QueryException $e) {
+            return redirect()->back()->withInput()->withErrors(['failed' => trans('setting.2fa_failed_msg'), '2fa_failed' => trans('setting.2fa_failed_msg')]);
+        }
+
+        return redirect()->route('setting')->with('success', trans('setting.2fa_success_msg'))->with('2fa_success', trans('setting.2fa_success_msg'));
     }
 
     /**
@@ -255,6 +377,8 @@ class SettingController extends Controller
         $user->lang = $data['lang'];
         try {
             $user->save();
+            App::setLocale($data['lang']);
+            session()->put('locale', $data['lang']);
         } catch (QueryException $e) {
             Log::error($e->getMessage());
             return redirect()->back()->withInput()->withErrors(['failed' => trans('setting.lang_failed_msg'), 'language' => trans('setting.lang_failed_msg')]);

@@ -39,6 +39,9 @@ class ExchangeController extends Controller
                 ->get()->toArray();
 
             $data = $symbol_list[0];
+
+            $priceData = $this->getDayDataByCurrency($data['id']);
+            $data['lastPrice'] = empty($priceData[config('constants.daily_fluct.YESTERDAY_CLOSING_PRICE')]) ? 0 : $priceData[config('constants.daily_fluct.YESTERDAY_CLOSING_PRICE')];
         } catch (QueryException $e) {
             Log::error($e->getMessage());
         }
@@ -78,6 +81,10 @@ class ExchangeController extends Controller
             $order_history = OrderHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_order_history.currency')
                 ->where('ct_order_history.user_id', $user->id)
                 ->where('ct_order_history.currency', $symbol)
+                ->where(function ($query) {
+                    $query->where('ct_order_history.status', config('constants.order_status.pending'))
+                        ->orWhere('ct_order_history.status', config('constants.order_status.canceling'));
+                })
                 ->select('ct_order_history.*', 'ct_currencies.currency as symbol', 'ct_currencies.amount_decimals', 'ct_currencies.price_decimals')
                 ->orderby('ct_order_history.ordered_at', 'desc')
                 ->get()->toArray();
@@ -86,7 +93,7 @@ class ExchangeController extends Controller
                 $order_history[$i]['order_amount'] = _number_format($order_history[$i]['order_amount'], $order_history[$i]['amount_decimals']);
                 $order_history[$i]['order_price'] = _number_format($order_history[$i]['order_price'], $order_history[$i]['price_decimals']);
 
-                $order_history[$i]['type2'] = $this->getTradeType($order_history[$i]['type2']);
+                $order_history[$i]['type1'] = $this->getTradeType($order_history[$i]['type1']);
                 $order_history[$i]['signal'] = $this->getOrderType($order_history[$i]['signal']);
                 $order_history[$i]['status_str'] = $this->getOrderStatus($order_history[$i]['status']);
             }
@@ -187,9 +194,15 @@ class ExchangeController extends Controller
         $result = '';
         $order_id = '';
 
-        DB::connection('mysql2')->statement("call NewOrder(?, ?, ?, ?, ?, ?, ?, ?, @result, @id);",
-            [$user->id, $data['currency'], $data['order_price'], $data['order_amount'], $data['signal'], $order_at, $data['type1'], $data['type2']]);
-        $orderResult = DB::connection('mysql2')->select('select @result as result, @id as order_id');
+        try {
+            DB::connection('mysql2')->statement("call NewOrder(?, ?, ?, ?, ?, ?, ?, ?, @result, @id);",
+                [$user->id, $data['currency'], $data['order_price'], $data['order_amount'], $data['signal'], $order_at, $data['type1'], $data['type2']]);
+            $orderResult = DB::connection('mysql2')->select('select @result as result, @id as order_id');
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            echo json_encode($res);
+            exit;
+        }
 
         if (empty($orderResult) || $orderResult[0]->result != 1) {
             $res['status'] = 0;

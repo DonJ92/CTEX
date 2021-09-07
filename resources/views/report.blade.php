@@ -25,13 +25,13 @@
                     <div class="col-md-2 tab-border-right mb-3">
                         <ul class="nav flex-column nav-tabs border-1" id="myTab4" role="tablist" aria-orientation="vertical">
                             <li class="nav-item">
-                                <a class="nav-link no-border active" id="trade-tab" data-bs-toggle="tab" href="#trade" role="tab" aria-controls="trade" aria-selected="true"><b>Trade</b></a>
+                                <a class="nav-link no-border active" id="trade-tab" data-bs-toggle="tab" href="#trade" role="tab" aria-controls="trade" aria-selected="true"><b>{{ trans('report.trade') }}</b></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link no-border" id="deposit-tab" data-bs-toggle="tab" href="#deposit" role="tab" aria-controls="deposit" aria-selected="true"><b>Deposit</b></a>
+                                <a class="nav-link no-border" id="deposit-tab" data-bs-toggle="tab" href="#deposit" role="tab" aria-controls="deposit" aria-selected="true"><b>{{ trans('report.deposit') }}</b></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link no-border" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true"><b>Withdraw</b></a>
+                                <a class="nav-link no-border" id="withdraw-tab" data-bs-toggle="tab" href="#withdraw" role="tab" aria-controls="withdraw" aria-selected="true"><b>{{ trans('report.withdraw') }}</b></a>
                             </li>
                         </ul>
                     </div>
@@ -83,7 +83,7 @@
                                     <thead>
                                     <tr>
                                         <th class="background-black-dark">{{ trans('report.date_time') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.currency') }}</th>
                                         <th class="background-black-dark">{{ trans('report.amount') }}</th>
                                         <th class="background-black-dark">{{ trans('report.deposit_address') }}</th>
                                         <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
@@ -106,7 +106,7 @@
                                     <thead>
                                     <tr>
                                         <th class="background-black-dark">{{ trans('report.date_time') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                        <th class="background-black-dark">{{ trans('report.currency') }}</th>
                                         <th class="background-black-dark">{{ trans('report.amount') }}</th>
                                         <th class="background-black-dark">{{ trans('report.withdraw_address') }}</th>
                                         <th class="background-black-dark">{{ trans('report.tx_id') }}</th>

@@ -30,6 +30,8 @@ class FAQController extends Controller
     {
         $locale = app()->getLocale();
 
+        $category_list = array();
+        $faq_list = array();
         try {
             $category_list = FaqCategory::where('lang', $locale)
                 ->orderby('id', 'asc')

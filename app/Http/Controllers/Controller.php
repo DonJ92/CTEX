@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\CryptoSettings;
 use App\Models\Currency;
+use App\Models\DailyFluct;
+use App\Models\Identity;
 use App\Models\News;
 use App\Models\Notifications;
 use App\Models\UserBalance;
@@ -460,5 +462,53 @@ class Controller extends BaseController
             return trans('common.trade_status.canceled');
 
         return '';
+    }
+
+    /**
+     * get Daily Data
+     *
+     * @param int $currency
+     * @return array
+     */
+    protected function getDayDataByCurrency($currency = 0)
+    {
+        $daily_data = array();
+
+        try {
+            $query = DailyFluct::orderby('id', 'asc');
+
+            if (empty($currency))
+                $daily_data = $query->select('option', 'currency', 'value')->get()->toArray();
+            else
+                $daily_data = $query->where('currency', $currency)->pluck('value', 'option')->toArray();
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $daily_data;
+        }
+
+        return $daily_data;
+    }
+
+    /**
+     * get kyc docs
+     *
+     * @return array
+     */
+    protected function getKYCInfo()
+    {
+        $user = Auth::user();
+
+        $kyc_infos = array();
+        try {
+            $kyc_infos = Identity::where('user_id', $user->id)
+                ->get()->toArray();
+
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $kyc_infos;
+        }
+
+        return $kyc_infos;
     }
 }

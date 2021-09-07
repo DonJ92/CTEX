@@ -65,15 +65,15 @@
                             if (response[i].status == '{{config('constants.notifications_status.unread')}}')
                                 var content = '<div class="container" id="news_container">\n' +
                                     '                <div class="form-group row news-item">\n' +
-                                    '                    <div class="col-md-2 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
-                                    '                    <div class="col-md-10"><a class="font-size-md" href="{{url('notifications/detail')}}/' + response[i].id + '">' + response[i].title + '&nbsp;&nbsp;<span class="badge bg-danger">NEW</span></a></div>\n' +
+                                    '                    <div class="col-md-2 col-md-4 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
+                                    '                    <div class="col-md-10 col-md-8"><a class="font-size-md" href="{{url('notifications/detail')}}/' + response[i].id + '">' + response[i].title + '&nbsp;&nbsp;<span class="badge bg-danger">NEW</span></a></div>\n' +
                                     '                </div>\n' +
                                     '            </div>';
                             else
                                 var content = '<div class="container" id="news_container">\n' +
                                     '                <div class="form-group row news-item">\n' +
-                                    '                    <div class="col-md-2 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
-                                    '                    <div class="col-md-10"><a class="font-size-md" href="{{url('notifications/detail')}}/' + response[i].id + '">' + response[i].title + '</a></div>\n' +
+                                    '                    <div class="col-md-2 col-md-4 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
+                                    '                    <div class="col-md-10 col-md-8"><a class="font-size-md" href="{{url('notifications/detail')}}/' + response[i].id + '">' + response[i].title + '</a></div>\n' +
                                     '                </div>\n' +
                                     '            </div>';
                             list_content = list_content + content;

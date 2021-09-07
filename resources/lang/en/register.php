@@ -24,5 +24,7 @@ return [
     'address' => 'Address',
     'postal_code' => 'Postal Code',
 
-    'agree_desc' => 'I have read and agree to Ctex\'s Terms of Service.'
+    'agree_desc' => 'I have read and agree to ADAM Bit\'s Terms of Service.',
+
+    'already_desc' => 'Already Registered?',
 ];

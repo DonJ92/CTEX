@@ -39,6 +39,9 @@ class UniexchangeDatafeed {
 
             uniexchangeKlines(g_rateUrl, _currencyPair, _resolution, _start, _start + chartResolution, 0).then(klines => {
                 var latest = klines.map(function(el) {
+                    g_bid_price = el.close;
+                    g_ask_price = el.ask_close;
+
                     return {
                         time: el.date * 1000,
                         low: el.low,
@@ -49,9 +52,9 @@ class UniexchangeDatafeed {
                     }
                 });
 
-                if (latest.length > 1) {
-                    for (var i = 1; i < latest.length; i++) {
-                        if (latest.time < sub.lastBar.time) {
+                if (latest.length >= 1) {
+                    for (var i = 0; i < latest.length; i++) {
+                        if (latest[i].time < sub.lastBar.time) {
                             continue;
                         }
                         var _lastBar = updateBar(latest[i], sub);
@@ -97,13 +100,13 @@ class UniexchangeDatafeed {
         // console.log({coeff})
 
         var rounded = Math.floor(data.time / coeff) * coeff;
-        var lastBarSec = lastBar.time / 1000;
+        var lastBarSec = lastBar.time;
         var _lastBar;
-/*        
+
         if (rounded > lastBarSec) {
             // create a new candle, use last close as open **PERSONAL CHOICE**
             _lastBar = {
-                time: rounded * 1000,
+                time: rounded,
                 open: lastBar.close,
                 high: lastBar.close,
                 low: lastBar.close,
@@ -111,7 +114,7 @@ class UniexchangeDatafeed {
                 volume: data.volume
             }
         } else {
-*/
+
             // update lastBar candle!
             if (data.close < lastBar.low) {
                 lastBar.low = data.close;
@@ -122,7 +125,7 @@ class UniexchangeDatafeed {
             lastBar.volume = data.volume;
             lastBar.close = data.close;
             _lastBar = lastBar;
-//        }
+        }
 
         return _lastBar
     }

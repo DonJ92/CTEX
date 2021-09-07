@@ -37,11 +37,11 @@
                     <div class="header-extras">
                         <ul>
                             <li>
-                                <div class="p-dropdown">
+                                <div class="p-dropdown" id="lang_dropdown">
                                     <a href="#"><i class="icon-globe"></i><span>{{ app()->getLocale() }}</span></a>
                                     <ul class="p-dropdown-content background-black-dark border-panel">
                                         @foreach(config('constants.language_list') as $language_info)
-                                            <li><a href="#">{{ $language_info['name'] }}</a></li>
+                                            <li><a href="{{ url('lang') . '/' . $language_info['code']}}">{{ $language_info['name'] }}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -51,7 +51,7 @@
                     <!--end: Header Extras-->
                     <!--Navigation Resposnive Trigger-->
                     <div id="mainMenu-trigger">
-                        <a class="lines-button x"><span class="lines"></span></a>
+                        <a class="lines-button x mx-3"><span class="lines"></span></a>
                     </div>
                     <!--end: Navigation Resposnive Trigger-->
                     <!--Navigation-->
@@ -96,15 +96,15 @@
             <div class="footer-content">
                 <div class="container">
                     <div class="row mx-1">
-                        <div class="col-lg-5">
+                        <div class="col-md-5">
                             <div class="widget">
                                 <div class="widget-title">{{ config('app.name') }}</div>
                                 <p>{{ trans('common.footer_menu.desc') }}</p>
                             </div>
                         </div>
-                        <div class="col-lg-7">
+                        <div class="col-md-7">
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-md-4">
                                     <div class="widget">
                                         <ul class="list">
                                             <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>
@@ -112,7 +112,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-md-4">
                                     <div class="widget">
                                         <ul class="list">
                                             <li><a href="{{ route('news') }}">{{ trans('common.footer_menu.news') }}</a></li>
@@ -121,7 +121,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-md-4">
                                     <div class="widget">
                                         <ul class="list">
                                             <li><a href="{{ route('login') }}">{{ trans('common.footer_menu.login') }}</a></li>
@@ -141,6 +141,15 @@
     <script src="{{ asset('js/plugins.js') }}"></script>
     <!--Template functions-->
     <script src="{{ asset('js/functions.js') }}"></script>
+
+    <script>
+        $(document).on("click", function(event){
+            var $trigger = $("#lang_dropdown");
+            if($trigger !== event.target && !$trigger.has(event.target).length){
+                $("#lang_dropdown").removeClass("dropdown-active");
+            }
+        });
+    </script>
 
     @yield('script')
 </body>

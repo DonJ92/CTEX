@@ -132,7 +132,7 @@
                                 </div>
                                 <button type="submit" class="btn m-t-30 mt-3">{{ trans('buttons.register') }}</button>
                             </form>
-                            <div class="mt-4"><small>Already Registered?</small> <a href="{{route('login')}}" class="small fw-bold">{{ trans('buttons.login') }}</a>
+                            <div class="mt-4"><small>{{ trans('register.already_desc') }}</small> <a href="{{route('login')}}" class="small fw-bold">{{ trans('buttons.login') }}</a>
                             </div>
                         </div>
                     </div>

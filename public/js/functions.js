@@ -84,11 +84,11 @@ var INSPIRO = {},
             },
             {
                 name: "lg",
-                width: 1025,
+                width: 1400,
             },
             {
                 name: "xl",
-                width: 1200,
+                width: 1630,
             },
         ],
     });
@@ -100,11 +100,11 @@ var INSPIRO = {},
     });
 
     $(window).bind("breakpoint-change", function(event) {
-        $(window).breakpoints("greaterEqualTo", "lg", function() {
+        $(window).breakpoints("greaterEqualTo", "xl", function() {
             $body.addClass("b--desktop");
             $body.removeClass("b--responsive");
         });
-        $(window).breakpoints("lessThan", "lg", function() {
+        $(window).breakpoints("lessThan", "xl", function() {
             $body.removeClass("b--desktop");
             $body.addClass("b--responsive");
         });
@@ -433,7 +433,7 @@ var INSPIRO = {},
                 $triggerButton.on("click", function(e) {
                     var elem = $(this);
                     e.preventDefault();
-                    $(window).breakpoints("lessThan", "lg", function() {
+                    $(window).breakpoints("lessThan", "xl", function() {
                         var openMenu = function() {
                             if (!processing) {
                                 processing = true;
@@ -541,7 +541,7 @@ var INSPIRO = {},
                 });
 
                 /*invert menu fix*/
-                $(window).breakpoints("greaterEqualTo", "lg", function() {
+                $(window).breakpoints("greaterEqualTo", "xl", function() {
                     var $menuLastItem = $("nav > ul > li:last-child"),
                         $menuLastItemUl = $("nav > ul > li:last-child > ul"),
                         $menuLastInvert = $menuLastItemUl.width() - $menuLastItem.width(),

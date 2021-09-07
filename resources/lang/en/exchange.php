@@ -11,8 +11,9 @@ return [
     'buy_opt' => 'Buy',
     'sell_opt' => 'Sell',
 
-    'symbol' => 'Symbol',
+    'currency' => 'Currency',
     'balance' => 'Balance',
+    'symbol' => 'Symbol',
 
     'ask' => 'Ask',
     'bid' => 'Bid',
@@ -25,7 +26,7 @@ return [
 
     'order_id' => 'Order ID',
     'order_datetime' => 'Order DateTime',
-    'order_type' => 'Order Type',
+    'order_type' => 'Buy/Sell',
     'type' => 'Type',
     'status' => 'Status',
     'remark' => 'Remark',

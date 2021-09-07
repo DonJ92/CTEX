@@ -17,6 +17,9 @@
     <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
     <!--Bootstrap switch files-->
     <link href="{{ asset('plugins/bootstrap-switch/bootstrap-switch.css') }}" rel="stylesheet">
+    <!--Toastr switch files-->
+    <link href="{{ asset('plugins/toastr/toastr.min.css') }}" rel="stylesheet" >
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
@@ -41,11 +44,11 @@
                 <div class="header-extras">
                     <ul>
                         <li>
-                            <div class="p-dropdown">
+                            <div class="p-dropdown" id="notify_dropdown">
                                 <a href="#"><i class="icon-bell"></i></a>
                                 <div class="p-dropdown-content background-black-dark border-panel">
                                     <div class="widget-notification">
-                                        <h4 class="mb-0">Notifications</h4>
+                                        <h4 class="mb-0">{{ trans('common.top_menu.notification') }}</h4>
                                         <!--<p class="text-muted">You have 2 new notifications</p>-->
                                         @foreach(\App\Http\Controllers\Controller::getLastNotifications() as $notification_info)
                                             <div class="notification-item @if($notification_info['status'] == config('constants.notifications_status.unread')) notification-new @endif">
@@ -61,12 +64,12 @@
                             </div>
                         </li>
                         <li>
-                            <div class="p-dropdown">
+                            <div class="p-dropdown" id="lang_dropdown">
                                 <a href="#"><i class="icon-globe"></i><span>{{ app()->getLocale() }}</span></a>
                                 <div class="p-dropdown-content background-black-dark border-panel">
                                     <ul>
                                         @foreach(config('constants.language_list') as $language_info)
-                                            <li><a href="#">{{ $language_info['name'] }}</a></li>
+                                            <li><a href="{{ url('lang') . '/' . $language_info['code']}}">{{ $language_info['name'] }}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -77,7 +80,7 @@
                 <!--end: Header Extras-->
                 <!--Navigation Resposnive Trigger-->
                 <div id="mainMenu-trigger">
-                    <a class="lines-button x"><span class="lines"></span></a>
+                    <a class="lines-button x mx-2"><span class="lines"></span></a>
                 </div>
                 <!--end: Navigation Resposnive Trigger-->
                 <!--Navigation-->
@@ -94,7 +97,7 @@
                                 <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
                                 <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
                                 <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
-                                <li class="dropdown"><a href="#"><img src="{{ asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
+                                <li class="dropdown"><a href="#"><img src="{{ auth()->user()->avatar ? auth()->user()->avatar : asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
                                         <li><a href="{{ route('setting') }}">{{ trans('common.top_menu.setting') }}</a></li>
                                         <li><a href="{{ route('notifications') }}">{{ trans('common.top_menu.notification') }}</a></li>
@@ -123,15 +126,15 @@
         <div class="footer-content">
             <div class="container">
                 <div class="row mx-1">
-                    <div class="col-lg-5">
+                    <div class="col-md-5">
                         <div class="widget">
                             <div class="widget-title">{{ config('app.name') }}</div>
                             <p>{{ trans('common.footer_menu.desc') }}</p>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-md-7">
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-md-4">
                                 <div class="widget">
                                     <ul class="list">
                                         <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>
@@ -139,7 +142,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-md-4">
                                 <div class="widget">
                                     <ul class="list">
                                         <li><a href="{{ route('payment') }}">{{ trans('common.footer_menu.payment') }}</a></li>
@@ -147,7 +150,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-md-4">
                                 <div class="widget">
                                     <ul class="list">
                                         <li><a href="{{ route('news') }}">{{ trans('common.footer_menu.news') }}</a></li>
@@ -166,6 +169,9 @@
 
 <script src="{{ asset('js/jquery.js') }}"></script>
 <script src="{{ asset('js/plugins.js') }}"></script>
+
+<!--Toastr plugin files-->
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 <!--Clipboard plugin files-->
 <script src="{{ asset('plugins/clipboard/clipboard.min.js') }}"></script>
 <!--Template functions-->
@@ -174,6 +180,20 @@
 <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
 <!--Bootstrap switch files-->
 <script src="{{ asset('plugins/bootstrap-switch/bootstrap-switch.min.js') }}"></script>
+
+<script>
+    $(document).on("click", function(event){
+        var $trigger = $("#lang_dropdown");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $("#lang_dropdown").removeClass("dropdown-active");
+        }
+
+        $trigger = $("#notify_dropdown");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $("#notify_dropdown").removeClass("dropdown-active");
+        }
+    });
+</script>
 
 @yield('script')
 </body>

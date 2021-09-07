@@ -68,3 +68,16 @@
     border-left: 1px solid #585858 !important;
     border-right: 1px solid #585858 !important;
 }
+
+.text-info-disable {
+    color: #15687d !important;
+}
+
+.text-danger-disable {
+    color: #7d1d20 !important;
+}
+
+.currency-span {
+    min-width: 75px;
+    text-align: center;
+}

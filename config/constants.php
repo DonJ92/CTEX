@@ -156,7 +156,25 @@ return [
         'valid' => 1,
     ],
 
+    'daily_fluct' => [
+        'YESTERDAY_CLOSING_PRICE' => 'YESTERDAY_CLOSING_PRICE',
+        'TODAY_CURRENT_PRICE' => 'TODAY_CURRENT_PRICE',
+        'TODAY_TOTAL_AMOUNTS' => 'TODAY_TOTAL_AMOUNTS',
+        'TODAY_CHANGE_PERCENT' => 'TODAY_CHANGE_PERCENT',
+    ],
+
+    'rate_timeline_list' => [
+        'm1' => 'm1',
+        'm5' => 'm5',
+        'm15' => 'm15',
+        'm30' => 'm30',
+        'm60' => 'm60',
+        'm240' => 'm240',
+        'm1440' => 'm1440',
+    ],
+
     'order_book_count' => 14,
+    'trade_list_count' => 25,
 
     'page_num' => 10,
     'last_news_count' => 4,

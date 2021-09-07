@@ -64,8 +64,8 @@
                         for (var i = 0; i < response.length; i++) {
                             var content = '<div class="container" id="news_container">\n' +
                                 '                <div class="form-group row news-item">\n' +
-                                '                    <div class="col-md-2 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
-                                '                    <div class="col-md-10"><a class="font-size-md" href="{{url('news/detail')}}/' + response[i].id + '">' + response[i].title + '</a></div>\n' +
+                                '                    <div class="col-lg-2 col-md-4 sub-date">' + moment(response[i].updated_at).utc().format('YYYY-MM-DD HH:mm:ss') + '</div>\n' +
+                                '                    <div class="col-lg-10 col-md-8"><a class="font-size-md" href="{{url('news/detail')}}/' + response[i].id + '">' + response[i].title + '</a></div>\n' +
                                 '                </div>\n' +
                                 '            </div>';
                             list_content = list_content + content;

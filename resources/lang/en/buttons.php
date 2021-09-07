@@ -20,5 +20,10 @@ return [
 
     'send' => 'Send Message',
     'save' => 'Save',
-    'upload' => 'Upload'
+    'upload' => 'Upload',
+
+    'enable' => 'Enable',
+    'disable' => 'Disable',
+
+    'authenticate' => 'Authenticate'
 ];

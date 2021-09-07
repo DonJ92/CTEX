@@ -10,8 +10,8 @@
                     <div class="card background-black-dark border-panel">
                         <div class="card-body py-5 px-sm-5">
                             <div class="mb-5 text-center">
-                                <h6 class="h3 mb-1 text-primary">ADAM Bit</h6>
-                                <p class="text-muted mb-0">Login</p>
+                                <h6 class="h3 mb-1 text-primary">{{ config('app.name', 'ADAM Bit') }}</h6>
+                                <p class="text-muted mb-0">{{ trans('login.page_title') }}</p>
                             </div><span class="clearfix"></span>
                             <hr>
                             <form method="post" class="form-validate" action="{{ route('login') }}">

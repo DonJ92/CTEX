@@ -27,16 +27,16 @@
                                 <div class="form-group">
                                     <div class="input-group text-light ">
                                         <span class="input-group-text font-size-xs input-dark-bg">{{ trans('exchange.price') }}</span>
-                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right trading-border-left" id="limit_price" name="limit_price" onchange="onCalcLimitAmount()">
-                                        <span class="input-group-text font-size-xs input-dark-bg" id="limit_symbol"></span>
+                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="limit_price" name="limit_price" onchange="onCalcLimitAmount()">
+                                        <span class="input-group-text font-size-xs input-dark-bg currency-span" id="limit_symbol"></span>
                                     </div>
                                     <div class="is-invalid text-right" id="limit_price_error"></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group text-light ">
                                         <span class="input-group-text font-size-xs input-dark-bg">{{ trans('exchange.amount') }}</span>
-                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right trading-border-left" id="limit_amount" name="limit_amount" onchange="onCalcLimitAmount()">
-                                        <span class="input-group-text font-size-xs input-dark-bg" id="limit_first_currency"></span>
+                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="limit_amount" name="limit_amount" onchange="onCalcLimitAmount()">
+                                        <span class="input-group-text font-size-xs input-dark-bg currency-span" id="limit_first_currency"></span>
                                     </div>
                                     <div class="is-invalid text-right" id="limit_amount_error"></div>
                                 </div>
@@ -44,25 +44,19 @@
                                 <div class="form-group">
                                     <div class="input-group text-light ">
                                         <span class="input-group-text font-size-xs input-dark-bg">{{ trans('exchange.total') }}</span>
-                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right trading-border-left" id="limit_total" name="limit_total" readonly value="0">
-                                        <span class="input-group-text font-size-xs input-dark-bg" id="limit_second_currency"></span>
+                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="limit_total" name="limit_total" readonly>
+                                        <span class="input-group-text font-size-xs input-dark-bg currency-span" id="limit_second_currency"></span>
                                     </div>
                                     <div class="is-invalid text-right" id="limit_total_error"></div>
                                 </div>
-                                @guest
-                                    <hr class="my-4">
-                                    <div class="text-center">
-                                        <a href="{{ route('login') }}" class="btn btn-primary"><i class="icon-log-in"></i>&nbsp;{{ trans('buttons.login') }}</a>
-                                        <a href="{{ route('register') }}" class="btn btn-primary"><i class="icon-user-plus"></i>&nbsp;{{ trans('buttons.register') }}</a>
-                                    </div>
-                                @else
+                                @auth
                                 <div class="form-group range-color-info" id="limit_range">
                                     <input type="hidden" id="range_slider_limit"/>
                                 </div>
 
                                 <input type="hidden" id="limit_signal" value="{{ config('constants.order_type.buy') }}">
                                 <button type="button" class="btn btn-block btn-info" id="limit_order_btn" onclick="onOrder('{{ config('constants.order_type2.limit') }}')">{{ trans('common.order.buy') }}</button>
-                                @endguest
+                                @endauth
                             </div>
                             <div class="tab-pane fade" id="market" role="tabpanel" aria-labelledby="step-tab">
                                 <div class="form-group text-light">
@@ -71,11 +65,15 @@
                                         <div class="col-6 p-l-0"><button type="button" class="btn btn-light btn-light-hover btn-block sell-b-r" id="sell_market_opt" onclick="onSelMarketSell()">{{ trans('exchange.sell_opt') }}</button></div>
                                     </div>
                                 </div>
+
+                                <input type="hidden" id="market_buy_price">
+                                <input type="hidden" id="market_sell_price">
+
                                 <div class="form-group">
                                     <div class="input-group text-light">
                                         <span class="input-group-text font-size-xs input-dark-bg">{{ trans('exchange.amount') }}</span>
                                         <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="market_amount" name="market_amount" onchange="onCalcMarketAmount()">
-                                        <span class="input-group-text font-size-xs input-dark-bg" id="market_first_currency"></span>
+                                        <span class="input-group-text font-size-xs input-dark-bg currency-span" id="market_first_currency"></span>
                                     </div>
                                     <div class="is-invalid text-right" id="market_amount_error"></div>
                                 </div>
@@ -83,35 +81,38 @@
                                 <div class="form-group">
                                     <div class="input-group text-light">
                                         <span class="input-group-text font-size-xs input-dark-bg">{{ trans('exchange.total') }}</span>
-                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="market_total" name="market_total" value="0">
-                                        <span class="input-group-text font-size-xs input-dark-bg" id="market_second_currency"></span>
+                                        <input type="text" class="form-control form-control-sm text-light input-dark-bg text-right" id="market_total" name="market_total" readonly>
+                                        <span class="input-group-text font-size-xs input-dark-bg currency-span" id="market_second_currency"></span>
                                     </div>
                                     <div class="is-invalid text-right" id="market_total_error"></div>
                                 </div>
-                                @guest
-                                    <hr class="my-4">
-                                    <div class="text-center">
-                                        <a href="{{ route('login') }}" class="btn btn-primary"><i class="icon-log-in"></i>&nbsp;{{ trans('buttons.login') }}</a>
-                                        <a href="{{ route('register') }}" class="btn btn-primary"><i class="icon-user-plus"></i>&nbsp;{{ trans('buttons.register') }}</a>
-                                    </div>
-                                @else
+                                @auth
                                     <div class="form-group range-color-info" id="market_range">
                                         <input type="hidden" id="range_slider_market"/>
                                     </div>
 
                                     <input type="hidden" id="market_signal" value="{{ config('constants.order_type.buy') }}">
                                     <button type="button" class="btn btn-info btn-block" id="market_order_btn" onclick="onOrder('{{ config('constants.order_type2.market') }}')">{{ trans('common.order.buy') }}</button>
-                                @endguest
+                                @endauth
                             </div>
                         </div>
                         @auth
                         <hr class="my-4">
                         @endauth
                     </div>
-                    @auth
+                    @guest
+                        <div class="col-lg-12 col-md-6">
+                            <hr class="space">
+                            <div class="text-center">
+                                <a href="{{ route('login') }}" class="btn btn-primary"><i class="icon-log-in"></i>&nbsp;{{ trans('buttons.login') }}</a>
+                                <a href="{{ route('register') }}" class="btn btn-primary"><i class="icon-user-plus"></i>&nbsp;{{ trans('buttons.register') }}</a>
+                            </div>
+                            <hr class="space">
+                        </div>
+                    @else
                     <div class="col-lg-12 col-md-6" id="balance_panel">
                     </div>
-                    @endauth
+                    @endguest
                 </div>
             </div>
             <div class="col-lg-10 direction-left">
@@ -155,9 +156,9 @@
                                 <tr>
                                     <th class="background-dark">{{ trans('exchange.order_id') }}</th>
                                     <th class="background-dark">{{ trans('exchange.order_datetime') }}</th>
-                                    <th class="background-dark">{{ trans('exchange.order_type') }}</th>
-                                    <th class="background-dark">{{ trans('exchange.symbol') }}</th>
                                     <th class="background-dark">{{ trans('exchange.type') }}</th>
+                                    <th class="background-dark">{{ trans('exchange.symbol') }}</th>
+                                    <th class="background-dark">{{ trans('exchange.order_type') }}</th>
                                     <th class="background-dark">{{ trans('exchange.price') }}</th>
                                     <th class="background-dark">{{ trans('exchange.amount') }}</th>
                                     <th class="background-dark">{{ trans('exchange.status') }}</th>
@@ -176,9 +177,9 @@
                                     <th class="background-dark">{{ trans('exchange.order_id') }}</th>
                                     <th class="background-dark">{{ trans('exchange.trade_id') }}</th>
                                     <th class="background-dark">{{ trans('exchange.settle_datetime') }}</th>
-                                    <th class="background-dark">{{ trans('exchange.order_type') }}</th>
-                                    <th class="background-dark">{{ trans('exchange.symbol') }}</th>
                                     <th class="background-dark">{{ trans('exchange.type') }}</th>
+                                    <th class="background-dark">{{ trans('exchange.symbol') }}</th>
+                                    <th class="background-dark">{{ trans('exchange.order_type') }}</th>
                                     <th class="background-dark">{{ trans('exchange.price') }}</th>
                                     <th class="background-dark">{{ trans('exchange.amount') }}</th>
                                     <th class="background-dark">{{ trans('exchange.fee') }}</th>
@@ -194,7 +195,6 @@
                 </div>
             </div>
         </div>
-        </div>
     </section>
 @endsection
 
@@ -202,8 +202,10 @@
     <script src="{{ asset('js/moment.js') }}"></script>
     <script>
         $( document ).ready(function() {
-            onSelectCurrency('{{ $id }}', '{{ $currency }}');
-            getBalance();
+            onSelectCurrency('{{ $id }}', '{{ $currency }}', '{{ $price_decimals }}');
+            @auth
+                getBalance();
+            @endauth
 
             $('#range_slider_limit').ionRangeSlider({
                 type: "single",
@@ -224,7 +226,7 @@
             });
         });
 
-        function onSelectCurrency(id, symbol) {
+        function onSelectCurrency(id, symbol, price_decimals) {
             $('#symbol').html(symbol);
             $('#limit_symbol').html(symbol);
             $('#market_symbol').html(symbol);
@@ -241,8 +243,14 @@
             $('#ask_order_list').html('');
             $('#bid_order_list').html('');
 
+            g_currencyId = id;
+            g_currencyName = symbol;
+            g_price_decimals = price_decimals;
+            refreshChart();
+            @auth
             getOrderHistory();
             getTradeHistory();
+            @endauth
         }
 
         function onSelSell() {
@@ -310,7 +318,7 @@
                 success: function (response) {
 
                     balance_list = '<div class="form-group row">\n' +
-                        '                            <div class="col-6"><h5 class="text-light">{{ trans('exchange.symbol') }}</h5></div>\n' +
+                        '                            <div class="col-6"><h5 class="text-light">{{ trans('exchange.currency') }}</h5></div>\n' +
                         '                            <div class="col-6 text-right"><h5 class="text-light">{{ trans('exchange.balance') }}</h5></div>\n' +
                         '                        </div>';
                     if (response == undefined || response.length == 0) {
@@ -349,7 +357,7 @@
                 $('#limit_total_error').html('');
                 $('#limit_price_error').html('');
 
-                if (balance < amount) {
+                if (parseFloat(balance) < parseFloat(amount)) {
                     $('#limit_amount').removeClass('text-light');
                     $('#limit_amount').addClass('text-danger');
                     $('#limit_amount_error').html('{{ trans('exchange.balance_error_msg') }}');
@@ -367,36 +375,38 @@
                 $('#limit_amount_error').html('');
                 $('#limit_price_error').html('');
 
-                if (balance < total) {
+                if (parseFloat(balance) < parseFloat(total)) {
                     $('#limit_total').removeClass('text-light');
                     $('#limit_total').addClass('text-danger');
                     $('#limit_total_error').html('{{ trans('exchange.balance_error_msg') }}');
                 } else {
                     $('#limit_total').removeClass('text-danger');
                     $('#limit_total').addClass('text-light');
-                    $('#limit_amount_error').html('');
+                    $('#limit_total_error').html('');
                 }
             }
 
+            total = _number_format(total, g_price_decimals);
             $('#limit_total').val(total);
 
+            @auth
             var instance = $('#range_slider_limit').data("ionRangeSlider");
             instance.update({
                 from: percent,
             });
+            @endauth
         }
 
         function onCalcMarketAmount() {
-            var price = $('#top_price').html();
             var amount = $('#market_amount').val();
-
-            var total = price * amount;
 
             var symbol = $('#symbol').html();
             var currencies = symbol.split("/");
             var signal = $('#market_signal').val();
             var percent = 0;
             if (signal == '{{ config('constants.order_type.sell') }}') {
+                var price = $('#market_sell_price').val();
+
                 var balance = $('#' + currencies[0] + '_balance').val();
                 percent = (amount / balance) * 100;
 
@@ -404,7 +414,7 @@
                 $('#market_total').addClass('text-light');
                 $('#market_total_error').html('');
 
-                if (balance < amount) {
+                if (parseFloat(balance) < parseFloat(amount)) {
                     $('#market_amount').removeClass('text-light');
                     $('#market_amount').addClass('text-danger');
                     $('#market_amount_error').html('{{ trans('exchange.balance_error_msg') }}');
@@ -414,6 +424,9 @@
                     $('#market_amount_error').html('');
                 }
             } else {
+                var price = $('#market_buy_price').val();
+                var total = price * amount;
+
                 var balance = $('#' + currencies[1] + '_balance').val();
                 percent = (total / balance) * 100;
 
@@ -421,7 +434,7 @@
                 $('#market_amount').addClass('text-light');
                 $('#market_amount_error').html('');
 
-                if (balance < total) {
+                if (parseFloat(balance) < parseFloat(total)) {
                     $('#market_total').removeClass('text-light');
                     $('#market_total').addClass('text-danger');
                     $('#market_total_error').html('{{ trans('exchange.balance_error_msg') }}');
@@ -432,12 +445,16 @@
                 }
             }
 
-            $('#market_total').val(price * amount);
+            var total = price * amount;
+            total = _number_format(total, g_price_decimals);
+            $('#market_total').val(total);
 
+            @auth
             var instance = $('#range_slider_market').data("ionRangeSlider");
             instance.update({
                 from: percent,
             });
+            @endauth
         }
 
         function getOrderHistory() {
@@ -468,7 +485,7 @@
                             datas.push([
                                 response[i].order_id,
                                 moment(response[i].ordered_at).utc().format('YYYY-MM-DD HH:mm:ss'),
-                                response[i].type2,
+                                response[i].type1,
                                 response[i].symbol,
                                 response[i].signal,
                                 response[i].order_price,
@@ -571,14 +588,46 @@
         function onOrder(type2) {
             var token = $("input[name=_token]").val();
             var currency = $('#symbol_id').val();
+            var symbol = $('#symbol').html();
+            var currencies = symbol.split("/");
             if (type2 == '{{ config('constants.order_type2.limit') }}') {
                 var order_price = $('#limit_price').val();
                 var order_amount = $('#limit_amount').val();
                 var signal = $('#limit_signal').val();
+
+                if (signal == '{{ config('constants.order_type.sell') }}') {
+                    var balance = $('#' + currencies[0] + '_balance').val();
+                    if (parseFloat(balance) < parseFloat(order_amount)) {
+                        toastr.error("{{ trans('exchange.balance_error_msg') }}");
+                        return;
+                    }
+                } else if(signal == '{{ config('constants.order_type.buy') }}') {
+                    var balance = $('#' + currencies[1] + '_balance').val();
+                    if (parseFloat(balance) < parseFloat(order_amount * order_price)) {
+                        toastr.error("{{ trans('exchange.balance_error_msg') }}");
+                        return;
+                    }
+                }
             } else if(type2 == '{{ config('constants.order_type2.market') }}') {
-                var order_price = $('#top_price').html();
                 var order_amount = $('#market_amount').val();
                 var signal = $('#market_signal').val();
+                var balance = $('#' + currencies[0] + '_balance').val();
+
+                if (signal == '{{ config('constants.order_type.sell') }}') {
+                    var order_price = $('#market_sell_price').val();
+                    var balance = $('#' + currencies[0] + '_balance').val();
+                    if (parseFloat(balance) < parseFloat(order_amount)) {
+                        toastr.error("{{ trans('exchange.balance_error_msg') }}");
+                        return;
+                    }
+                } else if(signal == '{{ config('constants.order_type.buy') }}') {
+                    var order_price = $('#market_buy_price').val();
+                    var balance = $('#' + currencies[1] + '_balance').val();
+                    if (parseFloat(balance) < parseFloat(order_amount * order_price)) {
+                        toastr.error("{{ trans('exchange.balance_error_msg') }}");
+                        return;
+                    }
+                }
             }
             var order_at = $('#limit_amount').val();
             var type1 = '{{ config('constants.trade_type.exchange') }}'
@@ -586,23 +635,24 @@
             $.ajax({
                 url: '{{ route('exchange.order') }}',
                 type: 'POST',
-                data: {_token: token, currency: currency, order_price: order_price, order_amount: order_amount, signal: signal, order_at: order_at, type1: type1, type2:type2},
+                data: {_token: token, currency: currency, order_price: order_price, order_amount: order_amount, signal: signal, type1: type1, type2:type2},
                 dataType: 'JSON',
                 success: function (response) {
                     if (response == undefined || response.status == 0) {
+                        toastr.error("{{ trans('exchange.order_failed_msg') }}");
                         if (response.errors != undefined && type2 == '{{ config('constants.order_type2.limit') }}') {
-                            toastr.error("{{ trans('exchange.order_failed_msg') }}");
                             if (response.errors.order_price != undefined)
                                 $('#limit_price_error').html(response.errors.order_price[0]);
                             if (response.errors.order_amount != undefined)
                                 $('#limit_amount_error').html(response.errors.order_amount[0]);
-                        } else if(response.errors !== null && type2 == '{{ config('constants.order_type2.market') }}') {
+                        } else if(response.errors !== undefined && type2 == '{{ config('constants.order_type2.market') }}') {
                             if (response.errors.order_amount != undefined)
                                 $('#market_amount_error').html(response.errors.order_amount[0]);
                         }
                     } else {
                         toastr.success("{{ trans('exchange.order_success_msg') }}");
                         getOrderHistory();
+                        getTradeHistory();
                         getBalance();
                     }
                 }
@@ -637,22 +687,44 @@
 
         socket.on('Ctex:Response:OrderBook', function(data) {
             var _data = JSON.parse(data);
-            console.log(_data.DETAIL);
+
             var sell_order = _data.DETAIL.sell;
             var buy_order = _data.DETAIL.buy;
 
             var sell_order_cnt = sell_order.length;
             var buy_order_cnt = buy_order.length;
 
-            var sell_min_index = 0;
-            var sell_max_index = sell_order_cnt;
-            if (sell_order_cnt > '{{ config('constants.order_book_count') }}') {
-                sell_min_index = sell_order_cnt - '{{ config('constants.order_book_count') }}';
-                sell_max_index = '{{ config('constants.order_book_count') }}';
+            if (sell_order_cnt > 0) {
+                $('#market_buy_price').val(sell_order[sell_order_cnt - 1].price);
+            } else {
+                $('#market_buy_price').val(0);
             }
 
+            if (buy_order_cnt > 0) {
+                $('#market_sell_price').val(buy_order[buy_order_cnt - 1].price);
+            } else {
+                $('#market_sell_price').val(0);
+            }
+
+            var sell_space_cnt = 0;
+            if (sell_order_cnt > '{{ config('constants.order_book_count') }}')
+                sell_order_cnt = '{{ config('constants.order_book_count') }}';
+            else
+                sell_space_cnt = '{{ config('constants.order_book_count') }}' - sell_order_cnt;
+
             var sell_order_list = '';
-            for (var i = sell_order_cnt - 1; i >= sell_min_index; i--) {
+            var zero = 0;
+
+            for (var i = 0; i < sell_space_cnt; i++) {
+                var order_info = '<tr class="text-center">\n' +
+                    '                                <td class="p-0 no-border text-muted">'+zero.toFixed(g_price_decimals)+'</td>\n' +
+                    '                                <td class="p-0 no-border text-danger-disable">'+zero.toFixed(g_price_decimals)+'</td>\n' +
+                    '                                <td class="p-0 no-border"></td>\n' +
+                    '                            </tr>';
+                sell_order_list = sell_order_list + order_info;
+            }
+
+            for (var i = sell_order_cnt - 1; i >= 0; i--) {
                 var order_info = '<tr class="text-center">\n' +
                     '                                <td class="p-0 no-border">' + sell_order[i].amount + '</td>\n' +
                     '                                <td class="p-0 no-border text-danger">' + sell_order[i].price + '</td>\n' +
@@ -661,11 +733,14 @@
                 sell_order_list = sell_order_list + order_info;
             }
 
-            var buy_max_index = buy_order_cnt;
+            var buy_space_cnt = 0;
             if (buy_order_cnt > '{{ config('constants.order_book_count') }}')
-                buy_max_index = '{{ config('constants.order_book_count') }}';
+                buy_order_cnt = '{{ config('constants.order_book_count') }}';
+            else
+                buy_space_cnt = '{{ config('constants.order_book_count') }}' - buy_order_cnt;
+
             var buy_order_list = '';
-            for (var i = 0; i < buy_max_index; i++) {
+            for (var i = 0; i < buy_order_cnt; i++) {
                 var order_info = '<tr class="text-center">\n' +
                     '                                <td class="p-0 no-border"></td>\n' +
                     '                                <td class="p-0 no-border text-info">' + buy_order[i].price + '</td>\n' +
@@ -674,12 +749,11 @@
                 buy_order_list = buy_order_list + order_info;
             }
 
-            var space_cnt = ('{{ config('constants.order_book_count') }}' * 2) - buy_max_index - sell_max_index;
-            for (var i = 0; i < space_cnt; i++) {
+            for (var i = 0; i < buy_space_cnt; i++) {
                 var order_info = '<tr class="text-center">\n' +
                     '                                <td class="p-0 no-border"></td>\n' +
-                    '                                <td class="p-0 no-border text-info">&nbsp;</td>\n' +
-                    '                                <td class="p-0 no-border"></td>\n' +
+                    '                                <td class="p-0 no-border text-info-disable">'+zero.toFixed(g_price_decimals)+'</td>\n' +
+                    '                                <td class="p-0 no-border text-muted">'+zero.toFixed(g_price_decimals)+'</td>\n' +
                     '                            </tr>';
                 buy_order_list = buy_order_list + order_info;
             }
@@ -688,9 +762,15 @@
                 var order_price = '<tr class="text-center font-size-lg">\n' +
                     '                                <td colspan="3" class="p-1 no-border text-info">' + buy_order[0].price + '</td>\n' +
                     '                            </tr>';
-                $('#order_price').html(order_price);
                 $('#top_price').html(buy_order[0].price);
+            } else {
+                var order_price = '<tr class="text-center font-size-lg">\n' +
+                    '                                <td colspan="3" class="p-1 no-border text-info">'+zero.toFixed(g_price_decimals)+'</td>\n' +
+                    '                            </tr>';
+                $('#top_price').html(0);
             }
+
+            $('#order_price').html(order_price);
 
             $('#ask_order_list').html(sell_order_list);
             $('#bid_order_list').html(buy_order_list);
@@ -705,5 +785,125 @@
         setInterval(function(){
             doRequestOrderBook();
         }, 1000);
+
+        const g_masterData = '';
+        var isRtl = $('body').attr('dir') === 'rtl' || $('html').attr('dir') === 'rtl';
+        var g_currencyId = "", g_currencyName = "", g_basicCoin = "", g_curCoin = "";
+        var g_price_decimals = 0;
+        var g_ask_price = 0;
+        var g_bid_price = 0;
+        var g_intervalOrderBook = null;
+        var g_lastPrice = '{{ $lastPrice }}';
+        var isAuth = "{{ Auth::check() ? 1 : 0 }}";
+
+        var g_chart, g_interval = '1'; //1min : Resolution
+        var history = {};
+        var g_rateUrl = "{{ route('rate.interval') }}";
+
+        var supportedResolutions = ["1", "5", "15", "30", "60", "240", "D"];
+        var config = {
+            supported_resolutions: supportedResolutions,
+        };
+
+        var widgetConfig = {
+            interval: g_interval, //default: 1min
+            locale: "{{ app()->getLocale() }}",
+            autosize: true,
+            style: 1,
+            container_id: 'crypto_chart',//容器id
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            disabled_features: [
+                'save_chart_properties_to_local_storage',
+                'volume_force_overlay',
+                'study_templates',
+                'header_undo_redo',
+                'header_symbol_search',
+                'symbol_search_hot_key',
+                'adaptive_logo',
+                'go_to_date',
+                'header_compare',
+                'use_localstorage_for_settings'
+            ],
+            //enabled_features: ["study_templates"],
+            enabled_features: [
+                'hide_last_na_study_output', 'side_toolbar_in_fullscreen_mode', 'disable_resolution_rebuild', 'move_logo_to_main_pane'
+            ],
+            overrides: {
+                //蜡烛样式
+                'mainSeriesProperties.candleStyle.upColor': '#117a8b',
+                'mainSeriesProperties.candleStyle.downColor': '#bd2130',
+                //烛心
+                'mainSeriesProperties.candleStyle.drawWick': true,
+                //烛心颜色
+                'mainSeriesProperties.candleStyle.wickUpColor:': '#117a8b',
+                'mainSeriesProperties.candleStyle.wickDownColor': '#bd2130',
+                //边框
+                'mainSeriesProperties.candleStyle.drawBorder': true,
+                'mainSeriesProperties.candleStyle.borderUpColor': '#117a8b',
+                'mainSeriesProperties.candleStyle.borderDownColor': '#bd2130',
+                //面积图《分时图》 styles
+                'mainSeriesProperties.areaStyle.color1': '#88c0ff',
+                'mainSeriesProperties.areaStyle.color2': '#1e2022',
+                'mainSeriesProperties.areaStyle.linecolor': '#117a8b',
+                'mainSeriesProperties.areaStyle.linewidth': 1,
+                //背景
+                'paneProperties.background': '#1e2022',
+                //网格线
+                'paneProperties.vertGridProperties.color': '#252525',
+                'paneProperties.vertGridProperties.style': 0,
+                'paneProperties.horzGridProperties.color': '#252525',
+                'paneProperties.horzGridProperties.style': 0,
+                //坐标轴和刻度标签颜色
+                'scalesProperties.lineColor': '#686d80',
+                'scalesProperties.textColor': '#959595',
+                'scalesProperties.showLeftScale': false,
+                //隐藏图例
+//            'paneProperties.legendProperties.showLegend': true,
+//            'paneProperties.legendProperties.showSeriesTitle': false,
+//            'paneProperties.legendProperties.showStudyTitle': false,
+//            'paneProperties.legendProperties.showStudyArgument': false,
+//            'scalesProperties.showButtomScale': false,
+                //成交量高度
+                'volumePaneSize': 'medium',
+                // "MACDPaneSize":"tiny"
+                /* 边距 */
+                'paneProperties.topMargin': 15,
+//            'timeScale.rightOffent': 2,
+                'symbolWatermarkProperties.color': 'rgba(0, 0, 0, 0)'
+            },
+            studies_overrides: {
+                //销量颜色
+                'volume.volume.color.0': '#bd2130',
+                'volume.volume.color.1': '#117a8b'
+            },
+            time_frames: [],
+            drawings_access: { type: 'black', tools: [{ name: "Regression Trend" }] },
+            //timezone: 'Asia/Tokyo', //地区时间
+            datafeed: new UniexchangeDatafeed({ debug: true}),
+            library_path: "{{ asset('plugins/charting_library') . '/' }}", //调用本js图表地库和样式
+            //charts_storage_url: 'http://saveload.tradingview.com',
+            //charts_storage_api_version: "1.1",
+            toolbar_bg: '#1e2022',
+            client_id : '{{ config('app.name', 'ADAM Bit') }}',
+            user_id: "public_user", //"public_user_id", //"public_user",
+            customFormatters: {
+                timeFormatter: {
+                    format: function (date) {
+                        var _format_str = '%h:%m'
+                        return _format_str.replace('%h', date.getUTCHours(), 2).replace('%m', date.getUTCMinutes(), 2).replace('%s', date.getUTCSeconds(), 2)
+                    }
+                },
+                dateFormatter: {
+                    format: function (date) { return date.getUTCFullYear() + '/' + (date.getUTCMonth() + 1) + '/' + (date.getUTCDate()) }
+                }
+            },
+        }
+
+        function refreshChart() {
+            widgetConfig.symbol = g_currencyName;
+            widgetConfig.interval = g_interval; //m1, m5, m15, m30, m60, m240, m1440
+            //$("#chartContainer").LoadingOverlay('show');
+            g_chart = new TradingView.widget(widgetConfig)
+        }
     </script>
 @endsection

@@ -20,6 +20,11 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
+Route::get('/2fa/validate', [App\Http\Controllers\Auth\LoginController::class, 'getValidateToken'])->name('2fa');;
+Route::post('/2fa/validate', [App\Http\Controllers\Auth\LoginController::class, 'postValidateToken'])->name('2fa.validate');
+
+Route::get('/lang/{locale}', [App\Http\Controllers\LanguageController::class, 'setLocale'])->name('lang');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange');
@@ -30,6 +35,10 @@ Route::post('/exchange/order', [App\Http\Controllers\ExchangeController::class, 
 Route::post('/exchange/order/cancel', [App\Http\Controllers\ExchangeController::class, 'orderCancel'])->name('exchange.order.cancel');
 
 Route::get('/dealer', [App\Http\Controllers\DealerController::class, 'index'])->name('dealer');
+Route::post('/dealer/trade/list', [App\Http\Controllers\DealerController::class, 'getTradeList'])->name('dealer.trade.list');
+
+Route::get('/rate', [App\Http\Controllers\RateController::class, 'get_rate'])->name('rate.interval');
+Route::get('/dealer/rate', [App\Http\Controllers\RateController::class, 'get_dealer_rate'])->name('dealer.rate.interval');
 
 Route::get('/payment', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment');
 Route::post('/withdraw', [App\Http\Controllers\PaymentController::class, 'withdraw'])->name('payment.withdraw');
@@ -43,6 +52,9 @@ Route::get('/setting', [App\Http\Controllers\SettingController::class, 'index'])
 Route::post('/setting/updateprofile', [App\Http\Controllers\SettingController::class, 'updateProfile'])->name('setting.updateprofile');
 Route::post('/setting/updatepassword', [App\Http\Controllers\SettingController::class, 'updatePassword'])->name('setting.updatepassword');
 Route::post('/setting/idverify', [App\Http\Controllers\SettingController::class, 'idVerify'])->name('setting.idverify');
+Route::post('/setting/idverify/delete', [App\Http\Controllers\SettingController::class, 'idVerifyDelete'])->name('setting.idverify.delete');
+Route::post('/setting/2fa_auth/enable', [App\Http\Controllers\SettingController::class, 'enable2FA'])->name('setting.2fa_auth.enable');
+Route::post('/setting/2fa_auth/disable', [App\Http\Controllers\SettingController::class, 'disable2FA'])->name('setting.2fa_auth.disable');
 Route::post('/setting/datalist', [App\Http\Controllers\SettingController::class, 'getDataList'])->name('setting.datalist');
 Route::post('/setting/loginhistory', [App\Http\Controllers\SettingController::class, 'getLoginHistory'])->name('setting.loginhistory');
 Route::post('/setting/language', [App\Http\Controllers\SettingController::class, 'language'])->name('setting.language');
