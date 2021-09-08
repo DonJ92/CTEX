@@ -537,7 +537,6 @@
 
                     $('#data_list_tbl').dataTable({
                         data: datas,
-                        responsive: true,
                         searching: false,
                         viewCount: false,
                         bLengthChange: false,
@@ -593,7 +592,6 @@
 
                     $('#login_history_tbl').dataTable({
                         data: datas,
-                        responsive: true,
                         searching: false,
                         viewCount: false,
                         bLengthChange: false,

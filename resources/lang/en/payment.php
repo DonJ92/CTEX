@@ -13,6 +13,9 @@ return [
     'deposit_desc2' => 'Please copy or scan the QR code to use it.',
 
     'balance' => 'Balance:',
+    'available_balance' => 'Available Balance:',
+
+    'available_balance_desc' => 'You can withdraw the funds except for the pending order amount and requested withdrawal amount.',
 
     'min_deposit_title' => 'Minimum Deposit Amount:',
     'min_deposit_desc' => 'You have to transfer funds larger than the minimum deposit amount',
@@ -39,4 +42,6 @@ return [
 
     'withdraw_failed_msg' => 'Your withdrawal request failed.',
     'withdraw_success_msg' => 'Your withdrawal request succeed.',
+
+    'withdraw_after_kyc' => 'You can withdraw the funds after the ID verification.'
 ];

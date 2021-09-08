@@ -52,24 +52,26 @@
                                         <button type="button" class="btn btn-primary" onclick="getTradeHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
-                                <table id="trade_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th class="background-black-dark">{{ trans('report.trade_id') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.type') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.symbol') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.order_type') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.settle_datetime') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.settle_price') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.settle_amount') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.fee') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.remark') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                <div class="overflow-auto px-3">
+                                    <table id="trade_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th class="background-black-dark">{{ trans('report.trade_id') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.type') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.symbol') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.order_type') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.settle_datetime') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.settle_price') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.settle_amount') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.fee') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.status') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.remark') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
                                 <div class="form-group row">
@@ -79,20 +81,22 @@
                                         <button type="button" class="btn btn-primary" onclick="getDepositHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
-                                <table id="deposit_history_tbl" class="table table-dark font-size-sm" style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th class="background-black-dark">{{ trans('report.date_time') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.currency') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.amount') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.deposit_address') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                <div class="overflow-auto px-3">
+                                    <table id="deposit_history_tbl" class="table table-dark font-size-sm" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th class="background-black-dark">{{ trans('report.date_time') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.currency') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.amount') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.deposit_address') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.status') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
                                 <div class="form-group row">
@@ -102,21 +106,23 @@
                                         <button type="button" class="btn btn-primary" onclick="getWithdrawHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
                                 </div>
-                                <table id="withdraw_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th class="background-black-dark">{{ trans('report.date_time') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.currency') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.amount') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.withdraw_address') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.status') }}</th>
-                                        <th class="background-black-dark">{{ trans('report.remark') }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                <div class="overflow-auto px-3">
+                                    <table id="withdraw_history_tbl" class="table table-dark font-size-sm overflow-auto" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th class="background-black-dark">{{ trans('report.date_time') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.currency') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.amount') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.withdraw_address') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.tx_id') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.status') }}</th>
+                                            <th class="background-black-dark">{{ trans('report.remark') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,7 +184,6 @@
 
                 $('#trade_history_tbl').dataTable({
                     data: datas,
-                    responsive: true,
                     searching: false,
                     viewCount: false,
                     bLengthChange: false,
@@ -229,7 +234,6 @@
 
                 $('#deposit_history_tbl').dataTable({
                     data: datas,
-                    responsive: true,
                     searching: false,
                     viewCount: false,
                     bLengthChange: false,
@@ -281,7 +285,6 @@
 
                 $('#withdraw_history_tbl').dataTable({
                     data: datas,
-                    responsive: true,
                     searching: false,
                     viewCount: false,
                     bLengthChange: false,

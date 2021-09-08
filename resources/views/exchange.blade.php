@@ -328,7 +328,7 @@
                             var content = '<div class="row mb-1">\n' +
                                 '                            <div class="col-6"><img src="' + response[i].ico + '" width="24px" class="p-r-10"><b>' + response[i].currency + '</b></div>\n' +
                                 '                            <div class="col-6 text-right"><h5 class="text-light">' + response[i].balance + '</h5></div>\n' +
-                                '                            <input type="hidden" id="' + response[i].currency + '_balance" value="' + response[i].balance_amount + '">\n' +
+                                '                            <input type="hidden" id="' + response[i].currency + '_balance" value="' + response[i].available_balance + '">\n' +
                                 '                        </div>';
                             balance_list = balance_list + content;
                         }
@@ -629,7 +629,7 @@
                     }
                 }
             }
-            var order_at = $('#limit_amount').val();
+
             var type1 = '{{ config('constants.trade_type.exchange') }}'
 
             $.ajax({

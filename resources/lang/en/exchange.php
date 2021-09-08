@@ -42,5 +42,7 @@ return [
     'order_success_msg' => 'Order Success.',
 
     'cancel_failed_msg' => 'Order Cancel Failure.',
-    'cancel_success_msg' => 'Order Cancel Success.'
+    'cancel_success_msg' => 'Order Cancel Success.',
+
+    'market_order_cancel' => 'Market order cancel',
 ];

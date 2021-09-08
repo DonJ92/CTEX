@@ -27,6 +27,7 @@ class TradeHistory extends Model
         'settle_price',
         'settle_amount',
         'fee',
+        'fee_currency',
         'status',
         'remark',
     ];

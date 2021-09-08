@@ -13,6 +13,9 @@ return [
     'deposit_desc2' => '请复制或扫描二维码使用。',
 
     'balance' => '余额:',
+    'available_balance' => '可提款金额:',
+
+    'available_balance_desc' => '您可以提取除挂单金额和请求提取金额以外的资金。',
 
     'min_deposit_title' => '最低存款金额:',
     'min_deposit_desc' => '您必须存款大于最低存款金额的资金。',
@@ -39,4 +42,6 @@ return [
 
     'withdraw_failed_msg' => '您的取款请求失败。',
     'withdraw_success_msg' => '您的取款请求成功。',
+
+    'withdraw_after_kyc' => '身份验证后，您可以提取资金。'
 ];

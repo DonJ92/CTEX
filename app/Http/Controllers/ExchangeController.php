@@ -132,15 +132,21 @@ class ExchangeController extends Controller
             for ($i = 0; $i < count($trade_history); $i++) {
                 $trade_history[$i]['settle_amount'] = _number_format($trade_history[$i]['settle_amount'], $trade_history[$i]['amount_decimals']);
                 $trade_history[$i]['settle_price'] = _number_format($trade_history[$i]['settle_price'], $trade_history[$i]['price_decimals']);
-                $trade_history[$i]['fee'] = _number_format($trade_history[$i]['fee'], $trade_history[$i]['amount_decimals']);
+                $trade_history[$i]['fee'] = _number_format($trade_history[$i]['fee'], $trade_history[$i]['amount_decimals']) . '(' . $trade_history[$i]['fee_currency'] . ')';
 
                 $trade_history[$i]['type'] = $this->getTradeType($trade_history[$i]['type']);
                 $trade_history[$i]['signal'] = $this->getOrderType($trade_history[$i]['signal']);
                 $trade_history[$i]['status'] = $this->getTradeStatue($trade_history[$i]['status']);
+                if ($trade_history[$i]['remark'] == config('constants.trade_remark.not_enough_balance'))
+                    $trade_history[$i]['remark'] = trans('exchange.balance_error_msg');
+                else if ($trade_history[$i]['remark'] == config('constants.trade_remark.market_order_cancel'))
+                    $trade_history[$i]['remark'] = trans('exchange.market_order_cancel');
             }
 
         } catch (QueryException $e) {
             Log::error($e->getMessage());
+            print_r($e->getMessage());
+            die();
             echo json_encode($trade_history);
             exit;
         }
@@ -184,6 +190,33 @@ class ExchangeController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $errors = $validator->errors();
+            $res['errors'] = $errors;
+            echo json_encode($res);
+            exit;
+        }
+
+        $currencies = explode('/', $currency_info['currency']);
+        if($data['signal'] == config('constants.order_type.sell')) {
+            $balance = $this->getAvailableBalanceFromCurrency($currencies[0]);
+            if ($data['order_amount'] > $balance['balance']) {
+                $validator->errors()->add('order_amount', trans('exchange.balance_error_msg'));
+                $errors = $validator->errors();
+                $res['errors'] = $errors;
+                echo json_encode($res);
+                exit;
+            }
+        } else if ($data['signal'] == config('constants.order_type.buy')) {
+            $balance = $this->getAvailableBalanceFromCurrency($currencies[1]);
+            if ($data['order_amount'] * $data['order_price'] > $balance['balance']) {
+                $validator->errors()->add('order_amount', trans('exchange.balance_error_msg'));
+                $errors = $validator->errors();
+                $res['errors'] = $errors;
+                echo json_encode($res);
+                exit;
+            }
+        } else {
+            $validator->errors()->add('order_amount', trans('exchange.balance_error_msg'));
             $errors = $validator->errors();
             $res['errors'] = $errors;
             echo json_encode($res);

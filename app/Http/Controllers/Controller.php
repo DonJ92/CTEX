@@ -8,7 +8,9 @@ use App\Models\DailyFluct;
 use App\Models\Identity;
 use App\Models\News;
 use App\Models\Notifications;
+use App\Models\OrderHistory;
 use App\Models\UserBalance;
+use App\Models\Withdraw;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -114,6 +116,8 @@ class Controller extends BaseController
         }
 
         for ($i = 0; $i < count($cryptocurrency_list); $i++) {
+            $available_balance = $this->getAvailableBalanceFromCurrency($cryptocurrency_list[$i]['currency']);
+            $cryptocurrency_list[$i]['available_balance'] = _number_format($available_balance['balance'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['balance'] = _number_format($cryptocurrency_list[$i]['balance'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['min_deposit'] = _number_format($cryptocurrency_list[$i]['min_deposit'], $cryptocurrency_list[$i]['rate_decimals']);
@@ -167,6 +171,8 @@ class Controller extends BaseController
         }
 
         for ($i = 0; $i < count($balance_list); $i++) {
+            $available_balance = $this->getAvailableBalanceFromCurrency($balance_list[$i]['currency']);
+            $balance_list[$i]['available_balance'] = _number_format2($available_balance['balance'], $balance_list[$i]['rate_decimals']);
             $balance_list[$i]['balance_amount'] = _number_format2($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
             $balance_list[$i]['balance'] = _number_format($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
 
@@ -220,6 +226,57 @@ class Controller extends BaseController
                 $balance['balance'] = $balance_info->balance;
                 $balance['decimals'] = $balance_info->rate_decimals;
             }
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $balance;
+        }
+
+        return $balance;
+    }
+
+    /**
+     * get available balance from currency
+     *
+     * @param $currency
+     * @return array
+     */
+    protected function getAvailableBalanceFromCurrency($currency)
+    {
+        $user = Auth::user();
+
+        $balance = $this->getBalanceFromCurrency($currency);
+
+        try {
+            $order_pending_list = OrderHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_order_history.currency')
+                ->where('ct_order_history.user_id', $user->id)
+                ->where('ct_currencies.currency', 'like', '%'.$currency.'%')
+                ->where(function ($query) {
+                    $query->where('ct_order_history.status', config('constants.order_status.pending'))
+                        ->orWhere('ct_order_history.status', config('constants.order_status.canceling'));
+                })
+                ->get()->toArray();
+
+            $order_pending_amount = 0;
+            foreach ($order_pending_list as $order_pending_info) {
+                $currencies = explode('/', $order_pending_info['currency']);
+
+                if ($currencies['0'] == $currency && $order_pending_info['signal'] == config('constants.order_type.sell'))
+                    $order_pending_amount = $order_pending_amount + $order_pending_info['order_amount'];
+                elseif ($currencies['1'] == $currency && $order_pending_info['signal'] == config('constants.order_type.buy'))
+                    $order_pending_amount = $order_pending_amount + ($order_pending_info['order_amount'] * $order_pending_info['order_price']) ;
+            }
+
+            $withdraw_pending_list = Withdraw::where('user_id', $user->id)
+                ->where('currency', $currency)
+                ->where('status', config('constants.withdraw_status.requested'))
+                ->get()->toArray();
+
+            $withdraw_pending_amount = 0;
+            foreach ($withdraw_pending_list as $withdraw_pending_info) {
+                $withdraw_pending_amount = $withdraw_pending_amount + $withdraw_pending_info['amount'];
+            }
+
+            $balance['balance'] = $balance['balance'] - $order_pending_amount - $withdraw_pending_amount;
         } catch (QueryException $e) {
             Log::error($e->getMessage());
             return $balance;

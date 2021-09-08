@@ -118,6 +118,11 @@ return [
         'canceled' => 2,
     ],
 
+    'trade_remark' => [
+        'not_enough_balance' => 'not_enough_balance',
+        'market_order_cancel' => 'market_order_cancel',
+    ],
+
     'news_status' => [
         'invalid' => 0,
         'valid' => 1,

@@ -48,7 +48,7 @@ class ReportController extends Controller
         try{
             $query = TradeHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_trade_history.currency')
                 ->select('ct_trade_history.trade_id', 'ct_trade_history.settled_at', 'ct_trade_history.type', 'ct_trade_history.signal',
-                    'ct_trade_history.settle_price', 'ct_trade_history.settle_amount', 'ct_trade_history.fee', 'ct_trade_history.status',
+                    'ct_trade_history.settle_price', 'ct_trade_history.settle_amount', 'ct_trade_history.fee', 'ct_trade_history.fee_currency', 'ct_trade_history.status',
                     'ct_trade_history.remark', 'ct_trade_history.remark', 'ct_currencies.currency', 'ct_currencies.amount_decimals', 'ct_currencies.price_decimals')
                 ->orderby('ct_trade_history.settled_at', 'desc');
 
@@ -64,11 +64,15 @@ class ReportController extends Controller
             for ($i = 0; $i < count($history_list); $i++) {
                 $history_list[$i]['settle_amount'] = _number_format($history_list[$i]['settle_amount'], $history_list[$i]['amount_decimals']);
                 $history_list[$i]['settle_price'] = _number_format($history_list[$i]['settle_price'], $history_list[$i]['price_decimals']);
-                $history_list[$i]['fee'] = _number_format($history_list[$i]['fee'], $history_list[$i]['amount_decimals']);
+                $history_list[$i]['fee'] = _number_format($history_list[$i]['fee'], $history_list[$i]['amount_decimals']) . '(' . $history_list[$i]['fee_currency'] . ')';
 
                 $history_list[$i]['type'] = $this->getTradeType($history_list[$i]['type']);
                 $history_list[$i]['signal'] = $this->getOrderType($history_list[$i]['signal']);
                 $history_list[$i]['status'] = $this->getTradeStatue($history_list[$i]['status']);
+                if ($history_list[$i]['remark'] == config('constants.trade_remark.not_enough_balance'))
+                    $history_list[$i]['remark'] = trans('exchange.balance_error_msg');
+                else if ($history_list[$i]['remark'] == config('constants.trade_remark.market_order_cancel'))
+                    $history_list[$i]['remark'] = trans('exchange.market_order_cancel');
             }
 
         } catch (QueryException $e) {

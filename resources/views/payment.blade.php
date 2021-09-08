@@ -91,8 +91,11 @@
                                         </h5>
                                         <br>
                                         <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . $cryptocurrency_info['currency'] }}</span></h4>
+                                        <h5>{{ trans('payment.available_balance') }} <span class="text-primary">{{ $cryptocurrency_info['available_balance'] . $cryptocurrency_info['currency'] }}</span></h5>
+                                        <p>{{ trans('payment.available_balance_desc') }}</p>
                                         <h5>{{ trans('payment.min_withdraw_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_withdraw'] . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_withdraw_desc') }}</p></h5>
                                         <hr>
+                                        @if (auth()->user()->kyc_status == config('constants.kyc_status.verified'))
                                         <div class="card background-dark">
                                             <div class="card-header background-black-dark">
                                                 <span class="h4 mx-auto text-primary">{{ trans('payment.withdraw_addr_title', ['currency' => $cryptocurrency_info['name']]) }}</span>
@@ -128,6 +131,9 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        @else
+                                            <h5 class="text-primary"><b>{{ trans('payment.withdraw_after_kyc') }}</b></h5>
+                                        @endif
                                         <h4>{{ trans('payment.withdraw_warning_title') }}</h4>
                                         <p class="text-light">{{ trans('payment.withdraw_warning_desc', ['currency' => $cryptocurrency_info['name']]) }}</p>
                                     </div>

@@ -42,5 +42,7 @@ return [
     'order_success_msg' => '注文成功',
 
     'cancel_failed_msg' => '注文キャンセル失敗',
-    'cancel_success_msg' => '注文キャンセル成功'
+    'cancel_success_msg' => '注文キャンセル成功',
+
+    'market_order_cancel' => '成行注文キャンセル',
 ];

@@ -92,7 +92,7 @@ class PaymentController extends Controller
         if(empty($data['currency_url']) || empty($data['currency']))
             return redirect()->back()->withInput()->withErrors(['failed' => trans('payment.invalid_currency_msg')]);
 
-        $available_balance = $this->getBalanceFromCurrency($data['currency']);
+        $available_balance = $this->getAvailableBalanceFromCurrency($data['currency']);
         $crypto_setting = $this->getCryptocurrencySetting($data['currency']);
         if(empty($crypto_setting))
             $min_amount = 0;

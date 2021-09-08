@@ -13,9 +13,12 @@ return [
     'deposit_desc2' => 'QRコードをコピーまたはスキャンしてご利用ください。',
 
     'balance' => '残高:',
+    'available_balance' => '出金可能残高:',
+
+    'available_balance_desc' => 'ペンディング状態の注文金額と要求された出金金額を除いた資金を出金することができます。',
 
     'min_deposit_title' => '最低入金数量:',
-    'min_deposit_desc' => '最低入金額より多い資金を入金する必要があります',
+    'min_deposit_desc' => '最低入金額より多い資金を入金する必要があります。',
 
     'deposit_addr_title' => ':currency入金先アドレス',
 
@@ -39,4 +42,6 @@ return [
 
     'withdraw_failed_msg' => '出金申込失敗',
     'withdraw_success_msg' => '出金申込成功',
+
+    'withdraw_after_kyc' => '本人認証後、資金を出金することができます。'
 ];

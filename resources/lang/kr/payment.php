@@ -13,6 +13,9 @@ return [
     'deposit_desc2' => 'QR코드를 복사 또는 스캔하여 이용해 주세요.',
 
     'balance' => '잔고: ',
+    'available_balance' => '출금가능잔고:',
+
+    'available_balance_desc' => '보류 상태의 주문 금액과 출금 요청 금액을 제외한 자금을 인출 할수 있습니다.',
 
     'min_deposit_title' => '최저 입금액:',
     'min_deposit_desc' => '최저 입금액보다 많은 자금을 입금하셔야 합니다.',
@@ -39,4 +42,6 @@ return [
 
     'withdraw_failed_msg' => '출금 신청 실패',
     'withdraw_success_msg' => '출금 신청 성공',
+
+    'withdraw_after_kyc' => '본인인증후 자금을 출금 할수 있습니다.'
 ];
