@@ -28,7 +28,7 @@
                                 @endauth
                                 <div class="form-group row">
                                     <div class="col-4">{{ trans('dealer.price') }}:</div>
-                                    <div class="col-8 text-right"><h5><span id="price">0</span>&nbsp;<span class="text-info font-size-sm">+5.71%</span></h5></div>
+                                    <div class="col-8 text-right"><h5><span id="price">0</span>&nbsp;<span class="text-info font-size-sm"></span></h5></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group text-light">

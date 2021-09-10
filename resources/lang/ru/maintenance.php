@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Maintenance',
+    'title' => 'Обслуживание',
 
-    'page_title' => 'Maintenance',
+    'page_title' => 'Обслуживание',
 ];

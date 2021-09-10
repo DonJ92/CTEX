@@ -36,7 +36,7 @@
                 <div id="logo">
                     <a href="{{ route('/') }}">
                         <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
-                        <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 50px"></span>
+                        <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 45px"></span>
                     </a>
                 </div>
                 <!--End: Logo-->
@@ -90,13 +90,13 @@
                             <ul>
                                 <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>{{ trans('common.top_menu.dashboard') }}</a></li>
                                 <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
-                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
+<!--                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>-->
                                 <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
                                 <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>{{ trans('common.top_menu.payment') }}</a></li>
                                 <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>{{ trans('common.top_menu.report') }}</a></li>
                                 <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
                                 <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
-                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
+<!--                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>-->
                                 <li class="dropdown"><a href="#"><img src="{{ auth()->user()->avatar ? auth()->user()->avatar : asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
                                         <li><a href="{{ route('setting') }}">{{ trans('common.top_menu.setting') }}</a></li>
@@ -137,7 +137,7 @@
                             <div class="col-md-4">
                                 <div class="widget">
                                     <ul class="list">
-                                        <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>
+<!--                                        <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>-->
                                         <li><a href="{{ route('dealer') }}">{{ trans('common.footer_menu.dealer') }}</a></li>
                                     </ul>
                                 </div>

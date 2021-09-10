@@ -20,14 +20,14 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/2fa/validate', [App\Http\Controllers\Auth\LoginController::class, 'getValidateToken'])->name('2fa');;
+Route::get('/2fa/validate', [App\Http\Controllers\Auth\LoginController::class, 'getValidateToken'])->name('2fa');
 Route::post('/2fa/validate', [App\Http\Controllers\Auth\LoginController::class, 'postValidateToken'])->name('2fa.validate');
 
 Route::get('/lang/{locale}', [App\Http\Controllers\LanguageController::class, 'setLocale'])->name('lang');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange');
+Route::get('/exchange', [App\Http\Controllers\DealerController::class, 'index'])->name('exchange');
 Route::post('/exchange/balance', [App\Http\Controllers\ExchangeController::class, 'getCurrentBalance'])->name('exchange.balance');
 Route::post('/exchange/order/history', [App\Http\Controllers\ExchangeController::class, 'getOrderHistory'])->name('exchange.order.history');
 Route::post('/exchange/trade/history', [App\Http\Controllers\ExchangeController::class, 'getTradeHistory'])->name('exchange.trade.history');
@@ -72,3 +72,5 @@ Route::get('/news/detail/{id}', [App\Http\Controllers\NewsController::class, 'ne
 Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
 Route::post('/notifications/list', [App\Http\Controllers\NotificationController::class, 'getNotificationsList'])->name('notifications.list');
 Route::get('/notifications/detail/{id}', [App\Http\Controllers\NotificationController::class, 'notificationDetail'])->name('notifications.detail');
+
+Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('maintenance');

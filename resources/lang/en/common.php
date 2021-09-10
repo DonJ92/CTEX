@@ -68,7 +68,7 @@ return [
     'order_status' => [
         'pending' => 'Pending',
         'settled' => 'Settled',
-        'settlement' => 'Settlement',
+        'settlement' => 'Partial Settlement',
         'canceled' => 'Canceled',
         'canceling' => 'Canceling',
     ],

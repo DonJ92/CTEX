@@ -45,7 +45,7 @@
                     <section class="no-padding equalize" data-equalize-item=".text-box">
                         <div class="row col-no-margin background-dark">
                             <!--Box 1-->
-                            <div class="col-lg-4 col-md-6 background-black-dark border-panel">
+<!--                            <div class="col-lg-4 col-md-6 background-black-dark border-panel">
                                 <a href="{{ route('exchange') }}">
                                     <div class="text-box">
                                         <i class="fa fa-chart-bar"></i>
@@ -53,7 +53,7 @@
                                         <p>{{ trans('dashboard.trade_desc') }}</p>
                                     </div>
                                 </a>
-                            </div>
+                            </div>-->
                             <!--End: Box 1-->
                             <!--Box 2-->
                             <div class="col-lg-4 col-md-6 background-black-dark border-panel">

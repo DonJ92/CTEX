@@ -29,7 +29,7 @@
                     <div id="logo">
                         <a href="{{ route('/') }}">
                             <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
-                            <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 50px"></span>
+                            <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 45px"></span>
                         </a>
                     </div>
                     <!--End: Logo-->
@@ -61,7 +61,7 @@
                                 <ul>
                                     <li><a href="{{ route('/') }}"><i class="fa fa-home"></i>{{ trans('common.top_menu.home') }}</a></li>
                                     <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
-                                    <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
+<!--                                    <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>-->
                                     <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
                                     <!--<li><a href="">Overview</a></li>
                                     <li><a href="">Services</a></li>
@@ -107,7 +107,7 @@
                                 <div class="col-md-4">
                                     <div class="widget">
                                         <ul class="list">
-                                            <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>
+<!--                                            <li><a href="{{ route('exchange') }}">{{ trans('common.footer_menu.exchange') }}</a></li>-->
                                             <li><a href="{{ route('dealer') }}">{{ trans('common.footer_menu.dealer') }}</a></li>
                                         </ul>
                                     </div>

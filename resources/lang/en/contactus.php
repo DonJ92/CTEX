@@ -12,7 +12,7 @@ return [
     'email_placeholder' => 'Enter your Email',
 
     'subject_title' => 'Your Subject',
-    'subject_placeholder' => 'Subject',
+    'subject_placeholder' => 'Enter your Subject',
     'message_title' => 'Message',
     'message_placeholder' => 'Enter your Message',
 

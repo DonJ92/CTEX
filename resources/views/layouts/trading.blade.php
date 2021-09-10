@@ -27,11 +27,171 @@
 <body class="background-dark">
 <!-- Body Inner -->
 <div class="body-inner dark vh-100">
+    @auth
+        <header id="header" class="dark" data-fullwidth="true">
+        <div class="header-inner">
+            <div class="container">
+                <!--Logo-->
+                <div id="logo">
+                    <a href="{{ route('/') }}">
+                        <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
+                        <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 45px"></span>
+                    </a>
+                </div>
+                <!--End: Logo-->
+                <!--Header Extras-->
+                <div class="header-extras">
+                    <ul>
+                        <li>
+                            <div class="p-dropdown" id="notify_dropdown">
+                                <a href="#"><i class="icon-bell"></i></a>
+                                <div class="p-dropdown-content background-black-dark border-panel">
+                                    <div class="widget-notification">
+                                        <h4 class="mb-0">{{ trans('common.top_menu.notification') }}</h4>
+                                        <!--<p class="text-muted">You have 2 new notifications</p>-->
+                                        @foreach(\App\Http\Controllers\Controller::getLastNotifications() as $notification_info)
+                                            <div class="notification-item @if($notification_info['status'] == config('constants.notifications_status.unread')) notification-new @endif">
+                                                <div class="notification-meta">
+                                                    <a href="#">{{ $notification_info['title'] }}</a>
+                                                    <span>{{ $notification_info['updated_at'] }}</span>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        <div class="m-t-20"><a href="{{ route('notifications') }}" class="text-theme">{{ trans('buttons.all_notifications') }}</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="p-dropdown" id="lang_dropdown">
+                                <a href="#"><i class="icon-globe"></i><span>{{ app()->getLocale() }}</span></a>
+                                <div class="p-dropdown-content background-black-dark border-panel">
+                                    <ul>
+                                        @foreach(config('constants.language_list') as $language_info)
+                                            <li><a href="{{ url('lang') . '/' . $language_info['code']}}">{{ $language_info['name'] }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!--end: Header Extras-->
+                <!--Navigation Resposnive Trigger-->
+                <div id="mainMenu-trigger">
+                    <a class="lines-button x mx-2"><span class="lines"></span></a>
+                </div>
+                <!--end: Navigation Resposnive Trigger-->
+                <!--Navigation-->
+                <div id="mainMenu">
+                    <div class="container">
+                        <nav>
+                            <ul>
+                                <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>{{ trans('common.top_menu.dashboard') }}</a></li>
+                                <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
+<!--                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>-->
+                                <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
+                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>{{ trans('common.top_menu.payment') }}</a></li>
+                                <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>{{ trans('common.top_menu.report') }}</a></li>
+                                <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
+                                <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
+                            <!--                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>-->
+                                <li class="dropdown"><a href="#"><img src="{{ auth()->user()->avatar ? auth()->user()->avatar : asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
+                                    <ul class="dropdown-menu background-black-dark border-panel">
+                                        <li><a href="{{ route('setting') }}">{{ trans('common.top_menu.setting') }}</a></li>
+                                        <li><a href="{{ route('notifications') }}">{{ trans('common.top_menu.notification') }}</a></li>
+                                        <li><a href="{{ route('logout') }}"
+                                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                {{ trans('common.top_menu.logout') }}</a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!--end: Navigation-->
+            </div>
+        </div>
+    </header>
+    @else
+        <header id="header" class="dark" data-fullwidth="true">
+            <div class="header-inner">
+                <div class="container">
+                    <!--Logo-->
+                    <div id="logo">
+                        <a href="{{ route('/') }}">
+                            <span class="logo-default"><img src="{{ asset('/images/logo_main.png') }}"></span>
+                            <span class="logo-dark text-primary"><img src="{{ asset('/images/logo_main.png') }}" style="max-height: 45px"></span>
+                        </a>
+                    </div>
+                    <!--End: Logo-->
+                    <!--Header Extras-->
+                    <div class="header-extras">
+                        <ul>
+                            <li>
+                                <div class="p-dropdown" id="lang_dropdown">
+                                    <a href="#"><i class="icon-globe"></i><span>{{ app()->getLocale() }}</span></a>
+                                    <ul class="p-dropdown-content background-black-dark border-panel">
+                                        @foreach(config('constants.language_list') as $language_info)
+                                            <li><a href="{{ url('lang') . '/' . $language_info['code']}}">{{ $language_info['name'] }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--end: Header Extras-->
+                    <!--Navigation Resposnive Trigger-->
+                    <div id="mainMenu-trigger">
+                        <a class="lines-button x mx-3"><span class="lines"></span></a>
+                    </div>
+                    <!--end: Navigation Resposnive Trigger-->
+                    <!--Navigation-->
+                    <div id="mainMenu">
+                        <div class="container">
+                            <nav>
+                                <ul>
+                                    <li><a href="{{ route('/') }}"><i class="fa fa-home"></i>{{ trans('common.top_menu.home') }}</a></li>
+                                    <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
+<!--                                    <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>-->
+                                    <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
+                                    <!--<li><a href="">Overview</a></li>
+                                    <li><a href="">Services</a></li>
+                                    <li><a href="">How to Use</a></li>-->
+                                    <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
+                                    <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
+                                    @guest
+                                        <li><a href="{{ route('login') }}"><i class="icon-log-in"> </i>{{ trans('common.top_menu.login') }}</a></li>
+                                        <li><a href="{{ route('register') }}"><i class="icon-user-plus"> </i>{{ trans('common.top_menu.register') }}</a></li>
+                                    @else
+                                        <li><a href="{{ route('logout') }}"
+                                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                {{ trans('common.top_menu.logout') }}</a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    @endguest
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!--end: Navigation-->
+                </div>
+            </div>
+        </header>
+    @endauth
     <!-- Topbar -->
     <div id="topbar" class="dark topbar-fullwidth">
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <ul class="top-menu">
 
                         <li class="p-dropdown" id="symbol_dropdown">
@@ -46,52 +206,6 @@
                         <li><a><span class="text-info" id="top_price">0</span></a></li>
                         <li><a><span class="text-info">0</span></a></li>
                         <li><a><i class="fab fa-btc"></i>0</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-7 text-right">
-                    <ul class="top-menu float-right">
-                        <li><a href="{{ route('/') }}"><b>{{ config('app.name') }}</b></a></li>
-                        <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>&nbsp;{{ trans('common.top_menu.exchange') }}</a></li>
-                        <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>&nbsp;{{ trans('common.top_menu.dealer') }}</a></li>
-                        @guest
-                            <li><a href="{{ route('login') }}"><i class="icon-log-in"></i>&nbsp;{{ trans('common.top_menu.login') }}</a></li>
-                            <li><a href="{{ route('register') }}"><i class="icon-user-plus"></i>&nbsp;{{ trans('common.top_menu.register') }}</a></li>
-                        @else
-                            <li>
-                                <div class="p-dropdown no-float" id="menu_dropdown">
-                                    <a href="#"><i class="icon-user"></i></a>
-                                    <div class="p-dropdown-content background-black-dark border-panel">
-                                        <ul>
-                                            <li><a href="{{ route('home') }}">{{ trans('common.top_menu.dashboard') }}</a></li>
-                                            <li><a href="{{ route('payment') }}">{{ trans('common.top_menu.payment') }}</a></li>
-                                            <li><a href="{{ route('report') }}">{{ trans('common.top_menu.report') }}</a></li>
-                                            <li><a href="{{ route('setting') }}">{{ trans('common.top_menu.setting') }}</a></li>
-                                            <li><a href="{{ route('notifications') }}">{{ trans('common.top_menu.notification') }}</a></li>
-                                            <li><a href="{{ route('logout') }}"
-                                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                    {{ trans('common.top_menu.logout') }}</a>
-                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                    @csrf
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                        @endguest
-                        <li>
-                            <div class="p-dropdown no-float m-l-10" id="lang_dropdown">
-                                <a href="#"><i class="icon-globe"></i></a>
-                                <div class="p-dropdown-content background-black-dark border-panel">
-                                    <ul>
-                                        @foreach(config('constants.language_list') as $language_info)
-                                            <li><a href="{{ url('lang') . '/' . $language_info['code']}}">{{ $language_info['name'] }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
                     </ul>
                 </div>
             </div>

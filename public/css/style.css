@@ -354,7 +354,7 @@ section.dark, .dark section { background-color: #1e2022; color: #e4e6ef; }
 /* ----------------------------------------------------------------
 Topbar
 -----------------------------------------------------------------*/
-#topbar { position: relative; z-index: 200; background-color: #fff; /*colored*/ }
+#topbar { position: relative; /*z-index: 200;*/ background-color: #fff; /*colored*/ }
 
 #topbar .top-menu { list-style: outside none none; margin: 0; padding: 0; float: left; }
 
@@ -420,7 +420,7 @@ Topbar
 
 #topbar { border-bottom: 1px solid #fbfbfb; }
 
-#topbar.topbar-dark, #topbar.dark { background-color: #252525; border-color: rgba(231, 231, 231, 0.25); }
+#topbar.topbar-dark, #topbar.dark { background-color: #1e2022; border-color: rgba(231, 231, 231, 0.25); }
 
 #topbar.topbar-dark .top-menu > li > a, #topbar.topbar-dark .social-icons li a, #topbar.dark .top-menu > li > a, #topbar.dark .social-icons li a { color: #fff !important; }
 

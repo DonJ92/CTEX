@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="subject" class="text-light">{{ trans('contactus.subject_title') }}</label>
-                                <input type="text" name="title" class="form-control input-dark-bg text-light required @error('title') is-invalid @enderror" placeholder="{{ trans('contactus.email_placeholder') }}">
+                                <input type="text" name="title" class="form-control input-dark-bg text-light required @error('title') is-invalid @enderror" placeholder="{{ trans('contactus.subject_placeholder') }}">
                                 @error('title')
                                     <div class="is-invalid">{{ $message }}</div>
                                 @enderror

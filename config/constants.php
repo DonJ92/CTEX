@@ -59,7 +59,8 @@ return [
     'language_list' => [
         ['code' => 'en', 'name' => 'English'],
         ['code' => 'ja', 'name' => '日本語'],
-        ['code' => 'zh', 'name' => '中文'],
+        ['code' => 'zh', 'name' => '中文（简体）'],
+        ['code' => 'tw', 'name' => '中文（繁体）'],
         ['code' => 'ru', 'name' => 'Русский'],
         ['code' => 'fr', 'name' => 'Français'],
         ['code' => 'kr', 'name' => '한국어'],
