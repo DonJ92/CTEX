@@ -5,7 +5,7 @@
 @section('content')
     <section class="p-0 h-100" style="min-height: 500px;">
         <div class="row col-12 h-100 p-0 m-0 direction-right">
-            <div class="col-lg-2 border-panel direction-left">
+            <div class="col-lg-2 border-panel p-0 direction-left">
                 <h5 class="mt-2 text-primary text-center"><b>{{ trans('exchange.page_title') }}</b></h5>
                 <hr class="my-2">
                 @csrf

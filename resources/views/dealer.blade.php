@@ -5,7 +5,7 @@
 @section('content')
     <section class="p-0 h-100" style="min-height: 500px;">
         <div class="row col-12 h-100 p-0 m-0">
-            <div class="col-lg-2 border-panel">
+            <div class="col-lg-2 border-panel p-0">
                 <div class="tabs">
                     <div class="tab-pane fade active show" id="order" role="tabpanel" aria-labelledby="order-tab">
                         <h5 class="mt-2 text-primary text-center"><b>{{ trans('dealer.page_title') }}</b></h5>
