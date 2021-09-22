@@ -37,9 +37,9 @@ class SettingController extends Controller
         $gender_list = config('constants.gender_list');
         $data['gender_list'] = $gender_list;
 
-        $country_response = Http::get('https://restcountries.eu/rest/v2/all');
+        $country_response = Http::get('https://api.first.org/data/v1/countries');
         $country_list = $country_response->json();
-        $data['country_list'] = $country_list;
+        $data['country_list'] = $country_list['data'];
 
         $language_list = config('constants.language_list');
         $data['language_list'] = $language_list;
@@ -99,15 +99,18 @@ class SettingController extends Controller
 
         $user = Auth::user();
 
-        $fileName = $user->login_id.'.'.$request->avatar->extension();
+        if (isset($data['avatar'])) {
+            $fileName = $user->login_id . '.' . $request->avatar->extension();
 
-        $request->avatar->move(public_path('uploads/avatar'), $fileName);
-        $avatar = url('uploads/avatar') . '/' . $fileName;
+            $request->avatar->move(public_path('uploads/avatar'), $fileName);
+            $avatar = url('uploads/avatar') . '/' . $fileName;
+        } else
+            $avatar = $user->avatar;
 
         try {
             $user->avatar = $avatar;
             $user->name = $data['name'];
-            $user->birthday= $data['birthday'];
+            $user->birthday= date('Y-m-d', strtotime($data['birthday']));
             $user->mobile= $data['mobile'];
             $user->country= $data['country'];
             $user->address= $data['address'];

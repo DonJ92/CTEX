@@ -27,7 +27,7 @@ Route::get('/lang/{locale}', [App\Http\Controllers\LanguageController::class, 's
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/exchange', [App\Http\Controllers\DealerController::class, 'index'])->name('exchange');
+Route::get('/exchange', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange');
 Route::post('/exchange/balance', [App\Http\Controllers\ExchangeController::class, 'getCurrentBalance'])->name('exchange.balance');
 Route::post('/exchange/order/history', [App\Http\Controllers\ExchangeController::class, 'getOrderHistory'])->name('exchange.order.history');
 Route::post('/exchange/trade/history', [App\Http\Controllers\ExchangeController::class, 'getTradeHistory'])->name('exchange.trade.history');
@@ -72,5 +72,10 @@ Route::get('/news/detail/{id}', [App\Http\Controllers\NewsController::class, 'ne
 Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
 Route::post('/notifications/list', [App\Http\Controllers\NotificationController::class, 'getNotificationsList'])->name('notifications.list');
 Route::get('/notifications/detail/{id}', [App\Http\Controllers\NotificationController::class, 'notificationDetail'])->name('notifications.detail');
+
+Route::get('/cookiespolicy', [App\Http\Controllers\ServiceController::class, 'cookiesPolicy'])->name('cookiespolicy');
+Route::get('/termofservice', [App\Http\Controllers\ServiceController::class, 'termOfService'])->name('termofservice');
+Route::get('/privacynotice', [App\Http\Controllers\ServiceController::class, 'privacyNotice'])->name('privacynotice');
+Route::get('/disclosures', [App\Http\Controllers\ServiceController::class, 'disclosures'])->name('disclosures');
 
 Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('maintenance');

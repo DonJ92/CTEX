@@ -25,5 +25,7 @@ return [
     'enable' => '有効',
     'disable' => '無効',
 
-    'authenticate' => '認証'
+    'authenticate' => '認証',
+
+    'browse' => 'ファイルを選択'
 ];

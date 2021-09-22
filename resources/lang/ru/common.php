@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => 'Связаться с нами',
         'notification' => 'Уведомления',
+        'cookiespolicy' => 'Политика использования файлов cookie',
+        'termofservice' => 'Срок службы',
+        'privacynotice' => 'Уведомление о конфиденциальности',
+        'disclosures' => 'Раскрытие информации',
         'login' => 'Авторизоваться',
         'register' => 'регистр',
         'logout' => 'Выйти',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => 'Купить',
         'sell' => 'Продавать',
-    ]
+    ],
+
+    'date_placeholder' => 'MM/DD/YYYY',
 ];

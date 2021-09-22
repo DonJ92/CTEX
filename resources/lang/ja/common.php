@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => 'お問い合わせ',
         'notification' => '通知',
+        'cookiespolicy' => 'クッキーポリシー',
+        'termofservice' => '利用規約',
+        'privacynotice' => 'プライバシー通知',
+        'disclosures' => '開示',
         'login' => 'ログイン',
         'register' => '登録',
         'logout' => 'ログアウト',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => '買う',
         'sell' => '売る',
-    ]
+    ],
+
+    'date_placeholder' => '月/日/年',
 ];

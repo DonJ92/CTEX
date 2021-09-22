@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => '联系我们',
         'notification' => '通知',
+        'cookiespolicy' => 'Cookie 政策',
+        'termofservice' => '服务条款',
+        'privacynotice' => '隐私声明',
+        'disclosures' => '披露',
         'login' => '登录',
         'register' => '注册',
         'logout' => '登出',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => '买',
         'sell' => '卖',
-    ]
+    ],
+
+    'date_placeholder' => '月/日/年',
 ];

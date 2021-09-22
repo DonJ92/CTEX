@@ -34,23 +34,19 @@
                     <form action="{{ route('contactus.send') }}" role="form" method="post">
                         @csrf
 
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label for="email" class="text-light">{{ trans('contactus.email_title') }}</label>
-                                <input type="email" aria-required="true" name="email" class="form-control input-dark-bg text-light required email @error('email') is-invalid @enderror" placeholder="{{ trans('contactus.email_placeholder') }}">
-                                @error('email')
-                                    <div class="is-invalid">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="form-group col-md-12">
+                            <label for="email" class="text-light">{{ trans('contactus.email_title') }}</label>
+                            <input type="email" aria-required="true" name="email" class="form-control input-dark-bg text-light required email @error('email') is-invalid @enderror" placeholder="{{ trans('contactus.email_placeholder') }}">
+                            @error('email')
+                                <div class="is-invalid">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label for="subject" class="text-light">{{ trans('contactus.subject_title') }}</label>
-                                <input type="text" name="title" class="form-control input-dark-bg text-light required @error('title') is-invalid @enderror" placeholder="{{ trans('contactus.subject_placeholder') }}">
-                                @error('title')
-                                    <div class="is-invalid">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="form-group col-md-12">
+                            <label for="subject" class="text-light">{{ trans('contactus.subject_title') }}</label>
+                            <input type="text" name="title" class="form-control input-dark-bg text-light required @error('title') is-invalid @enderror" placeholder="{{ trans('contactus.subject_placeholder') }}">
+                            @error('title')
+                                <div class="is-invalid">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="message" class="text-light">{{ trans('contactus.message_title') }}</label>
@@ -65,4 +61,12 @@
             </div>
         </section>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            $('#top_contactus').addClass('text-danger');
+        });
+    </script>
 @endsection

@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => '聯繫我們',
         'notification' => '通知',
+        'cookiespolicy' => 'Cookie 政策',
+        'termofservice' => '服務條款',
+        'privacynotice' => '隱私聲明',
+        'disclosures' => '披露',
         'login' => '登錄',
         'register' => '註冊',
         'logout' => '登出',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => '買',
         'sell' => '賣',
-    ]
+    ],
+
+    'date_placeholder' => '月/日/年',
 ];

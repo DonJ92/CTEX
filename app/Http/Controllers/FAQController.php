@@ -68,6 +68,7 @@ class FAQController extends Controller
 
             $faq_list = Faq::where('lang', $locale)
                 ->where('category', $id)
+                ->orderby('rank', 'asc')
                 ->get()->toArray();
 
         } catch (QueryException $e) {

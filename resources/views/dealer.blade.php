@@ -63,6 +63,19 @@
                                 </div>
                             @else
                                 <div class="col-lg-12 col-md-6" id="balance_panel">
+                                    <div class="form-group row">
+                                        <div class="col-6"><h5 class="text-light">{{ trans('dealer.currency') }}</h5></div>
+                                        <div class="col-6 text-right"><h5 class="text-light">{{ trans('dealer.balance') }}</h5></div>
+                                    </div>
+                                    @foreach ($currency_list as $currency_info)
+                                        @if ($currency_info['use_deposit'] == config('constants.use_deposit.enable'))
+                                            <div class="row mb-1">
+                                                <div class="col-6"><img src="{{ $currency_info['ico'] }}" width="24px" class="p-r-10"><b>{{ $currency_info['currency'] }}</b></div>
+                                                <div class="col-6 text-right"><h5 id="balance_{{ $currency_info['currency'] }}" class="text-light">0</h5></div>
+                                                <input type="hidden" id="{{ $currency_info['currency'] }}_balance" value="0">
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 </div>
                             @endguest
                         </div>
@@ -120,6 +133,8 @@
     <script src="{{ asset('js/moment.js') }}"></script>
     <script>
         $( document ).ready(function() {
+            $('#top_dealer').addClass('text-danger');
+
             onSelectCurrency('{{ $id }}', '{{ $currency }}', '{{ $price_decimals }}');
             @auth
                 getBalance();
@@ -215,17 +230,10 @@
                     if (response == undefined || response.length == 0) {
                     } else {
                         for (var i = 0; i < response.length; i++) {
-
-                            var content = '<div class="row mb-1">\n' +
-                                '                            <div class="col-6"><img src="' + response[i].ico + '" width="24px" class="p-r-10"><b>' + response[i].currency + '</b></div>\n' +
-                                '                            <div class="col-6 text-right"><h5 class="text-light">' + response[i].balance + '</h5></div>\n' +
-                                '                            <input type="hidden" id="' + response[i].currency + '_balance" value="' + response[i].available_balance + '">\n' +
-                                '                        </div>';
-                            balance_list = balance_list + content;
+                            $('#balance_' + response[i].currency).html(response[i].balance);
+                            $('#' + response[i].currency + '_balance').val(response[i].available_balance);
                         }
                     }
-
-                    $('#balance_panel').html(balance_list);
 
                     if (g_signal == '{{ config('constants.order_type.sell') }}') {
                         var available_balance = $('#' + g_first_currency + '_balance').val();
@@ -442,6 +450,9 @@
                 g_price = g_ask_price;
             $('#price').html(g_price);
             $('#top_price').html(g_price);
+            @auth
+                getBalance();
+            @endauth
         }, 1000);
 
         const g_masterData = '';

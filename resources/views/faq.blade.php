@@ -44,6 +44,10 @@
 
 @section('script')
     <script>
+        $( document ).ready(function() {
+            $('#top_faq').addClass('text-danger');
+        });
+
         function changeCategory()
         {
             var category_id = $('#faq_category').val();

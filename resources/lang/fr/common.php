@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => 'Nous contacter',
         'notification' => 'Notifications',
+        'cookiespolicy' => 'Politique relative aux cookies',
+        'termofservice' => 'Termes du contrat de service',
+        'privacynotice' => 'Avis de confidentialité',
+        'disclosures' => 'Divulgations',
         'login' => 'Connexion',
         'register' => 'S\'inscrire',
         'logout' => 'Se déconnecter',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => 'Acheter',
         'sell' => 'Vendre',
-    ]
+    ],
+
+    'date_placeholder' => 'MM/DD/YYYY',
 ];

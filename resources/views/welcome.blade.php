@@ -9,8 +9,8 @@
 <!--            <div class="heading-text heading-section text-center m-b-80" data-animate="animate__fadeInUp">
                 <h2>{{ trans('home.page_title') }}</h2>
             </div>-->
-            <div class="row m-b-40">
-                <div class="col-lg-6 m-b-40 row text-center" data-animate="animate__fadeInLeft">
+            <div class="row">
+                <div class="col-lg-7 m-b-40 p-0 row text-center" data-animate="animate__fadeInLeft">
                     <div class="col-md-6 p-5">
                         <!-- TradingView Widget BEGIN -->
                         <div class="tradingview-widget-container">
@@ -150,18 +150,28 @@
                         <!-- TradingView Widget END -->
                     </div>
                 </div>
-                <div class="col-lg-6 m-b-40 text-right" data-animate="animate__fadeInRight">
+                <div class="col-lg-5 m-b-40 text-right" data-animate="animate__fadeInRight">
                     <img class="m-b-20" src="{{ asset('/images/logo_main.png') }}" style="max-height: 70px">
                     <h1>{{ trans('home.main_desc') }}</h1>
                     <h4>{{ trans('home.desc') }}</h4>
                     <hr class="space">
-                    <div>
-                        <a href="{{ route('login') }}" class="btn btn-primary"><i class="icon-log-in"></i>&nbsp;{{ trans('buttons.login') }}</a>
-                        <a href="{{ route('register') }}" class="btn btn-primary"><i class="icon-user-plus"></i>&nbsp;{{ trans('buttons.register') }}</a>
-                    </div>
+                    @guest
+                        <div>
+                            <a href="{{ route('login') }}" class="btn btn-primary"><i class="icon-log-in"></i>&nbsp;{{ trans('buttons.login') }}</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary"><i class="icon-user-plus"></i>&nbsp;{{ trans('buttons.register') }}</a>
+                        </div>
+                    @endguest
                 </div>
             </div>
         </div>
     </section>
     <!-- end: WELCOME -->
+@endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            $('#top_home').addClass('text-danger');
+        });
+    </script>
 @endsection

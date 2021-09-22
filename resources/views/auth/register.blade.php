@@ -72,7 +72,10 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="birthday" class="text-light">{{ trans('register.birthday') }}</label>
-                                        <input class="form-control text-light input-dark-bg" type="date" value="{{ old('birthday') }}" name="birthday" >
+                                        <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#datepicker" name="birthday" value="{{ old('birthday') }}"  placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -89,8 +92,8 @@
                                         <label for="country" class="text-light">{{ trans('register.country') }}</label>
                                         <select name="country" class="form-select text-light input-dark-bg @error('country') is-invalid @enderror" >
                                             <option value="">{{ trans('register.country_placeholder') }}</option>
-                                            @foreach($country_list as $country_info)
-                                                <option value="{{ $country_info['name'] }}" @if( old('country') == $country_info['name']) selected @endif>{{ $country_info['name'] }}</option>
+                                            @foreach($country_list as $code => $country_info)
+                                                <option value="{{ $country_info['country'] }}" @if( old('country') == $country_info['country']) selected @endif>{{ $country_info['country'] }}</option>
                                             @endforeach
                                         </select>
                                         @error('country')
@@ -140,4 +143,21 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('script')
+    <!--Bootstrap Datetimepicker component-->
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.js') }}"></script>
+    <script>
+        jQuery(document).ready(function() {
+            $('#datepicker').datetimepicker({
+                format: 'L'
+            });
+        });
+	
+        $( document ).ready(function() {
+            $('#top_register').addClass('text-danger');
+        });
+    </script>
 @endsection

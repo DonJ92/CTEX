@@ -25,5 +25,7 @@ return [
     'enable' => 'Permettre',
     'disable' => 'Désactiver',
 
-    'authenticate' => 'Authentifier'
+    'authenticate' => 'Authentifier',
+
+    'browse' => 'Choisir le dossier'
 ];

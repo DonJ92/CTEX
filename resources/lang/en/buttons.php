@@ -25,5 +25,7 @@ return [
     'enable' => 'Enable',
     'disable' => 'Disable',
 
-    'authenticate' => 'Authenticate'
+    'authenticate' => 'Authenticate',
+
+    'browse' => 'Select File'
 ];

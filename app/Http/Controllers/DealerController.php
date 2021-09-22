@@ -43,6 +43,8 @@ class DealerController extends Controller
             Log::error($e->getMessage());
         }
 
+        $data['currency_list'] = $this->getCryptocurrencyList();;
+
         return view('dealer', $data);
     }
 

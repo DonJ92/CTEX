@@ -46,6 +46,8 @@ class ExchangeController extends Controller
             Log::error($e->getMessage());
         }
 
+        $data['currency_list'] = $this->getCryptocurrencyList();;
+
         return view('exchange', $data);
     }
 
@@ -145,8 +147,6 @@ class ExchangeController extends Controller
 
         } catch (QueryException $e) {
             Log::error($e->getMessage());
-            print_r($e->getMessage());
-            die();
             echo json_encode($trade_history);
             exit;
         }
@@ -199,7 +199,7 @@ class ExchangeController extends Controller
         $currencies = explode('/', $currency_info['currency']);
         if($data['signal'] == config('constants.order_type.sell')) {
             $balance = $this->getAvailableBalanceFromCurrency($currencies[0]);
-            if ($data['order_amount'] > $balance['balance']) {
+            if ($data['order_amount'] > $balance['available_balance']) {
                 $validator->errors()->add('order_amount', trans('exchange.balance_error_msg'));
                 $errors = $validator->errors();
                 $res['errors'] = $errors;
@@ -208,7 +208,7 @@ class ExchangeController extends Controller
             }
         } else if ($data['signal'] == config('constants.order_type.buy')) {
             $balance = $this->getAvailableBalanceFromCurrency($currencies[1]);
-            if ($data['order_amount'] * $data['order_price'] > $balance['balance']) {
+            if ($data['order_amount'] * $data['order_price'] > $balance['available_balance']) {
                 $validator->errors()->add('order_amount', trans('exchange.balance_error_msg'));
                 $errors = $validator->errors();
                 $res['errors'] = $errors;

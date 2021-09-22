@@ -2,7 +2,7 @@
 
 namespace App\Modules;
 
-
+use App\Models\Transactions;
 use Illuminate\Support\Facades\Log;
 
 class CryptoCurrencyAPI
@@ -33,6 +33,7 @@ class CryptoCurrencyAPI
     const _eth_signtransaction          = API_HOST3 . '/signtransaction';
     const _eth_checktransaction         = API_HOST3 . '/checktransaction';
     const _eth_checkaddress             = API_HOST3 . '/checkaddress';
+    const _eth_getnonce                 = API_HOST3 . '/getnonce';
 
     const _HTTP_RESPONSE_CODE_0 = 0;
     const _HTTP_RESPONSE_CODE_1 = 1;
@@ -47,9 +48,18 @@ class CryptoCurrencyAPI
     public static function call_generate_key($currency, $net = COIN_NET) {
         $response = [];
         try {
-            if ($currency == 'ETH' || $currency == 'USDT') {
+            if (g_isERC20Token($currency)) {
                 $params = [
                     'CODE' => 'ETH',
+                    'NET' => $net,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_genkey, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE' => 'BNB',
                     'NET' => $net,
                 ];
 
@@ -77,9 +87,20 @@ class CryptoCurrencyAPI
         $response = [];
 
         try {
-            if ($currency == 'ETH' || $currency == '8CO' || $currency == 'USDT') {
+            if (g_isERC20Token($currency)) {
                 $params = [
                     'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'ADDRESS'   => $address,
+                    'SYMBOL'    => $currency,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_getbalance, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
                     'NET'       => $net,
                     'ADDRESS'   => $address,
                     'SYMBOL'    => $currency,
@@ -146,20 +167,35 @@ class CryptoCurrencyAPI
         return false;
     }
 
-    public static function call_send($currency, $from, $to, $amount, $fee = '', $net = COIN_NET, $gas_price = '', $gas_limit = '') {
+    public static function call_send($currency, $from, $to, $amount, $fee = '', $net = COIN_NET, $gas_price = '', $gas_limit = '', $unit = 0) {
         $response = [];
 
         try {
-            if ($currency == '8CO' || $currency == 'USDT' || $currency == 'ETH') {
+            if (g_isERC20Token($currency)) {
                 $params = [
-                    'CODE' => 'ETH',
-                    'NET' => $net,
-                    'FROM' => $from,
-                    'TO' => $to,
-                    'SYMBOL' => $currency,
-                    'AMOUNT' => $amount,
-                    'GASPRICE' => $gas_price,
-                    'GASLIMIT' => $gas_limit,
+                    'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'FROM'      => $from,
+                    'TO'        => $to,
+                    'SYMBOL'    => $currency,
+                    'AMOUNT'    => $amount,
+                    'GASPRICE'  => $gas_price,
+                    'GASLIMIT'  => $gas_limit,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_send, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
+                    'NET'       => $net,
+                    'FROM'      => $from,
+                    'TO'        => $to,
+                    'SYMBOL'    => $currency,
+                    'AMOUNT'    => $amount,
+                    'GASPRICE'  => $gas_price,
+                    'GASLIMIT'  => $gas_limit,
                 ];
 
                 $response = g_sendHttpRequest(self::_eth_send, HTTP_METHOD_POST, $params);
@@ -167,12 +203,13 @@ class CryptoCurrencyAPI
             }
             else {
                 $params = [
-                    'CODE' => $currency,
-                    'NET' => $net,
-                    'FROM' => $from,
-                    'TO' => $to,
-                    'AMOUNT' => $amount,
-                    'FEE' => $fee,
+                    'CODE'      => $currency,
+                    'NET'       => $net,
+                    'FROM'      => $from,
+                    'TO'        => $to,
+                    'AMOUNT'    => $amount,
+                    'FEE'       => $fee,
+                    'UNIT'      => $unit,
                 ];
 
                 $response = g_sendHttpRequest(self::_url_send, HTTP_METHOD_POST, $params);
@@ -187,24 +224,43 @@ class CryptoCurrencyAPI
     }
 
     public static function call_checkaddress($address, $secret, $currency, $net = COIN_NET) {
-        $check_url = self::_url_checkaddress;
-        if ($currency == '8CO' || $currency == 'USDT' || $currency == 'ETH') {
-            $currency = 'ETH';
-            $check_url = self::_eth_checkaddress;
-        }
-
-        $params = [
-            'CODE' => $currency,
-            'NET' => $net,
-            'ADDRESS' => $address,
-            'SECRET' => $secret,
-        ];
-
         $response = [];
+
         try
         {
-            $response = g_sendHttpRequest($check_url, HTTP_METHOD_POST, $params);
-            $response = json_decode($response, true);
+            if (g_isERC20Token($currency)) {
+                $params = [
+                    'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'ADDRESS'   => $address,
+                    'SECRET'    => $secret,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_checkaddress, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
+                    'NET'       => $net,
+                    'ADDRESS'   => $address,
+                    'SECRET'    => $secret,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_checkaddress, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else {
+                $params = [
+                    'CODE'      => $currency,
+                    'NET'       => $net,
+                    'ADDRESS'   => $address,
+                    'SECRET'    => $secret,
+                ];
+
+                $response = g_sendHttpRequest(self::_url_checkaddress, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
         } catch(\Exception $e) {
             $response = [];
             Log::debug($e->getMessage());
@@ -213,17 +269,41 @@ class CryptoCurrencyAPI
         return $response;
     }
 
-    public static function call_getnonce($address, $net = COIN_NET) {
-        $params = [
-            'CODE' => 'ETH',
-            'NET'  => $net,
-            'ADDRESS'   => $address
-        ];
+    public static function call_getnonce($currency, $address, $net = COIN_NET) {
         $response = [];
+
         try
         {
-            $response = g_sendHttpRequest(self::_url_getnonce, HTTP_METHOD_POST, $params);
-            $response = json_decode($response, true);
+            if (g_isERC20Token($currency)) {
+                $params = [
+                    'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'ADDRESS'   => $address
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_getnonce, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
+                    'NET'       => $net,
+                    'ADDRESS'   => $address
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_getnonce, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else {
+                $params = [
+                    'CODE'      => $currency,
+                    'NET'       => $net,
+                    'ADDRESS'   => $address
+                ];
+
+                $response = g_sendHttpRequest(self::_url_getnonce, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
         } catch(\Exception $e) {
             $response = [];
             Log::debug($e->getMessage());
@@ -232,13 +312,29 @@ class CryptoCurrencyAPI
         return $response;
     }
 
-    public static function call_maketransaction($currency, $net, $from, $to, $amount, $nonce, $fee = '', $gas_price = '', $gas_limit = '') {
+    public static function call_maketransaction($currency, $net, $from, $to, $amount, $nonce, $fee = '', $gas_price = '', $gas_limit = '', $unit = 0) {
         $response = [];
 
         try {
-            if ($currency == 'ETH' || $currency == '8CO' || $currency == 'USDT') {
+            if (g_isERC20Token($currency)) {
                 $params = [
                     'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'FROM'      => $from,
+                    'TO'        => $to,
+                    'SYMBOL'    => $currency,
+                    'AMOUNT'    => $amount,
+                    'GASPRICE'  => $gas_price,
+                    'GASLIMIT'  => $gas_limit,
+                    'NONCE'     => $nonce,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_maketransaction, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
                     'NET'       => $net,
                     'FROM'      => $from,
                     'TO'        => $to,
@@ -260,6 +356,7 @@ class CryptoCurrencyAPI
                     'TO'        => $to,
                     'AMOUNT'    => $amount,
                     'FEE'       => $fee,
+                    'UNIT'      => $unit,
                 ];
 
                 $response = g_sendHttpRequest(self::_url_maketransaction, HTTP_METHOD_POST, $params);
@@ -278,10 +375,20 @@ class CryptoCurrencyAPI
         $response = [];
 
         try {
-            if ($currency == 'ETH' || $currency == '8CO' || $currency == 'USDT') {
+            if (g_isERC20Token($currency)) {
                 $params = [
-                    'CODE' => 'ETH',
-                    'NET' => $net,
+                    'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'TX_SIGNED' => $transaction,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_sendtransaction, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
+                    'NET'       => $net,
                     'TX_SIGNED' => $transaction,
                 ];
 
@@ -290,8 +397,8 @@ class CryptoCurrencyAPI
             }
             else {
                 $params = [
-                    'CODE' => $currency,
-                    'NET' => $net,
+                    'CODE'      => $currency,
+                    'NET'       => $net,
                     'TX_SIGNED' => $transaction,
                 ];
 
@@ -310,9 +417,19 @@ class CryptoCurrencyAPI
         $response = [];
 
         try {
-            if ($currency == '8CO' || $currency == 'USDT' || $currency == 'ETH') {
+            if (g_isERC20Token($currency)) {
                 $params = [
                     'CODE'      => 'ETH',
+                    'NET'       => $net,
+                    'TX_ID'     => $tx_id,
+                ];
+
+                $response = g_sendHttpRequest(self::_eth_checktransaction, HTTP_METHOD_POST, $params);
+                $response = json_decode($response, true);
+            }
+            else if (g_isBinanceToken($currency)) {
+                $params = [
+                    'CODE'      => 'BNB',
                     'NET'       => $net,
                     'TX_ID'     => $tx_id,
                 ];
@@ -398,9 +515,9 @@ class CryptoCurrencyAPI
         return $result;
     }
 
-    public static function GetNonce($address)
+    public static function GetNonce($currency, $address)
     {
-        $ret = CryptoCurrencyAPI::call_getnonce($address, COIN_NET);
+        $ret = CryptoCurrencyAPI::call_getnonce($currency, $address, COIN_NET);
         if (!isset($ret['result'])) {
             return false;
         }
@@ -414,12 +531,12 @@ class CryptoCurrencyAPI
         return doubleVal($result);
     }
 
-    public static function MakeTransaction($currency, $net, $from, $to, $amount, $nonce, $fee = '', $gas_price = '', $gas_limit = '')
+    public static function MakeTransaction($currency, $net, $from, $to, $amount, $nonce, $fee = '', $gas_price = '', $gas_limit = '', $unit = 0)
     {
         $send_sucess = false;
 
         for ($_cnt = 0; $_cnt < API_RETRY_COUNT; $_cnt++) {
-            $ret = CryptoCurrencyAPI::call_maketransaction($currency, $net, $from, $to, $amount, $nonce, $fee, $gas_price, $gas_limit);
+            $ret = CryptoCurrencyAPI::call_maketransaction($currency, $net, $from, $to, $amount, $nonce, $fee, $gas_price, $gas_limit, $unit);
 
             if (!isset($ret['result'])) {
                 Log::info("  : Call MakeTransaction has failed. retryCount: " . $_cnt . " >>" . json_encode($ret));
@@ -481,7 +598,7 @@ class CryptoCurrencyAPI
             $tx_id = $ret['detail']['id'];
 
             Transactions::updateRecord(['id' => $id], [
-                'status'    => SENT_STATE,
+                'status'    => TRANSFER_STATUS_SENT,
                 'tx_id'     => $tx_id,
             ]);
 
@@ -510,8 +627,8 @@ class CryptoCurrencyAPI
             Log::error("*** Call Send API : code - ".$ret['result']." >>");
             Log::error("  : Error ". json_encode($ret));
 
-            if (isset($ret['detail']) && stripos($ret['detail'], "not found") !== false) {
-                return STATUS_FAILED;
+            if (isset($ret['detail']) && ($ret['result'] == 30 || stripos($ret['detail'], "not found") !== false)) {
+                return TRANSFER_STATUS_FAILED;
             }
 
             return false;
@@ -520,11 +637,10 @@ class CryptoCurrencyAPI
         Log::info("  : Call API Success");
 
 		$gas = 0;
-		if ($currency == '8CO' || $currency == 'USDT' || $currency == 'ETH') {
+		if (g_isERC20Token($currency) || g_isBinanceToken($currency)) {
 			$gas = $ret['detail']['gasUsed'];
 		}
 
         return true;
     }
-
 }

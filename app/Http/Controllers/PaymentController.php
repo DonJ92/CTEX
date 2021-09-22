@@ -40,17 +40,10 @@ class PaymentController extends Controller
             $deposit_wallet_list = Disposable::where('user_id', $user->id)->get()->toArray();
 
             if (empty($deposit_wallet_list)) {
+                $insert_data = array();
                 foreach ($cryptocurrency_list as $cryptocurrency_info) {
-                    if ($cryptocurrency_info['currency'] == 'ADA' || $cryptocurrency_info['currency'] == 'WIZ+') {
-                        $insert_data[] = [
-                            'user_id' => $user->id,
-                            'currency' => $cryptocurrency_info['currency'],
-                            'wallet_address' => ' ',
-                            'wallet_privkey' => ' ',
-                            'status' => config('constants.disposable_status.valid')
-                        ];
+                    if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.disable'))
                         continue;
-                    }
 
                     $wallet_info = CryptoCurrencyAPI::call_generate_key($cryptocurrency_info['currency'], COIN_NET);
                     if (isset($wallet_info['detail']))
@@ -65,6 +58,27 @@ class PaymentController extends Controller
 
                 $res = Disposable::insert($insert_data);
                 $deposit_wallet_list = $insert_data;
+            } else {
+                $insert_data = array();
+                foreach ($cryptocurrency_list as $cryptocurrency_info) {
+                    $key = array_search($cryptocurrency_info['currency'], array_column($deposit_wallet_list, 'currency'));
+                    if ($key === 0)
+                        continue;
+
+                    if (empty($key) && $cryptocurrency_info['use_deposit'] == config('constants.use_deposit.enable')) {
+                        $wallet_info = CryptoCurrencyAPI::call_generate_key($cryptocurrency_info['currency'], COIN_NET);
+                        if (isset($wallet_info['detail']))
+                            $insert_data[] = [
+                                'user_id' => $user->id,
+                                'currency' => $cryptocurrency_info['currency'],
+                                'wallet_address' => $wallet_info['detail']['adr'],
+                                'wallet_privkey' => $wallet_info['detail']['pri'],
+                                'status' => config('constants.disposable_status.valid')
+                            ];
+                    }
+                }
+                $res = Disposable::insert($insert_data);
+                $deposit_wallet_list = array_merge($deposit_wallet_list, $insert_data);
             }
 
         } catch (QueryException $e) {
@@ -101,7 +115,7 @@ class PaymentController extends Controller
 
         $validator = Validator::make($data, [
             $data['currency_url'] . '_destination' => 'required|max:225',
-            $data['currency_url'] . '_amount' => 'required|numeric|min:' . $min_amount . '|max:'._number_format2($available_balance['balance'], $available_balance['decimals']),
+            $data['currency_url'] . '_amount' => 'required|numeric|min:' . $min_amount . '|max:'._number_format2($available_balance['available_balance'], $available_balance['decimals']),
             'currency' => 'required',
             'currency_url' => 'required',
         ], [
@@ -126,6 +140,7 @@ class PaymentController extends Controller
         try {
             $balance_info = UserBalance::where('user_id', $user->id)
                 ->where('currency', $data['currency'])
+                ->lockForUpdate()
                 ->first();
             if (is_null($balance_info))
                 return redirect()->back()->withInput()->withErrors(['failed' => trans('payment.withdraw_failed_msg')]);

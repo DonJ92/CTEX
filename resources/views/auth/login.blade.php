@@ -52,3 +52,11 @@
         </div>
     </section>
 @endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            $('#top_login').addClass('text-danger');
+        });
+    </script>
+@endsection

@@ -28,7 +28,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <section id="page-content" class="dark">
+        <section id="page-content" class="background-dark">
             <div class="container">
                 <div class="tabs tabs-vertical">
                     <div class="row">
@@ -116,8 +116,9 @@
 
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label for="avatar" class="text-light">{{ trans('setting.avatar') }}</label>
-                                                        <input type="file" class="form-control-file" name="avatar" id="avatar" onchange="previewFile()">
+                                                        <label for="" class="text-light">{{ trans('setting.avatar') }}</label>
+                                                        <input type="file" class="form-control-file d-none" name="avatar" id="avatar" onchange="previewFile()">
+                                                        <label for="avatar" class="btn btn-primary">{{ trans('buttons.browse') }}</label>
                                                         @error('avatar')
                                                             <div class="is-invalid">{{ $message }}</div>
                                                         @enderror
@@ -144,7 +145,10 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="birthday" class="text-light">{{ trans('setting.birthday') }}</label>
-                                                        <input class="form-control text-light input-dark-bg @error('birthday') is-invalid @enderror" type="date" name="birthday" value="{{ old('birthday') ? old('birthday') : auth()->user()->birthday}}">
+                                                        <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#datepicker" name="birthday" value="{{ old('birthday') ? old('birthday') : date('m/d/Y', strtotime(auth()->user()->birthday))}}"  placeholder="{{ trans('common.date_placeholder') }}" />
+                                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                                        </div>
                                                         @error('birthday')
                                                             <div class="is-invalid">{{ $message }}</div>
                                                         @enderror
@@ -162,8 +166,8 @@
                                                         <label for="country" class="text-light">{{ trans('setting.country') }}</label>
                                                         <select name="country" class="form-select text-light input-dark-bg @error('country') is-invalid @enderror">
                                                             <option value="">{{ trans('setting.country_placeholder') }}</option>
-                                                            @foreach($country_list as $country_info)
-                                                                <option value="{{ $country_info['name'] }}" @if( (old('country') ? old('country') : auth()->user()->country) == $country_info['name']) selected @endif>{{ $country_info['name'] }}</option>
+                                                            @foreach($country_list as $code => $country_info)
+                                                                <option value="{{ $country_info['country'] }}" @if( (old('country') ? old('country') : auth()->user()->country) == $country_info['country']) selected @endif>{{ $country_info['country'] }}</option>
                                                             @endforeach
                                                         </select>
                                                         @error('country')
@@ -461,9 +465,19 @@
 
 @section('script')
     <script src="{{ asset('js/moment.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.js') }}"></script>
     <script>
         var g_id_doc_cnt = 0;
+        jQuery(document).ready(function() {
+            $('#datepicker').datetimepicker({
+                format: 'L'
+            });
+        });
+
         $( document ).ready(function() {
+            $('#top_setting').addClass('text-danger');
+
             $('#account_info-tab').removeClass('active');
             $('#account_info').removeClass('show active');
             $('#change_password-tab').removeClass('active');

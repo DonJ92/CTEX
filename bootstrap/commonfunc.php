@@ -10,9 +10,6 @@ function _number_format($str, $decimals) {
     if ($str == '0' || $str == 0) {
         return 0;
     }
-    if ($decimals == 0) {
-        return number_format($str, 0);
-    }
 
     $dot_pos = stripos($str, '.');
     $decimal_length = strlen($str) - $dot_pos - 1;
@@ -487,7 +484,7 @@ function g_sendHttpRequest($url, $content, $method='POST') {
     }
 }
 */
-function g_sendHttpRequest($url, $method=HTTP_METHOD_GET, $params = [], $headers = "") {
+function g_sendHttpRequest($url, $method=HTTP_METHOD_GET, $params = [], $headers = "", &$code = 0) {
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -502,10 +499,33 @@ function g_sendHttpRequest($url, $method=HTTP_METHOD_GET, $params = [], $headers
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     }
+    else if ($method == HTTP_METHOD_PUT) {
+        curl_setopt($ch, CURLOPT_PUT, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    }
+    else if ($method == HTTP_METHOD_DELETE) {
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    }
 
     $res = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     return $res;
+}
+
+function g_sendHttpPutRequest($url, $params, $headers) {
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response  = curl_exec($ch);
+    curl_close($ch);
+
+    return $response;
 }
 
 
@@ -750,6 +770,14 @@ function cUrl($path) {
     return url($path);
 }
 
+function g_convertTimeToMinutes($now) {
+    $hour = substr($now, 11, 2);
+    $minute = substr($now, 14, 2);
+    $second = substr($now, 17, 2);
+
+    return $hour * 60 + $minute;
+}
+
 function g_findValueByKey($str, $start_str, $end_str) {
     $start = stripos($str, $start_str);
     $result = '';
@@ -779,9 +807,9 @@ function g_getBlockchainFees($currency) {
             BLOCKCHAIN_FEE_MODE_SAFELOW     => intval($ret->hourFee / 3),
         );
     }
-    else if ($currency == 'ETH') {
+    else if (g_isERC20Token($currency)) {
         // Check first url first
-        $ret = g_sendHttpRequest(ETH_FEE_API_URL1, HTTP_METHOD_GET);
+        /*$ret = g_sendHttpRequest(ETH_FEE_API_URL1, HTTP_METHOD_GET);
         $low_value = g_findValueByKey($ret, 'ContentPlaceHolder1_ltGasPrice">', '</span>');
         $avg_value = g_findValueByKey($ret, '<span id="spanAvgPrice">', '</span>');
         $high_value = g_findValueByKey($ret, '<span id="spanHighPrice">', '</span>');
@@ -792,7 +820,7 @@ function g_getBlockchainFees($currency) {
                 BLOCKCHAIN_FEE_MODE_SAFELOW     => $low_value,
             );
         }
-        else {
+        else*/ {
             // Get by second url
             $ret = g_sendHttpRequest(ETH_FEE_API_URL2, HTTP_METHOD_GET);
             $ret = json_decode($ret, false);
@@ -803,6 +831,19 @@ function g_getBlockchainFees($currency) {
             );
         }
     }
+    else if (g_isBinanceToken($currency)) {
+        $params = array(
+            'CODE'  => 'BNB',
+        );
+        $ret = g_sendHttpRequest(API_HOST3 . '/getgas', HTTP_METHOD_POST, $params);
+        $ret = json_decode($ret, true);
+
+        $result = array(
+            BLOCKCHAIN_FEE_MODE_FAST        => intval($ret['detail']['rapid']),
+            BLOCKCHAIN_FEE_MODE_STANDARD    => intval($ret['detail']['fast']),
+            BLOCKCHAIN_FEE_MODE_SAFELOW     => intval($ret['detail']['standard']),
+        );
+    }
     else if ($currency == 'LTC') {
         $url = LTC_FEE_API_URL;
         $headers = array(
@@ -812,13 +853,11 @@ function g_getBlockchainFees($currency) {
         $ret = g_sendHttpRequest($url, HTTP_METHOD_GET, '', $headers);
         $ret = json_decode($ret, false);
 
-        if (isset($ret->payload)) {
-            $result = array(
-                BLOCKCHAIN_FEE_MODE_FAST        => $ret->payload->fast_fee_per_byte,
-                BLOCKCHAIN_FEE_MODE_STANDARD    => $ret->payload->average_fee_per_byte,
-                BLOCKCHAIN_FEE_MODE_SAFELOW     => $ret->payload->slow_fee_per_byte,
-            );
-        }
+        $result = array(
+            BLOCKCHAIN_FEE_MODE_FAST        => $ret->payload->fast_fee_per_byte,
+            BLOCKCHAIN_FEE_MODE_STANDARD    => $ret->payload->average_fee_per_byte,
+            BLOCKCHAIN_FEE_MODE_SAFELOW     => $ret->payload->slow_fee_per_byte,
+        );
     }
 
     return $result;
@@ -830,14 +869,23 @@ function validateTime($time, $fullTime) {
 }
 
 function getTxUrl($currency, $tx_id) {
-    if ($currency == 'ETH' || $currency == 'USDT') {
+    if (g_isERC20Token($currency)) {
         return ETH_CONFIRM_URL + $tx_id;
+    }
+    else if (g_isBinanceToken($currency)) {
+        return BNB_CONFIRM_URL + $tx_id;
     }
     else if ($currency == 'BTC') {
         return BTC_CONFIRM_URL + $tx_id;
     }
     else if ($currency == 'BCH') {
         return BCH_CONFIRM_URL + $tx_id;
+    }
+    else if ($currency == 'LTC') {
+        return LTC_CONFIRM_URL + $tx_id;
+    }
+    else if ($currency == 'XRP') {
+        return XRP_CONFIRM_URL + $tx_id;
     }
 
     return '';
@@ -904,6 +952,12 @@ function getMonthDays($year, $month) {
     return $days[intval($month) - 1];
 }
 
+function getOpDays($year, $month, $invest_days) {
+    $days = getMonthDays($year, $month);
+
+    return $days - $invest_days;
+}
+
 function getDiffDays($date1, $date2) {
     if ($date1 >= $date2) {
         return 0;
@@ -915,10 +969,34 @@ function getDiffDays($date1, $date2) {
     return round(($t2 - $t1) / (60 * 60 * 24)) + 1;
 }
 
-function getTimeStrByMinute($t) {
-    $hour = intval(floor($t / 60));
-    $minute = $t % 60;
+function g_isERC20Token($currency) {
+    if ($currency == 'ETH' || $currency == '8CO' || $currency == 'USDT' || $currency == 'ADAE' || $currency == 'WCP' ||
+        $currency == 'JCC'
+    ) {
+        return true;
+    }
 
-    return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' .
-        str_pad($minute, 2, '0', STR_PAD_LEFT);
+    return false;
+}
+
+function g_isBinanceToken($currency) {
+    if ($currency == 'BNB' || $currency == 'ADAB'
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+function g_convertCoinToSymbol($coin) {
+    if (stripos($coin, 'ADA') !== false) {
+        return substr($coin, 0, 3);
+    }
+
+    return $coin;
+}
+
+function _removeNumber($str) {
+    $result = strtr($str, '0123456789', str_repeat('X', 10));
+    return $result;
 }

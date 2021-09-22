@@ -16,7 +16,7 @@
     <!-- end: Page title -->
     <hr>
     <!-- Content -->
-    <section id="page-content" class="dark">
+    <section id="page-content" class="background-dark">
         <div class="container-fluid">
             @csrf
 
@@ -39,8 +39,18 @@
                         <div class="tab-content" id="myTabContent4">
                             <div class="tab-pane fade show active" id="trade" role="tabpanel" aria-labelledby="trade-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="trade_from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="trade_to_date"></div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="trade_from_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#trade_from_datepicker" name="trade_from_date" id="trade_from_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#trade_from_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="trade_to_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#trade_to_datepicker" name="trade_to_date" id="trade_to_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#trade_to_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3 form-group">
                                         <select id="trade_type" class="form-select text-light input-dark-bg">
                                             <option value="" selected>{{ trans('report.type_placeholder') }}</option>
@@ -75,8 +85,18 @@
                             </div>
                             <div class="tab-pane fade" id="deposit" role="tabpanel" aria-labelledby="deposit-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="deposit_from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="deposit_to_date"></div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="deposit_from_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#deposit_from_datepicker" name="deposit_from_date" id="deposit_from_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#deposit_from_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="deposit_to_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#deposit_to_datepicker" name="deposit_to_date" id="deposit_to_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#deposit_to_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3">
                                         <button type="button" class="btn btn-primary" onclick="getDepositHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
@@ -100,8 +120,18 @@
                             </div>
                             <div class="tab-pane fade" id="withdraw" role="tabpanel" aria-labelledby="withdraw-tab">
                                 <div class="form-group row">
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="withdraw_from_date"></div>
-                                    <div class="col-lg-3 form-group"><input class="form-control text-light input-dark-bg" type="date" id="withdraw_to_date"></div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="withdraw_from_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#withdraw_from_datepicker" name="withdraw_from_date" id="withdraw_from_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#withdraw_from_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <div class="input-group date" id="withdraw_to_datepicker" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input input-dark-bg text-light" data-target="#withdraw_to_datepicker" name="withdraw_to_date" id="withdraw_to_date" placeholder="{{ trans('common.date_placeholder') }}" />
+                                            <div class="input-group-text btn btn-light input-dark-bg text-light" data-target="#withdraw_to_datepicker" data-toggle="datetimepicker"><i class="icon-calendar"></i></div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3">
                                         <button type="button" class="btn btn-primary" onclick="getWithdrawHistory()">{{ trans('buttons.search') }}</button>
                                     </div>
@@ -137,9 +167,40 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/moment.js') }}"></script>
+<!--Bootstrap Datetimepicker component-->
+<script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.js') }}"></script>
+
 <script>
+    jQuery(document).ready(function() {
+        $('#trade_from_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+        $('#trade_to_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+        $('#deposit_from_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+        $('#deposit_to_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+        $('#withdraw_from_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+        $('#withdraw_to_datepicker').datetimepicker({
+            format: 'L'
+        });
+    });
+
     $( document ).ready(function() {
+        $('#top_report').addClass('text-danger');
+
         getTradeHistory();
         getDepositHistory();
         getWithdrawHistory();
@@ -226,7 +287,7 @@
                             response[i].currency,
                             response[i].amount,
                             response[i].wallet_addr,
-                            response[i].tx_id,
+                            getTxLink(response[i].currency, response[i].tx_id),
                             response[i].status,
                         ]);
                     }
@@ -276,7 +337,7 @@
                             response[i].currency,
                             response[i].amount,
                             response[i].destination,
-                            response[i].tx_id,
+                            getTxLink(response[i].currency, response[i].tx_id),
                             response[i].status,
                             response[i].remark,
                         ]);
@@ -299,6 +360,37 @@
                 });
             }
         });
+    }
+
+    function getTxLink(currency, tx_id) {
+        if (tx_id == undefined || tx_id == '') return tx_id;
+        tx_id = (tx_id == null || tx_id == undefined) ? '' : tx_id;
+        let txStr = tx_id;
+        if (txStr.length >= 15) {
+            txStr = txStr.substring(0, 10) + '...' + txStr.substring(txStr.length - 5, txStr.length);
+        }
+
+        let url = '';
+        if (currency == 'BTC') {
+            url = '{{ BTC_CONFIRM_URL }}';
+        }
+        else if (currency == 'BCH') {
+            url = '{{ BCH_CONFIRM_URL }}';
+        }
+        else if (currency == 'LTC') {
+            url = '{{ LTC_CONFIRM_URL }}';
+        }
+        else if (currency == 'XRP') {
+            url = '{{ XRP_CONFIRM_URL }}';
+        }
+        else if (currency == 'ETH' || currency == 'USDT' || currency == '8CO' || currency == 'WCP' || currency == 'ADAE' || currency == 'JCC') {
+            url = '{{ ETH_CONFIRM_URL }}';
+        }
+        else if (currency == 'BNB' || currency == 'ADAB') {
+            url = '{{ BNB_CONFIRM_URL }}';
+        }
+
+        return '<a target="_blank" class="btn-flat-info" href="' + url + tx_id + '">' + txStr + '</a>';
     }
 </script>
 @endsection

@@ -25,5 +25,7 @@ return [
     'enable' => '유효',
     'disable' => '무효',
 
-    'authenticate' => '인증'
+    'authenticate' => '인증',
+
+    'browse' => '파일 선택'
 ];

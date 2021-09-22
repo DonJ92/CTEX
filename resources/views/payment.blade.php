@@ -3,7 +3,7 @@
 @section('title', trans('payment.title'))
 
 @section('content')
-<div class="container body-min-height">
+<div class="container body-min-height m-b-60">
 <!-- Page title -->
 <section id="page-title" class="page-title-left text-light background-dark">
     <div class="container">
@@ -35,9 +35,11 @@
                 <div class="col-md-3 tab-border-right mb-3">
                     <ul class="nav flex-column nav-tabs border-1" id="cryptoTab" role="tablist" aria-orientation="vertical">
                         @foreach($cryptocurrency_list as $cryptocurrency_info)
-                            <li class="nav-item">
-                                <a class="nav-link no-border" id="{{ $cryptocurrency_info['currency_url'] }}-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}" aria-selected="false"><img src="{{ $cryptocurrency_info['ico'] }}" width="32px" class="p-r-10"><b>{{ $cryptocurrency_info['currency'] }}</b></a>
-                            </li>
+                            @if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.enable') || $cryptocurrency_info['use_withdraw'] == config('constants.use_withdraw.enable'))
+                                <li class="nav-item">
+                                    <a class="nav-link no-border" id="{{ $cryptocurrency_info['currency_url'] }}-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}" aria-selected="false"><img src="{{ $cryptocurrency_info['ico'] }}" width="32px" class="p-r-10"><b>{{ $cryptocurrency_info['currency'] }}</b></a>
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </div>
@@ -47,22 +49,27 @@
                         <div class="tab-pane fade" id="{{ $cryptocurrency_info['currency_url'] }}" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-tab">
                             <div class="tabs tabs-folder">
                                 <ul class="nav nav-tabs" id="{{ $cryptocurrency_info['currency_url'] }}_payment_tab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-deposit" aria-selected="true"><b>{{ trans('payment.deposit') }}</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-withdraw" aria-selected="false">{{ trans('payment.withdraw') }}</a>
-                                    </li>
+                                    @if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.enable'))
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-deposit" aria-selected="true"><b>{{ trans('payment.deposit') }}</b></a>
+                                        </li>
+                                    @endif
+                                    @if ($cryptocurrency_info['use_withdraw'] == config('constants.use_withdraw.enable'))
+                                        <li class="nav-item">
+                                            <a class="nav-link @if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.disable')) active @endif" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab" data-bs-toggle="tab" href="#{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tab" aria-controls="{{ $cryptocurrency_info['currency_url'] }}-withdraw" aria-selected="false">{{ trans('payment.withdraw') }}</a>
+                                        </li>
+                                    @endif
                                 </ul>
                                 <div class="tab-content" id="{{ $cryptocurrency_info['currency_url'] }}_payment_content">
-                                    <div class="tab-pane fade show active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab">
+                                    @if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.enable'))
+                                        <div class="tab-pane fade show active" id="{{ $cryptocurrency_info['currency_url'] }}-deposit" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-deposit-tab">
                                         <h5>
                                             {{ trans('payment.deposit_desc1', ['currency' => $cryptocurrency_info['name']]) }}<br>
                                             {{ trans('payment.deposit_desc2') }}
                                         </h5>
                                         <br>
-                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . $cryptocurrency_info['currency'] }}</span></h4>
-                                        <h5>{{ trans('payment.min_deposit_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_deposit'] . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_deposit_desc') }}</p></h5>
+                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . ' ' . $cryptocurrency_info['currency'] }}</span></h4>
+                                        <h5>{{ trans('payment.min_deposit_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_deposit'] . ' ' . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_deposit_desc') }}</p></h5>
                                         <hr>
                                         <div class="card background-dark">
                                             <div class="card-header background-black-dark">
@@ -85,15 +92,17 @@
                                         <h4>{{ trans('payment.deposit_warning_title') }}</h4>
                                         <p class="text-light">{{ trans('payment.deposit_warning_desc', ['currency' => $cryptocurrency_info['name']]) }}</p>
                                     </div>
-                                    <div class="tab-pane fade" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab">
+                                    @endif
+                                    @if ($cryptocurrency_info['use_withdraw'] == config('constants.use_withdraw.enable'))
+                                        <div class="tab-pane fade @if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.disable')) show active @endif" id="{{ $cryptocurrency_info['currency_url'] }}-withdraw" role="tabpanel" aria-labelledby="{{ $cryptocurrency_info['currency_url'] }}-withdraw-tab">
                                         <h5>
                                             {{ trans('payment.withdraw_desc', ['currency' => $cryptocurrency_info['name']]) }}
                                         </h5>
                                         <br>
-                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . $cryptocurrency_info['currency'] }}</span></h4>
-                                        <h5>{{ trans('payment.available_balance') }} <span class="text-primary">{{ $cryptocurrency_info['available_balance'] . $cryptocurrency_info['currency'] }}</span></h5>
+                                        <h4>{{ trans('payment.balance') }} <span class="text-primary">{{ $cryptocurrency_info['balance'] . ' ' . $cryptocurrency_info['currency'] }}</span></h4>
+                                        <h5>{{ trans('payment.available_balance') }} <span class="text-primary">{{ $cryptocurrency_info['available_balance'] . ' ' . $cryptocurrency_info['currency'] }}</span></h5>
                                         <p>{{ trans('payment.available_balance_desc') }}</p>
-                                        <h5>{{ trans('payment.min_withdraw_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_withdraw'] . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_withdraw_desc') }}</p></h5>
+                                        <h5>{{ trans('payment.min_withdraw_title') }} <span class="text-danger">{{ $cryptocurrency_info['min_withdraw'] . ' ' . $cryptocurrency_info['currency'] }}</span> <p>{{ trans('payment.min_withdraw_desc') }}</p></h5>
                                         <hr>
                                         @if (auth()->user()->kyc_status == config('constants.kyc_status.verified'))
                                         <div class="card background-dark">
@@ -137,6 +146,7 @@
                                         <h4>{{ trans('payment.withdraw_warning_title') }}</h4>
                                         <p class="text-light">{{ trans('payment.withdraw_warning_desc', ['currency' => $cryptocurrency_info['name']]) }}</p>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -153,6 +163,8 @@
 @section('script')
     <script>
         $( document ).ready(function() {
+            $('#top_payment').addClass('text-danger');
+
             @if ($errors->any())
                 $('#{{ old('currency_url') }}-tab').addClass('active');
                 $('#{{ old('currency_url') }}').addClass('show active');

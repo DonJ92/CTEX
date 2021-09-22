@@ -18,6 +18,13 @@ define('HTTP_METHOD_DELETE', 'DELETE');
 
 define('QR_GENERATE_URL', 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=');
 
+define('BTC_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://live.blockcypher.com/btc/tx/' : 'https://live.blockcypher.com/btc-testnet/tx/'));
+define('LTC_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://live.blockcypher.com/ltc/tx/' : 'https://live.blockcypher.com/ltc-testnet/tx/'));
+define('XRP_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://blockchair.com/ripple/transaction/' : 'https://blockchair.com/ripple/transaction/'));
+define('BCH_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://explorer.bitcoin.com/bch/tx/' : 'https://explorer.bitcoin.com/bch/tx/'));
+define('ETH_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://etherscan.io/tx/' : 'https://ropsten.etherscan.io/tx/'));
+define('BNB_CONFIRM_URL', (COIN_NET == COIN_REAL_NET ? 'https://bscscan.com/tx/' : 'https://bscscan.com/tx/'));
+
 return [
     'reg_type' => [
         'BO' => 1,
@@ -177,6 +184,16 @@ return [
         'm60' => 'm60',
         'm240' => 'm240',
         'm1440' => 'm1440',
+    ],
+
+    'use_deposit' => [
+        'disable' => 0,
+        'enable' => 1,
+    ],
+
+    'use_withdraw' => [
+        'disable' => 0,
+        'enable' => 1,
     ],
 
     'order_book_count' => 14,

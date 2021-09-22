@@ -45,6 +45,7 @@
     <script src="{{ asset('js/moment.js') }}"></script>
     <script>
         $( document ).ready(function() {
+            $('#top_news').addClass('text-danger');
             getNewsList(1);
         });
 

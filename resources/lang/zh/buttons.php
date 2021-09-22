@@ -25,5 +25,7 @@ return [
     'enable' => '有效',
     'disable' => '无效',
 
-    'authenticate' => '认证'
+    'authenticate' => '认证',
+
+    'browse' => '选择文件'
 ];

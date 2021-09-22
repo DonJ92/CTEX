@@ -31,11 +31,13 @@
                             <div class="col-6"><h5 class="text-light">{{ trans('dashboard.symbol') }}</h5></div>
                             <div class="col-6"><h5 class="text-light text-right">{{ trans('dashboard.balance') }}</h5></div>
                         </div>
-                        @foreach($balance_list as $balance_info)
-                        <div class="form-group row">
-                            <div class="col-6"><img src="{{ $balance_info['ico'] }}" width="32px" class="p-r-10"><b>{{ $balance_info['currency'] }}</b></div>
-                            <div class="col-6"><h5 class="text-light text-right">{{ $balance_info['balance'] }}</h5></div>
-                        </div>
+                        @foreach($currency_list as $currency_info)
+                            @if ($currency_info['use_deposit'] == config('constants.use_deposit.enable'))
+                            <div class="form-group row">
+                                <div class="col-6"><img src="{{ $currency_info['ico'] }}" width="32px" class="p-r-10"><b>{{ $currency_info['currency'] }}</b></div>
+                                <div class="col-6"><h5 id="balance_{{ $currency_info['currency'] }}" class="text-light text-right">0</h5></div>
+                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -45,7 +47,7 @@
                     <section class="no-padding equalize" data-equalize-item=".text-box">
                         <div class="row col-no-margin background-dark">
                             <!--Box 1-->
-<!--                            <div class="col-lg-4 col-md-6 background-black-dark border-panel">
+                            <div class="col-lg-4 col-md-6 background-black-dark border-panel">
                                 <a href="{{ route('exchange') }}">
                                     <div class="text-box">
                                         <i class="fa fa-chart-bar"></i>
@@ -53,7 +55,7 @@
                                         <p>{{ trans('dashboard.trade_desc') }}</p>
                                     </div>
                                 </a>
-                            </div>-->
+                            </div>
                             <!--End: Box 1-->
                             <!--Box 2-->
                             <div class="col-lg-4 col-md-6 background-black-dark border-panel">
@@ -155,4 +157,32 @@
         </div>
     </div>
     </section>
+@endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            $('#top_dashboard').addClass('text-danger');
+            getBalance();
+        });
+
+        function getBalance() {
+            var token = $("input[name=_token]").val();
+
+            $.ajax({
+                url: '{{ route('exchange.balance') }}',
+                type: 'POST',
+                data: {_token: token},
+                dataType: 'JSON',
+                success: function (response) {
+                    if (response == undefined || response.length == 0) {
+                    } else {
+                        for (var i = 0; i < response.length; i++) {
+                            $('#balance_' + response[i].currency).html(response[i].balance);
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 @endsection

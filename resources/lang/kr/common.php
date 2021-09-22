@@ -28,6 +28,10 @@ return [
         'faq' => 'FAQ',
         'contactus' => '문의',
         'notification' => '통지',
+        'cookiespolicy' => '쿠키 정책',
+        'termofservice' => '이용 약관',
+        'privacynotice' => '개인 정보 보호 알림',
+        'disclosures' => '공개',
         'login' => '로그인',
         'register' => '등록',
         'logout' => '로그아웃',
@@ -100,5 +104,7 @@ return [
     'order' => [
         'buy' => 'Buy',
         'sell' => 'Sell',
-    ]
+    ],
+
+    'date_placeholder' => '월/일/년',
 ];
