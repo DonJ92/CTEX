@@ -93,7 +93,7 @@
                                         <select name="country" class="form-select text-light input-dark-bg @error('country') is-invalid @enderror" >
                                             <option value="">{{ trans('register.country_placeholder') }}</option>
                                             @foreach($country_list as $code => $country_info)
-                                                <option value="{{ $country_info['country'] }}" @if( old('country') == $country_info['country']) selected @endif>{{ $country_info['country'] }}</option>
+                                                <option value="{{ $country_info['name'] }}" @if( old('country') == $country_info['name']) selected @endif>{{ $country_info['name'] }}</option>
                                             @endforeach
                                         </select>
                                         @error('country')

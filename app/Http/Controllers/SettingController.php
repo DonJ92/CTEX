@@ -37,9 +37,8 @@ class SettingController extends Controller
         $gender_list = config('constants.gender_list');
         $data['gender_list'] = $gender_list;
 
-        $country_response = Http::get('https://api.first.org/data/v1/countries');
-        $country_list = $country_response->json();
-        $data['country_list'] = $country_list['data'];
+        $country_list = $this->getCountryList();
+        $data['country_list'] = $country_list;
 
         $language_list = config('constants.language_list');
         $data['language_list'] = $language_list;

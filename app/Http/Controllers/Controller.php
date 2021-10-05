@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CountryList;
 use App\Models\CryptoSettings;
 use App\Models\Currency;
 use App\Models\DailyFluct;
@@ -543,5 +544,24 @@ class Controller extends BaseController
         }
 
         return $kyc_infos;
+    }
+
+    /**
+     * get country list
+     *
+     * @return array
+     */
+    protected function getCountryList()
+    {
+        $country_list = array();
+        try {
+            $country_list = CountryList::orderby('name', 'asc')
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $country_list;
+        }
+
+        return $country_list;
     }
 }
